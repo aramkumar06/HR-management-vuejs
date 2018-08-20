@@ -43,10 +43,10 @@ class Account(models.Model):
     registered_date = models.DateTimeField(auto_now_add=True)
     recital = models.TextField(max_length=1000, blank=True, help_text='May include zipcode, '
                                                                       'address and other information.')
-    country = models.ForeignKey(Country, blank=False, help_text='')
-    user = models.ForeignKey(User, blank=False, help_text='Owner of account')
-    site = models.ForeignKey(Site, blank=True, help_text='Working site')
     title = models.CharField(max_length=150, blank=False, help_text='Title')
     overview = models.TextField(max_length=5000, blank=False, help_text='Overview')
+    country = models.ForeignKey(Country, blank=False, on_delete=models.SET_NULL, help_text='')
+    user = models.ForeignKey(User, blank=False, on_delete=models.SET_NULL, help_text='Owner of account')
+    site = models.ForeignKey(Site, blank=True, on_delete=models.SET_NULL, help_text='Working site')
 
     pass
