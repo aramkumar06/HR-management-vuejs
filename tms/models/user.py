@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from tms.models.role import Role
 from tms.models.team import Team
-# Create your models here.
 
 
 class User(AbstractUser):
