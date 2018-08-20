@@ -11,6 +11,8 @@ version 1
     skype
     phone number
     reference url
+    registered date
+    recital
     refer to country
     refer to account
     refer to site 
@@ -22,10 +24,12 @@ version 2
 class Client(models.Model):
     first_name = models.CharField(max_length=15, blank=False, help_text='')
     last_name = models.CharField(max_length=15, blank=False, help_text='')
-    email = models.CharField(max_length=30, blank=True, help_text='Email address of client')
+    email = models.EmailField(max_length=30, blank=True, help_text='Email address of client')
     skype = models.CharField(max_length=30, blank=True, help_text='Skype username of client')
     phone_number = models.CharField(max_length=11, blank=True, help_text='Phone number of client')
-    url = models.CharField(max_length=100, blank=True, help_text='Reference URL')
+    url = models.URLField(max_length=100, blank=True, help_text='Reference URL')
+    recital = models.TextField(max_length=1000, blank=True, help_text='Explain his attitude and other experiences.')
+    registered_date = models.DateTimeField(auto_now_add=True)
     country = models.ForeignKey(Country, blank=True, help_text='')
     account = models.ForeignKey(Account, blank=True, help_text='')
     site = models.ForeignKey(Site, blank=True, help_text='')

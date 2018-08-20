@@ -31,7 +31,7 @@ version 2
 class Account(models.Model):
     first_name = models.CharField(max_length=15, blank=False, help_text='')
     last_name = models.CharField(max_length=15, blank=False, help_text='')
-    email = models.CharField(max_length=30, blank=False, help_text='Email ')
+    email = models.EmailField(max_length=30, blank=False, help_text='Email ')
     email_password = models.CharField(max_length=40, blank=False, help_text='Email password')
     skype = models.CharField(max_length=30, blank=True, help_text='Skype username. It could be null.')
     skype_password = models.CharField(max_length=30, blank=True, help_text='Skype password. It could be null.')
@@ -40,10 +40,9 @@ class Account(models.Model):
                                                                          'It could be null')
     created_date = models.DateField(blank=False, help_text='The date when the account is created.')
     suspended_date = models.DateField(blank=True, help_text='The date when the account is suspended.')
-    registered_date = models.DateTimeField(auto_created=True)
+    registered_date = models.DateTimeField(auto_add_now=True)
     recital = models.TextField(max_length=1000, blank=True, help_text='May include zipcode, '
                                                                       'address and other information.')
-
     country = models.ForeignKey(Country, blank=False, help_text='')
     user = models.ForeignKey(User, blank=False, help_text='Owner of account')
     site = models.ForeignKey(Site, blank=True, help_text='Working site')
