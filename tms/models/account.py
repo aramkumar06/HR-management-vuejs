@@ -40,7 +40,7 @@ class Account(models.Model):
                                                                          'It could be null')
     created_date = models.DateField(blank=False, help_text='The date when the account is created.')
     suspended_date = models.DateField(blank=True, help_text='The date when the account is suspended.')
-    registered_date = models.DateTimeField(auto_add_now=True)
+    registered_date = models.DateTimeField(auto_now_add=True)
     recital = models.TextField(max_length=1000, blank=True, help_text='May include zipcode, '
                                                                       'address and other information.')
     country = models.ForeignKey(Country, blank=False, help_text='')
