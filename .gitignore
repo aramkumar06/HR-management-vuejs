@@ -1,4 +1,17 @@
+# IDEs
 .idea/
+
 venv/
+
+# Python compiled byte code
 *.pyc
 __pycache__/
+
+# Node modules
+node_modules/
+yarn.lock
+npm-debug.log
+
+# SQLite3 database
+*.sqlite
+
