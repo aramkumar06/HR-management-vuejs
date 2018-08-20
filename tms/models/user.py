@@ -9,8 +9,9 @@ class User(AbstractUser):
     birthday = models.DateField(blank=False, help_text='')
     address = models.CharField(max_length=50, blank=False, help_text='')
     contact_number = models.CharField(max_length=50, blank=False, help_text='')
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, help_text='')
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, blank=True, help_text='')
+
+    role = models.ForeignKey(Role, null=True, on_delete=models.SET_NULL, help_text='')
+    team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass
 

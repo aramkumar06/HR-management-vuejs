@@ -24,6 +24,7 @@ class Earning(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=STATUS_PENDING, help_text='')
     approved_date = models.DateTimeField(blank=True, help_text='Date Time when confirm balance')
     withdrawn_date = models.DateTimeField(blank=True, help_text='Date Time when withdraw')
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=False, help_text='')
+
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass

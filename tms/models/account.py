@@ -45,8 +45,9 @@ class Account(models.Model):
                                                                       'address and other information.')
     title = models.CharField(max_length=150, blank=False, help_text='Title')
     overview = models.TextField(max_length=5000, blank=False, help_text='Overview')
-    country = models.ForeignKey(Country, blank=False, on_delete=models.SET_NULL, help_text='')
-    user = models.ForeignKey(User, blank=False, on_delete=models.SET_NULL, help_text='Owner of account')
-    site = models.ForeignKey(Site, blank=True, on_delete=models.SET_NULL, help_text='Working site')
+
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='Owner of account')
+    site = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL, help_text='Working site')
 
     pass

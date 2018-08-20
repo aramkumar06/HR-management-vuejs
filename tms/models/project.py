@@ -53,7 +53,8 @@ class Project(models.Model):
     applied_proposals_count = models.IntegerField(blank=True, help_text='Total proposals when hiring')
     interview_count = models.IntegerField(blank=True, help_text='Total interview count when hiring')
     registered_date = models.DateTimeField(auto_now_add=True)
-    account = models.ForeignKey(Account, on_delete=models.SET_NULL, help_text='')
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, help_text='')
+
+    account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
+    client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass
