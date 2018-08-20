@@ -38,14 +38,14 @@ class Project(models.Model):
         (STATUS_ENDED, 'End'),
         (STATUS_DISPUTED, 'Dispute'),
     )
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=STATUS_STARTED)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=STATUS_STARTED, help_text='')
     JOB_HOURLY = 'HR'
     JOB_FIXED = 'FX'
     JOB_CHOICES = (
         (JOB_HOURLY, 'Hourly'),
         (JOB_FIXED, 'Fixed'),
     )
-    project_type = models.CharField(max_length=2, choices=JOB_CHOICES, default=JOB_FIXED)
+    project_type = models.CharField(max_length=2, choices=JOB_CHOICES, default=JOB_FIXED, help_text='')
     price = models.FloatField(blank=False, help_text='Fixed price of project or hourly rate of project')
     limit = models.IntegerField(blank=True, help_text='')
     posted_datetime = models.DateTimeField(blank=True, help_text='Date and Time when the job is posted')
