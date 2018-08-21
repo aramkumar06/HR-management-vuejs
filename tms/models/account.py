@@ -29,22 +29,22 @@ version 2
 
 
 class Account(models.Model):
-    first_name = models.CharField(max_length=15, blank=False, help_text='')
-    last_name = models.CharField(max_length=15, blank=False, help_text='')
-    email = models.EmailField(max_length=30, blank=False, help_text='Email ')
-    email_password = models.CharField(max_length=40, blank=False, help_text='Email password')
-    skype = models.CharField(max_length=30, blank=True, help_text='Skype username. It could be null.')
-    skype_password = models.CharField(max_length=30, blank=True, help_text='Skype password. It could be null.')
+    first_name = models.CharField(max_length=15, null=False, help_text='')
+    last_name = models.CharField(max_length=15, null=False, help_text='')
+    email = models.EmailField(max_length=30, null=False, help_text='Email ')
+    email_password = models.CharField(max_length=40, null=False, help_text='Email password')
+    skype = models.CharField(max_length=30, null=True, help_text='Skype username. It could be null.')
+    skype_password = models.CharField(max_length=30, null=True, help_text='Skype password. It could be null.')
     status = models.BooleanField(default=True, help_text='It represents whether account is active or not.')
-    phone_number = models.CharField(max_length=11, blank=True, help_text='Phone number related to this account. '
-                                                                         'It could be null')
-    created_date = models.DateField(blank=False, help_text='The date when the account is created.')
-    suspended_date = models.DateField(blank=True, help_text='The date when the account is suspended.')
+    phone_number = models.CharField(max_length=11, null=True, help_text='Phone number related to this account.'
+                                                                        'It could be null')
+    created_date = models.DateField(null=False, help_text='The date when the account is created.')
+    suspended_date = models.DateField(null=True, help_text='The date when the account is suspended.')
     registered_date = models.DateTimeField(auto_now_add=True)
-    recital = models.TextField(max_length=1000, blank=True, help_text='May include zipcode, '
-                                                                      'address and other information.')
-    title = models.CharField(max_length=150, blank=False, help_text='Title')
-    overview = models.TextField(max_length=5000, blank=False, help_text='Overview')
+    recital = models.TextField(max_length=1000, null=True, help_text='May include zipcode, '
+                                                                     'address and other information.')
+    title = models.CharField(max_length=150, null=False, help_text='Title')
+    overview = models.TextField(max_length=5000, null=False, help_text='Overview')
 
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='Owner of account')

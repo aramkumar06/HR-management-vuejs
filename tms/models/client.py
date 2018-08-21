@@ -22,13 +22,13 @@ version 2
 
 
 class Client(models.Model):
-    first_name = models.CharField(max_length=15, blank=False, help_text='')
-    last_name = models.CharField(max_length=15, blank=False, help_text='')
-    email = models.EmailField(max_length=30, blank=True, help_text='Email address of client')
-    skype = models.CharField(max_length=30, blank=True, help_text='Skype username of client')
-    phone_number = models.CharField(max_length=11, blank=True, help_text='Phone number of client')
-    url = models.URLField(max_length=100, blank=True, help_text='Reference URL')
-    recital = models.TextField(max_length=1000, blank=True, help_text='Explain his attitude and other experiences.')
+    first_name = models.CharField(max_length=15, null=False, help_text='')
+    last_name = models.CharField(max_length=15, null=False, help_text='')
+    email = models.EmailField(max_length=30, null=True, help_text='Email address of client')
+    skype = models.CharField(max_length=30, null=True, help_text='Skype username of client')
+    phone_number = models.CharField(max_length=11, null=True, help_text='Phone number of client')
+    url = models.URLField(max_length=100, null=True, help_text='Reference URL')
+    recital = models.TextField(max_length=1000, null=True, help_text='Explain his attitude and other experiences.')
     registered_date = models.DateTimeField(auto_now_add=True)
 
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
