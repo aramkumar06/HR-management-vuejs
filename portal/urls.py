@@ -21,4 +21,5 @@ from frontend.urls import urlpatterns as frontend_url
 urlpatterns = [
     url(r'', include(frontend_url)),
     url(r'^admin/', admin.site.urls),
+    url(r'^api-auth/', include('rest_framework.urls'))
 ]
