@@ -1,6 +1,6 @@
 # A Django / Django REST framework based HR management ReactJS app for small companies
 
-- It is good django / django rest based HR management app for small companies.
+- This is django / django rest based HR management app for small companies.
 
 ## Backend
   - django 2.1
@@ -8,8 +8,4 @@
   - psycopg2 2.7.5
   
 ## Frontend
-  - ReactJS 16.4.2 
-  
-
-
-
+  - ReactJS 16.4.2
