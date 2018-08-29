@@ -17,5 +17,6 @@ class EarningSerializer(serializers.HyperlinkedModelSerializer):
             'week_year',
             'updated_date',
             'status',
-            'project'
+            'project',
+            'earn_type'
         )
