@@ -14,4 +14,4 @@ npm-debug.log
 
 # SQLite3 database
 *.sqlite
-
+*.sqlite3

@@ -129,3 +129,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+# Auth User Model Config
+AUTH_USER_MODEL = "tms.User"
