@@ -4,7 +4,7 @@
 
 ## Backend
   - django 2.1
-  - django-rest-framework 3.6.4
+  - django-rest-framework 3.8.2
   - psycopg2 2.7.5
   
 ## Frontend
