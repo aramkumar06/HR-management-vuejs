@@ -17,9 +17,10 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from frontend.urls import urlpatterns as frontend_url
+from tms.urls import urlpatterns as tms_apis
 
 urlpatterns = [
     url(r'', include(frontend_url)),
     url(r'^admin/', admin.site.urls),
-    url(r'^api-auth/', include('rest_framework.urls'))
+    url(r'^tms/', include(tms_apis))
 ]
