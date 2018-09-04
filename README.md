@@ -6,6 +6,11 @@
   - django 2.1
   - django-rest-framework 3.8.2
   - psycopg2 2.7.5
+  - django-cors-headers 2.4.0
   
 ## Frontend
   - ReactJS 16.4.2
+  
+## How to install
+  - install python 3.6
+  - install postgresql 10.3  
