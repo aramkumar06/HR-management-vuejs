@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'tms',
     'frontend',
     'rest_framework',
@@ -129,6 +130,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     # User Django's standard `django.contrib.auth` permissions,
