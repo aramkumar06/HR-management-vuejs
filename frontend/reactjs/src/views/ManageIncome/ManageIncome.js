@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Input, Label, Table, Badge} from 'reactstrap';
+import { Card, CardBody, CardHeader, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Input, Form, Label, Table, Badge} from 'reactstrap';
 import { Line} from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
@@ -42,18 +42,92 @@ const options = {
   maintainAspectRatio: false
 };
 
-class TeamEarning extends Component {
+class ManageIncome extends Component {
   render() {
     return (
       <div className="animated fadeIn mt-5">
+          <Row className = "justify-content-center">
+            <Col>
+              <Card>
+                <CardHeader>
+                  Add Income
+                </CardHeader>
+                <CardBody>
+                  <Form>
+                    <Container-Fluid>
+                      <Row>
+                        <Col md = "3" className = "offset-md-2">
+                          <InputGroup>
+                              <InputGroupAddon addonType="prepend">
+                                <InputGroupText>
+                                Project Name
+                                </InputGroupText>
+                              </InputGroupAddon>
+                              <Input type="select" name="select">
+                              </Input>
+                          </InputGroup>
+                        </Col>
+                        <Col md = "2" >
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>
+                                <i className="icon-calendar"></i>
+                              </InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="date"/>
+                          </InputGroup>
+                        </Col>
+                        <Col md = "2" >
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>
+                                <i className="icon-diamond"></i>
+                              </InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="text" placeholder="Cache"/>
+                          </InputGroup>
+                        </Col>
+                        <Col md = "1">
+                          <Input type="button" value = "Add"/>
+                        </Col>
+                      </Row>
+                    </Container-Fluid>
+                  </Form>
+                </CardBody>
+              </Card>
+            </Col>  
+          </Row>
           <Row className = "mt-5">
-            <Col md = "1" className = "byDateOrWeek">
-              <InputGroup>
-                <Input type="select">
-                  <option>Monthly</option>
-                  <option>Weekly</option>
-                </Input>
-              </InputGroup>
+          <Col md = "6">
+          <div>
+            <InputGroup className = "search-drop-box">
+              <Input type="select">
+                <option>Company</option>
+                <option>Team</option>
+                <option>Member</option>
+              </Input>
+            </InputGroup>
+            <InputGroup  className = "search-drop-box">
+              <Input type="select">
+                <option>TeamNo1</option>
+                <option>TeamNo2</option>
+                <option>TeamNo3</option>
+              </Input>
+            </InputGroup>
+            <InputGroup  className = "search-drop-box">
+              <Input type="select">
+                <option>Victor</option>
+                <option>Pabel</option>
+                <option>Drogba</option>
+              </Input>
+            </InputGroup>
+            <InputGroup  className = "search-drop-box">
+              <Input type="select"  className = "text-center">
+                <option>Monthly</option>
+                <option>Weekly</option>
+              </Input>
+            </InputGroup>
+            </div>
             </Col>
             <Col className = "dateStart">
               <InputGroup>
@@ -153,4 +227,4 @@ class TeamEarning extends Component {
   }
 }
 
-export default TeamEarning;
+export default ManageIncome;

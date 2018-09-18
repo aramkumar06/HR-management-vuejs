@@ -1,0 +1,6 @@
+{
+  "name": "MyContacts",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MyContacts.js"
+}

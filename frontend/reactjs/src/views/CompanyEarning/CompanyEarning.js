@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Card, CardBody, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Input, Label, Table, Badge} from 'reactstrap';
-import { Line} from 'react-chartjs-2';
+import { Card, CardBody, CardHeader, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Input, Label, Table, Badge} from 'reactstrap';
+import { Line, Bar} from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 //style
 import './style.css';
 
-//Variables
+//Chart Data
 const line = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
@@ -34,6 +34,21 @@ const line = {
   ],
 };
 
+const bar = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      backgroundColor: 'rgba(255,99,132,0.2)',
+      borderColor: 'rgba(255,99,132,1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      data: [65, 59, 80, 81, 56, 55, 40],
+    },
+  ],
+};
+
 const options = {
   tooltips: {
     enabled: false,
@@ -42,11 +57,11 @@ const options = {
   maintainAspectRatio: false
 };
 
-class TeamEarning extends Component {
+class CompanyEarning extends Component {
   render() {
     return (
-      <div className="animated fadeIn mt-5">
-          <Row className = "mt-5">
+      <div className="animated fadeIn mt-3">
+          <Row>
             <Col md = "1" className = "byDateOrWeek">
               <InputGroup>
                 <Input type="select">
@@ -79,7 +94,7 @@ class TeamEarning extends Component {
               </InputGroup>
             </Col>
           </Row>
-          <Row className = "mt-3">
+          <Row className = "mt-1">
             <Col md = "6">
               <Card>
                 <CardBody>
@@ -133,6 +148,7 @@ class TeamEarning extends Component {
                         <Badge color="success">Active</Badge>
                       </td>
                     </tr>
+                    
                     </tbody>
                   </Table>
                 </CardBody>
@@ -148,9 +164,35 @@ class TeamEarning extends Component {
               </Card>
             </Col>
           </Row>
+          <Row className = "mt-1">
+            <Col md = "6">
+              <Card>
+                <CardHeader>
+                  Team Ranking Chart
+                </CardHeader>
+                <CardBody>
+                  <div className="chart-wrapper">
+                    <Bar data={bar} options={options} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md = "6">
+              <Card>
+                <CardHeader>
+                  Individual Ranking Chart
+                </CardHeader>
+                <CardBody>
+                  <div className="chart-wrapper">
+                    <Bar data={bar} options={options} />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
       </div>
     );
   }
 }
 
-export default TeamEarning;
+export default CompanyEarning;

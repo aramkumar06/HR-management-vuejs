@@ -134,8 +134,8 @@ class MyEarning extends Component {
             <Col md = "6">
               <Card>
                 <CardBody>
-                  <Table hover bordered striped responsive size="sm">
-                    <thead>
+                  <Table hover bordered responsive className="table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-light">
                     <tr>
                       <th className = "jobtitleHeader">Name(Job Title)</th>
                       <th className = "ageHeader">Age</th>

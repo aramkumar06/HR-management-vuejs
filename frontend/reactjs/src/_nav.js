@@ -21,7 +21,7 @@ export default {
     },
     {
       name: 'Company Income',
-      url: '/theme/typography',
+      url: '/CompanyEarning',
       icon: 'icon-organization',
     },
     {
@@ -35,22 +35,22 @@ export default {
     },
     {
       name: 'Account Setting',
-      url: '/theme/colors',
+      url: '/AccountSetting',
       icon: 'icon-user-follow',
     },
     {
-      name: 'Contact Info',
-      url: '/theme/typography',
-      icon: 'icon-key',
+      name: 'My Contacts',
+      url: '/MyContacts',
+      icon: 'icon-credit-card',
     },
     {
-      name: 'Project Manage',
-      url: '/theme/typography',
+      name: 'My Projects',
+      url: '/MyProjects',
       icon: 'icon-layers',
     },
     {
-      name: 'Equip Manage',
-      url: '/theme/typography',
+      name: 'My Equips',
+      url: '/MyEquips',
       icon: 'icon-screen-desktop',
     },
     {
@@ -63,27 +63,27 @@ export default {
       class: ''             
     },
     {
-      name: 'Income Manage',
-      url: '/theme/colors',
+      name: 'Manage Income',
+      url: '/ManageIncome',
       icon: 'icon-diamond',
     },
     {
-      name: 'Project Manage',
-      url: '/theme/typography',
+      name: 'Manage Projects',
+      url: '/ManageProjects',
       icon: 'icon-layers',
     },
     {
-      name: 'Members Manage',
-      url: '/theme/typography',
+      name: 'Manage Members',
+      url: '/ManageMembers',
       icon: 'icon-people',
     },
     {
-      name: 'Accounts Manage',
+      name: 'Manage Accounts',
       url: '/theme/typography',
       icon: 'icon-user-follow',
     },
     {
-      name: 'Equip Manage',
+      name: 'Manage Equip',
       url: '/theme/typography',
       icon: 'icon-screen-desktop',
     }

@@ -1,0 +1,23 @@
+.project-type-header{
+    width: 8%;
+}
+
+.project-name-header{
+    width: 25%;
+}
+
+.client-name-header{
+    width: 12%;
+}
+
+.project-field-header{
+    width: 17%;
+}
+
+.language-header{
+    width: 17%;
+}
+
+input[type = "date"]{
+    max-width: 160px;
+}

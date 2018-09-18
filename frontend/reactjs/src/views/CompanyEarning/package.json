@@ -1,0 +1,6 @@
+{
+  "name": "CompanyEarning",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./CompanyEarning.js"
+}

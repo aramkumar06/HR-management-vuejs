@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
+import { DropdownItem, DropdownMenu, DropdownToggle, Nav} from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import { AppSidebarToggler } from '@coreui/react';
+import { AppSidebarToggler, AppHeaderDropdown} from '@coreui/react';
 
-const logo_image_url = "assets/imgs/portal-logo1.png";
-const style = {
-  logo:{
-    width: 130,
-    height: 40
-  }
-}
 const propTypes = {
   children: PropTypes.node,
 };
@@ -24,8 +18,18 @@ class DefaultHeader extends Component {
 
     return (
       <React.Fragment>
-        <img src = {logo_image_url} alt = "HR-Management" style = {style.logo}/>
         <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <Nav className="ml-auto" navbar>
+          <AppHeaderDropdown direction="down">
+            <DropdownToggle nav>
+              <img src={'assets/img/avatars/1.png'} className="img-avatar" alt="Menu" />
+            </DropdownToggle>
+            <DropdownMenu right style={{ right: 'auto' }}>
+              <DropdownItem><i className="fa fa-user-circle"></i>Account Setting</DropdownItem>
+              <DropdownItem><i className="fa fa-sign-out"></i>Log Out</DropdownItem>
+            </DropdownMenu>
+          </AppHeaderDropdown>
+        </Nav>
       </React.Fragment>
     );
   }
