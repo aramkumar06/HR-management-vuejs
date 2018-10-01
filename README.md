@@ -13,4 +13,4 @@
   
 ## How to install
   - install python 3.6
-  - install postgresql 10.3  
+  - install postgresql 10.3
