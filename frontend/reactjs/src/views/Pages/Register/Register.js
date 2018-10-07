@@ -7,6 +7,11 @@ import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputG
 import 'react-day-picker/lib/style.css';
 
 class Register extends Component {
+
+  onCreateAccount = () => {
+    console.log("create account");
+  }
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -15,7 +20,7 @@ class Register extends Component {
             <Col md="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
-                  <Form>
+                  <Form onSubmit = {this.onCreateAccount}>
                     <h1>Register</h1>
                     <p className="text-muted">Create your account to HR-Management</p>
                     <InputGroup className="mb-3">
@@ -24,7 +29,7 @@ class Register extends Component {
                           <i className="icon-envelope-letter"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type="text" placeholder="Email" autoComplete="email" />
+                      <Input type="text" placeholder="Email" autoComplete="email" required/>
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -104,7 +109,7 @@ class Register extends Component {
                           </InputGroupAddon>
                           <Input type="text" placeholder="Contact Number" autoComplete="" />
                     </InputGroup>
-                    <Button color="success" block>Create Account</Button>
+                    <Button type = "submit" color="success" block>Create Account</Button>
                   </Form>
                 </CardBody>
                 <CardFooter className="p-4">

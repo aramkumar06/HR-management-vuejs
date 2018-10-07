@@ -1,6 +1,10 @@
 import React, {Component} from "react";
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { loginSuccessAction, logoutSuccessAction} from './actions';
 // Styles
 // CoreUI Icons Set
 
@@ -18,20 +22,40 @@ import './scss/style.css'
 import {DefaultLayout} from './containers'
 
 //Pages
-import {Login, Register} from './views/Pages';
+import {Register} from './views/Pages';
+import Login from './views/Pages/Login';
+import cookie from 'react-cookies';
 
 class App extends Component {
+    componentWillMount(){
+        let login = cookie.load('login')
+        if (login !== undefined) 
+            this.props.loginSuccess(login)
+        else
+            this.props.logoutSuccess();
+    }
     render() {
         return (
-           <HashRouter>
+           <BrowserRouter>
                 <Switch>
                     <Route exact path="/login" name="Login Page" component={Login} />
                     <Route exact path="/register" name="Register Page" component={Register} />
                     <Route path="/" name="Home" component={DefaultLayout} />
                 </Switch>
-           </HashRouter>
+           </BrowserRouter>
         );
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        login: state.login
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    loginSuccess: (payload) => dispatch(loginSuccessAction(payload)),
+    logoutSuccess: () => dispatch(logoutSuccessAction())
+})
+
+export default withRouter( connect(mapStateToProps, mapDispatchToProps)(App) );

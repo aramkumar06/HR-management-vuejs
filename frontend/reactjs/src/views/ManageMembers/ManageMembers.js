@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, CardHeader, CardBody, Row, Col, InputGroup, InputGroupAddon, InputGroupText,Input, Button, Table, Collapse, FormGroup, Label} from 'reactstrap';
+import {Card, CardHeader, CardBody, Row, Col, InputGroup, Input, Button, Table, Collapse, FormGroup, Label} from 'reactstrap';
 
 //stylesheet
 import "./style.css";

@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { DropdownItem, DropdownMenu, DropdownToggle, Nav} from 'reactstrap';
-import PropTypes from 'prop-types';
-
+import cookie from 'react-cookies';
 import { AppSidebarToggler, AppHeaderDropdown} from '@coreui/react';
-
-const propTypes = {
-  children: PropTypes.node,
-};
-
-const defaultProps = {};
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logoutSuccessAction} from '../../actions';
 
 class DefaultHeader extends Component {
+
+  onLogOut = () =>{
+    cookie.remove('login', { path: '/' })
+    this.props.logoutSuccess();
+    this.props.history.push("/login");
+  }
+
   render() {
 
     // eslint-disable-next-line
@@ -26,7 +29,7 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem><i className="fa fa-user-circle"></i>Account Setting</DropdownItem>
-              <DropdownItem><i className="fa fa-sign-out"></i>Log Out</DropdownItem>
+              <DropdownItem onClick = {this.onLogOut}><i className="fa fa-sign-out"></i>Log Out</DropdownItem>
             </DropdownMenu>
           </AppHeaderDropdown>
         </Nav>
@@ -35,7 +38,8 @@ class DefaultHeader extends Component {
   }
 }
 
-DefaultHeader.propTypes = propTypes;
-DefaultHeader.defaultProps = defaultProps;
+const mapDispatchToProps = dispatch => ({
+  logoutSuccess: () => dispatch(logoutSuccessAction())
+})
 
-export default DefaultHeader;
+export default withRouter( connect(null, mapDispatchToProps)(DefaultHeader) );

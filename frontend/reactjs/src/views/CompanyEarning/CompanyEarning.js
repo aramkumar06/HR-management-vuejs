@@ -58,6 +58,7 @@ const options = {
 };
 
 class CompanyEarning extends Component {
+
   render() {
     return (
       <div className="animated fadeIn mt-3">

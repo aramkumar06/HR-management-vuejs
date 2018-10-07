@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { Container } from 'reactstrap';
+
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import {
   AppFooter,
@@ -22,11 +25,23 @@ import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 
 class DefaultLayout extends Component {
+
+  componentWillMount(){
+    if(!this.isUserVerified())
+    {
+      this.props.history.push('/login')
+    }
+  }
+
+  isUserVerified = () =>{
+    return this.props.login != null && this.props.login !== undefined;
+  }
+
   render() {
     return (
       <div className="app">
         <AppHeader fixed>
-          <DefaultHeader />
+          <DefaultHeader {...this.props}/>
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed display="lg">
@@ -40,13 +55,12 @@ class DefaultLayout extends Component {
             <Container fluid>
               <Switch>
                 {routes.map((route, idx) => {
-                    return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                        <route.component {...props} />
-                      )} />)
+                    return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} 
+                      component = {() => <route.component {...this.props} /> }/>)
                       : (null);
                   },
                 )}
-                <Redirect from="/" to="/dashboard" />
+                {this.isUserVerified() && <Redirect from = "/" to = "/myearning"/> }
               </Switch>
             </Container>
           </main>
@@ -54,9 +68,16 @@ class DefaultLayout extends Component {
         <AppFooter>
           <DefaultFooter />
         </AppFooter>
+        
       </div>
     );
   }
 }
 
-export default DefaultLayout;
+const mapStateToProps = (state) => {
+    return {
+      login: state.auth.login,
+    }
+}
+
+export default withRouter( connect(mapStateToProps, null)(DefaultLayout));
