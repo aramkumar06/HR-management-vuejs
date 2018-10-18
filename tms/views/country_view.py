@@ -6,4 +6,3 @@ class CountryView(APIView):
         pass
 
     pass
-
