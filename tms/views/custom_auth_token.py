@@ -21,5 +21,7 @@ class CustomAuthToken(ObtainAuthToken):
             return Response({
                 'success': True,
                 'token': token.key,
-                'id': user.id
+                'id': user.id,
+                'team_id': user.team.id,
+                'role_id': user.role.id
             })

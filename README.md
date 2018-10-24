@@ -16,6 +16,6 @@
   - install postgresql 10.3
   
 ## Load fixtures
-- `python3 manage.py loaddata fixture/countries.json`
-- `python3 manage.py loaddata fixture/sites.json`
-- `python3 manage.py loaddata fixture/roles.json`
+  - `python3 manage.py loaddata fixture/countries.json`
+  - `python3 manage.py loaddata fixture/sites.json`
+  - `python3 manage.py loaddata fixture/roles.json`
