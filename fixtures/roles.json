@@ -1,0 +1,26 @@
+[
+  {
+    "model": "tms.Role",
+    "pk": 1,
+    "fields": {
+      "name": "Member",
+      "description": "Member"
+    }
+  },
+  {
+    "model": "tms.Role",
+    "pk": 2,
+    "fields": {
+      "name": "Officer",
+      "description": "Officer"
+    }
+  },
+  {
+    "model": "tms.Role",
+    "pk": 3,
+    "fields": {
+      "name": "Delegate",
+      "description": "Delegate"
+    }
+  }
+]

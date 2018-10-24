@@ -1,0 +1,122 @@
+[
+  {
+    "model": "tms.Country",
+    "pk": 1,
+    "fields": {
+      "name": "United States",
+      "code": "US"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 2,
+    "fields": {
+      "name": "United States",
+      "code": "US"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 3,
+    "fields": {
+      "name": "Switzerland",
+      "code": "CH"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 4,
+    "fields": {
+      "name": "Sweden",
+      "code": "SE"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 5,
+    "fields": {
+      "name": "Singapore",
+      "code": "SG"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 6,
+    "fields": {
+      "name": "Norway",
+      "code": "NO"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 7,
+    "fields": {
+      "name": "Italy",
+      "code": "IT"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 8,
+    "fields": {
+      "name": "Hong Kong",
+      "code": "HK"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 9,
+    "fields": {
+      "name": "Germany",
+      "code": "DE"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 10,
+    "fields": {
+      "name": "France",
+      "code": "FR"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 11,
+    "fields": {
+      "name": "Denmark",
+      "code": "DK"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 12,
+    "fields": {
+      "name": "China",
+      "code": "CN"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 13,
+    "fields": {
+      "name": "Australia",
+      "code": "AU"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 14,
+    "fields": {
+      "name": "Austria",
+      "code": "AS"
+    }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 15,
+    "fields": {
+      "name": "Brazil",
+      "code": "BR"
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "model": "tms.Site",
+    "pk": 1,
+    "fields": {
+      "name": "Upwork",
+      "url": "https://www.upwork.com",
+      "description": "The biggest freelancing website"
+    }
+  },
+  {
+    "model": "tms.Site",
+    "pk": 2,
+    "fields": {
+      "name": "Freelancer",
+      "url": "http://freelancer.com",
+      "description": "One of the popular freelancing websites"
+    }
+  }
+]

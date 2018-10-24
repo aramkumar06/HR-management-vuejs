@@ -13,4 +13,9 @@
   
 ## How to install
   - install python 3.6
-  - install postgresql 10.3  
+  - install postgresql 10.3
+  
+## Load fixtures
+- `python3 manage.py loaddata fixture/countries.json`
+- `python3 manage.py loaddata fixture/sites.json`
+- `python3 manage.py loaddata fixture/roles.json`
