@@ -1,8 +1,8 @@
-from rest_framework.views import APIView
+from rest_framework import viewsets
+from tms.models import Country
+from tms.serializers import CountrySerializer
 
 
-class CountryView(APIView):
-    def get(self, request, format=None):
-        pass
-
-    pass
+class CountriesView(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
