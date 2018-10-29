@@ -12,16 +12,18 @@ class CustomAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid()
         if serializer.errors:
-            return Response({
+            response = Response({
                 'success': False
             })
         else:            
             user = serializer.validated_data['user']
             token, created = Token.objects.get_or_create(user=user)
-            return Response({
+            response = Response({
                 'success': True,
                 'token': token.key,
                 'id': user.id,
                 'team_id': user.team.id,
                 'role_id': user.role.id
             })
+
+        return response
