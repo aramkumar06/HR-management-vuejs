@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BaseAuthentication
 from rest_framework.response import Response
@@ -8,6 +9,10 @@ from tms.serializers import AccountSerializer
 class AccountsView(viewsets.ViewSet):
     serializer_class = AccountSerializer
     authentication_classes = (SessionAuthentication, BaseAuthentication)
+
+    def check_object_permissions(self, request, obj):
+        if obj.user_id != request.user.id:
+            raise PermissionDenied()
 
     def list(self, request):
         # TODO
@@ -50,6 +55,7 @@ class AccountsView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             account = Account.objects.get(pk=pk)
+            self.check_object_permissions(request, account)
             serializer = self.serializer_class(data=account)
             response = Response({
                 'success': True,
@@ -60,14 +66,58 @@ class AccountsView(viewsets.ViewSet):
                 'success': False,
                 'message': 'no such a account'
             })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
 
         return response
 
     def update(self, request, pk=None):
-        pass
+        try:
+            account = Account.objects.get(pk=pk)
+            self.check_object_permissions(request, account)
+            serializer = self.serializer_class(data=account)
+            account.save(update_fields=serializer)
+            response = Response({
+                'success': True,
+                'id': account.id
+            })
+        except Account.DoesNotExist:
+            response = Response({
+                'success': False,
+                'message': 'no such a account'
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
 
     def partial_update(self, request, pk=None):
         pass
 
     def destroy(self, request, pk=None):
-        pass
+        try:
+            account = Account.objects.get(pk=pk)
+            self.check_object_permissions(request, account)
+            account.delete()
+            response = Response({
+                'success': True,
+                'id': account.id
+            })
+        except Account.DoesNotExist:
+            response = Response({
+                'success': False,
+                'message': 'no such a account'
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
