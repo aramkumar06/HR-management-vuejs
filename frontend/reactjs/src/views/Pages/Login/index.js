@@ -21,7 +21,7 @@ class Login extends Component {
         axios.post(AuthUrls.LOGIN, values)
         .then(response => { 
             this.props.loginSuccess(response.data)
-            if (response.data.success === 1) {
+            if (response.data.success === true) {
                 cookie.save('login', response.data, { path: '/', maxAge: 3600 * 24 * 7 })
                 this.setState({
                     success: 'Login success',

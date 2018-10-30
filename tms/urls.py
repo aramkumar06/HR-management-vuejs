@@ -9,9 +9,9 @@ from tms.views import ProjectsView
 
 urlpatterns = [
     path('login/', CustomAuthToken.as_view()),
-    path('accounts', AccountsView, basename='accounts'),
-    path('countries', CountriesView, basename='countries'),
-    path('clients', ClientsView, basename='clients'),
-    path('earnings', EarningsView, basename='earnings'),
-    path('projects', ProjectsView, basename='projects'),
+    path('accounts', AccountsView),
+    path('countries', CountriesView),
+    path('clients', ClientsView),
+    path('earnings', EarningsView),
+    path('projects', ProjectsView),
 ]
