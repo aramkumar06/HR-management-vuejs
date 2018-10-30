@@ -7,6 +7,7 @@ from tms.views import CountriesView
 from tms.views import EarningsView
 from tms.views import ProjectsView
 
+# default_mapping =
 router = DefaultRouter()
 router.register(r'accounts', AccountsView, 'accounts')
 router.register(r'clients', ClientsView, 'clients')
