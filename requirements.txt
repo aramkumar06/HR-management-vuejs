@@ -4,3 +4,4 @@ djangorestframework==3.8.2
 markdown
 django-filter
 django-cors-headers==2.4.0
+django-extensions==2.1.1

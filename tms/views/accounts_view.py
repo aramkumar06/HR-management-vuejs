@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BaseAuthentication
 from rest_framework.response import Response
+from rest_framework.routers import DefaultRouter
 from tms.models import Account
 from tms.serializers import AccountSerializer
 
@@ -121,3 +122,7 @@ class AccountsView(viewsets.ViewSet):
             })
 
         return response
+
+
+router = DefaultRouter()
+router.register(r'accounts', AccountsView, 'accounts')
