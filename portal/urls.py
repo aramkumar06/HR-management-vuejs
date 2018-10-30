@@ -22,5 +22,5 @@ from tms.urls import urlpatterns as tms_apis
 urlpatterns = [
     url(r'', include(frontend_url)),
     url(r'^admin/', admin.site.urls),
-    url(r'^tms/', include(tms_apis))
+    url(r'^/', include(tms_apis))
 ]
