@@ -1,15 +1,12 @@
-from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.response import Response
+from django.core.exceptions import PermissionDenied
 from tms.models import Account
 from tms.serializers import AccountSerializer
 
 
 class AccountsView(viewsets.ViewSet):
     serializer_class = AccountSerializer
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = ()
 
     def check_object_permissions(self, request, obj):
         if obj.user_id != request.user.id:
@@ -17,8 +14,8 @@ class AccountsView(viewsets.ViewSet):
 
     def list(self, request):
         # TODO
-        # for all params, should return all accounts when has permission
-        # return only user accounts
+        #   if user id is specified, return only user related accounts
+        #   not return all
         accounts = Account.objects.filter(user_id__exact=request.user.id)
         serializer = self.serializer_class(accounts, many=True)
         response = Response({
@@ -49,7 +46,6 @@ class AccountsView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             account = Account.objects.get(pk=pk)
-            self.check_object_permissions(request, account)
             serializer = self.serializer_class(data=account)
             response = Response({
                 'success': True,

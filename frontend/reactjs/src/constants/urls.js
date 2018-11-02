@@ -1,7 +1,7 @@
 const ROOT_URL = "http://localhost:8000/";
 
 export const AuthUrls = {
-    LOGIN: `${ROOT_URL}api/v1/login/`,
+    LOGIN: `${ROOT_URL}api/v1/tms/login/`,
     SIGNUP: `${ROOT_URL}tms/register/`,
     CHANGE_PASSWORD: `${ROOT_URL}tms/password/change/`,
     RESET_PASSWORD: `${ROOT_URL}tms/password/reset/`,

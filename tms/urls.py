@@ -16,5 +16,5 @@ router.register(r'projects', ProjectsView, 'projects')
 
 urlpatterns = [
     path('login/', CustomAuthToken.as_view()),
-    path('tms/', include(router.urls))
+    path('', include(router.urls))
 ]
