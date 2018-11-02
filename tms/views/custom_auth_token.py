@@ -15,7 +15,7 @@ class CustomAuthToken(ObtainAuthToken):
             response = Response({
                 'success': False
             })
-        else:            
+        else:
             user = serializer.validated_data['user']
             token, created = Token.objects.get_or_create(user=user)
             response = Response({

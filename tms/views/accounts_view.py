@@ -1,6 +1,6 @@
 from django.core.exceptions import PermissionDenied
-from rest_framework import viewsets, views
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.response import Response
 from tms.models import Account
 from tms.serializers import AccountSerializer
@@ -20,18 +20,11 @@ class AccountsView(viewsets.ViewSet):
         # for all params, should return all accounts when has permission
         # return only user accounts
         accounts = Account.objects.filter(user_id__exact=request.user.id)
-        serializer = self.serializer_class(data=accounts, many=True)
-        serializer.is_valid()
-        if serializer.errors:
-            response = Response({
-                'success': False,
-                'message': 'occurred an error!'
-            })
-        else:
-            response = Response({
-                'success': True,
-                'accounts': serializer
-            })
+        serializer = self.serializer_class(accounts, many=True)
+        response = Response({
+            'success': True,
+            'accounts': serializer.data
+        })
 
         return response
 
