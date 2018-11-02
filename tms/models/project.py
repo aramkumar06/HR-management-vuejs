@@ -1,7 +1,8 @@
 from django.db import models
 
-from tms.models.account import Account
-from tms.models.client import Client
+from tms.models import Account
+from tms.models import Client
+from tms.models import User
 
 """
 version 1
@@ -56,5 +57,6 @@ class Project(models.Model):
 
     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
     client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='')
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass

@@ -9,7 +9,7 @@ class ClientsView(viewsets.ViewSet):
     serializer_class = ClientSerializer
 
     def check_object_permissions(self, request, obj):
-        if obj.account.user_id != request.user.id:
+        if obj.user_id != request.user.id:
             raise PermissionDenied()
 
     def list(self, request):
@@ -17,7 +17,7 @@ class ClientsView(viewsets.ViewSet):
         serializer = self.serializer_class(clients, many=True)
         response = Response({
             'success': True,
-            'accounts': serializer.data
+            'clients': serializer.data
         })
 
         return response
@@ -47,12 +47,12 @@ class ClientsView(viewsets.ViewSet):
             serializer = self.serializer_class(data=client)
             response = Response({
                 'success': True,
-                'account': serializer
+                'client': serializer
             })
         except Client.DoesNotExist:
             response = Response({
                 'success': False,
-                'message': 'no such a account'
+                'message': 'no such a client'
             })
         except PermissionDenied:
             response = Response({
@@ -75,7 +75,7 @@ class ClientsView(viewsets.ViewSet):
         except Client.DoesNotExist:
             response = Response({
                 'success': False,
-                'message': 'no such a account'
+                'message': 'no such a client'
             })
         except PermissionDenied:
             response = Response({
@@ -100,7 +100,7 @@ class ClientsView(viewsets.ViewSet):
         except Client.DoesNotExist:
             response = Response({
                 'success': False,
-                'message': 'no such a account'
+                'message': 'no such a client'
             })
         except PermissionDenied:
             response = Response({

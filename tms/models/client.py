@@ -1,8 +1,9 @@
 from django.db import models
 
-from tms.models.country import Country
-from tms.models.account import Account
-from tms.models.site import Site
+from tms.models import Country
+from tms.models import Account
+from tms.models import Site
+from tms.models import User
 """
 version 1
     first name
@@ -34,5 +35,6 @@ class Client(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
     site = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL, help_text='')
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass

@@ -1,6 +1,9 @@
 from django.db import models
 
-from tms.models.project import Project
+from tms.models import Account
+from tms.models import Client
+from tms.models import Project
+from tms.models import User
 
 
 class Earning(models.Model):
@@ -34,6 +37,9 @@ class Earning(models.Model):
     approved_date = models.DateTimeField(null=True, help_text='Date Time when confirm balance')
     withdrawn_date = models.DateTimeField(null=True, help_text='Date Time when withdraw')
 
-    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, help_text='')
+    project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL, help_text='used when calculating per project')
+    account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='used when calculating per account')
+    client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='used when calculating per client')
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='used when calculating per user')
 
     pass
