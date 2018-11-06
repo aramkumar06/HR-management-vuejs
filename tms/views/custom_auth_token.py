@@ -23,7 +23,8 @@ class CustomAuthToken(ObtainAuthToken):
                 'token': token.key,
                 'id': user.id,
                 'team_id': user.team.id,
-                'role_id': user.role.id
+                'role_id': user.role.id,
+                'role_name': user.role.name
             })
 
         return response
