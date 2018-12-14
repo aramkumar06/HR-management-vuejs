@@ -28,7 +28,7 @@ const CompanyEarning = Loadable({
 });
 
 const AccountSetting = Loadable({
-  loader: () => import('./views/AccountSetting'),
+  loader: () => import('./views/accounts'),
   loading: Loading,
 });
 

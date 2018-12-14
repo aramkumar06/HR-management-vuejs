@@ -35,7 +35,7 @@ export default {
     },
     {
       name: 'Account Setting',
-      url: '/AccountSetting',
+      url: '/accounts',
       icon: 'icon-user-follow',
     },
     {
