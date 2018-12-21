@@ -18,3 +18,14 @@ npm-debug.log
 
 # ignore fixtures
 fixtures/
+
+.DS_Store
+dist/
+yarn-debug.log*
+yarn-error.log*
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
+
+# environment
+.env

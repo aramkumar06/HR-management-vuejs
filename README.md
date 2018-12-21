@@ -9,7 +9,7 @@
   - django-cors-headers 2.4.0
   
 ## Frontend
-  - ReactJS 16.4.2
+  - Vue 2.5.13
   
 ## How to install
   - install python 3.6
