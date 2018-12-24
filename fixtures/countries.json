@@ -11,8 +11,8 @@
     "model": "tms.Country",
     "pk": 2,
     "fields": {
-      "name": "United States",
-      "code": "US"
+      "name": "Russian Federation",
+      "code": "RU"
     }
   },
   {

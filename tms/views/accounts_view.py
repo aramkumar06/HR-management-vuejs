@@ -13,10 +13,30 @@ class AccountsView(viewsets.ViewSet):
             raise PermissionDenied()
 
     def list(self, request):
+
         # TODO
-        #   if user id is specified, return only user related accounts
-        #   not return all
-        accounts = Account.objects.filter(user_id__exact=request.user.id)
+        #   if user id is specified, return only user related accounts and share accounts like freelancer
+        # v2
+        #   role based query
+        #
+        raw_query = """  
+          SELECT
+                ta.id           AS id
+              , ta.first_name   AS account_first_name
+              , ta.last_name    AS account_last_name
+              , ta.status       AS account_status
+              , ta.email        AS account_email
+              , tc.name         AS country_name
+              , ts.name         AS site_name
+          FROM
+            tms_account AS ta
+          INNER JOIN tms_site AS ts ON ta.site_id = ts.id
+          INNER JOIN tms_country AS tc ON ta.country_id = tc.id
+          WHERE ta.user_id = {user_id} OR ta.user_id IS NULL;
+        """.format(
+            user_id=request.user.id
+        )
+        accounts = Account.objects.raw(raw_query)
         serializer = self.serializer_class(accounts, many=True)
         response = Response({
             'success': True,
