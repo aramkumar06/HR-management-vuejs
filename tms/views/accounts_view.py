@@ -37,10 +37,20 @@ class AccountsView(viewsets.ViewSet):
             user_id=request.user.id
         )
         accounts = Account.objects.raw(raw_query)
-        serializer = self.serializer_class(accounts, many=True)
+        ret = []
+        for account in accounts:
+            ret.append({
+                "account_id": account.id,
+                "account_first_name": account.account_first_name,
+                "account_last_name": account.account_last_name,
+                "account_status": account.account_status,
+                "account_email": account.account_email,
+                "country_name": account.country_name,
+                "site_name": account.site_name,
+            })
         response = Response({
             'success': True,
-            'accounts': serializer.data
+            'accounts': ret
         })
 
         return response
@@ -51,11 +61,11 @@ class AccountsView(viewsets.ViewSet):
         if serializer.errors:
             response = Response({
                 'success': False,
-                'message': 'occurred an error!'
+                'message': serializer.errors
             })
         else:
-            account = serializer.validated_data['account']
-            created = Account.objects.create(account)
+            validated_data = serializer.validated_data
+            created = Account.objects.create(**validated_data)
             response = Response({
                 'success': True,
                 'id': created.id

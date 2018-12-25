@@ -7,7 +7,7 @@ class CountrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Country
         fields = (
-            'id'
+            'id',
             'name',
             'code'
         )
