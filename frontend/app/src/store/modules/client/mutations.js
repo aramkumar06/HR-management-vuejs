@@ -6,10 +6,14 @@
  * client module.
  */
 
-import { FIND } from './mutation-types';
+import { FIND, INDEX } from './mutation-types';
 
 /* eslint-disable no-param-reassign */
 export default {
   [FIND](state, client) {
+    state.client = client;
+  },
+  [INDEX](state, clients) {
+    state.clients = clients;
   },
 };

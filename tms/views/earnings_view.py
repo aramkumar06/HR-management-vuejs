@@ -28,14 +28,13 @@ class EarningsView(viewsets.ViewSet):
         if serializer.errors:
             response = Response({
                 'success': False,
-                'message': 'occurred an error!'
+                'message': serializer.errors
             })
         else:
-            earning = serializer.validated_data['earning']
-            created = Earning.objects.create(earning)
+            serializer.save()
             response = Response({
                 'success': True,
-                'id': created.id
+                'message': 'successfully created!'
             })
 
         return response
@@ -43,10 +42,10 @@ class EarningsView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             earning = Earning.objects.get(pk=pk)
-            serializer = self.serializer_class(data=earning)
+            serializer = self.serializer_class(earning)
             response = Response({
                 'success': True,
-                'earning': serializer
+                'earning': serializer.data
             })
         except Earning.DoesNotExist:
             response = Response({
@@ -65,12 +64,19 @@ class EarningsView(viewsets.ViewSet):
         try:
             earning = Earning.objects.get(pk=pk)
             self.check_object_permissions(request, earning)
-            serializer = self.serializer_class(data=earning)
-            earning.save(update_fields=serializer)
-            response = Response({
-                'success': True,
-                'id': earning.id
-            })
+            serializer = self.serializer_class(data=request.data, instance=earning)
+            serializer.is_valid(raise_exception=True)
+            if serializer.errors:
+                response = Response({
+                    'success': False,
+                    'message': serializer.errors
+                })
+            else:
+                serializer.save()
+                response = Response({
+                    'success': True,
+                    'message': 'successfully updated!'
+                })
         except Earning.DoesNotExist:
             response = Response({
                 'success': False,

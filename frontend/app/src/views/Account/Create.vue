@@ -84,7 +84,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div><!-- end of body -->
 
       <div slot="footer">
         Made by abc

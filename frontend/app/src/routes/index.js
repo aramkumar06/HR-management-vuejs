@@ -18,7 +18,7 @@ export default [
     },
   },
 
-  // Account
+  // Account Index
   {
     path: '/account',
     name: 'account.index',
@@ -54,11 +54,35 @@ export default [
     },
   },
 
-  // Client
+  // Client Index
   {
     path: '/client',
     name: 'client.index',
     component: () => import('@/views/Client/Index.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Client Create
+  {
+    path: '/client/create',
+    name: 'client.create',
+    component: () => import('@/views/Client/Create.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Client Update
+  {
+    path: '/client/:client_id/update',
+    name: 'client.update',
+    component: () => import('@/views/Client/Update.vue'),
 
     // If the user needs to be authenticated to view this page.
     meta: {

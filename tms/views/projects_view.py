@@ -28,14 +28,13 @@ class ProjectsView(viewsets.ViewSet):
         if serializer.errors:
             response = Response({
                 'success': False,
-                'message': 'occurred an error!'
+                'message': serializer.errors
             })
         else:
-            project = serializer.validated_data['project']
-            created = Project.objects.create(project)
+            serializer.save()
             response = Response({
                 'success': True,
-                'id': created.id
+                'message': 'successfully created!'
             })
 
         return response
@@ -43,10 +42,10 @@ class ProjectsView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             project = Project.objects.get(pk=pk)
-            serializer = self.serializer_class(data=project)
+            serializer = self.serializer_class(project)
             response = Response({
                 'success': True,
-                'project': serializer
+                'project': serializer.data
             })
         except Project.DoesNotExist:
             response = Response({
@@ -65,12 +64,19 @@ class ProjectsView(viewsets.ViewSet):
         try:
             project = Project.objects.get(pk=pk)
             self.check_object_permissions(request, project)
-            serializer = self.serializer_class(data=project)
-            project.save(update_fields=serializer)
-            response = Response({
-                'success': True,
-                'id': project.id
-            })
+            serializer = self.serializer_class(data=request.data, instance=project)
+            serializer.is_valid(raise_exception=True)
+            if serializer.errors:
+                response = Response({
+                    'success': False,
+                    'message': serializer.errors
+                })
+            else:
+                serializer.save()
+                response = Response({
+                    'success': True,
+                    'message': 'successfully updated!'
+                })
         except Project.DoesNotExist:
             response = Response({
                 'success': False,

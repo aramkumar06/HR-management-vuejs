@@ -16,7 +16,7 @@ version 1
     recital
     refer to country
     refer to account
-    refer to site 
+    refer to site
 version 2
     avatar
 """

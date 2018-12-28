@@ -6,7 +6,7 @@
  * account module.
  */
 
-import { FIND, INDEX, CREATE } from './mutation-types';
+import { FIND, INDEX } from './mutation-types';
 
 /* eslint-disable no-param-reassign */
 export default {

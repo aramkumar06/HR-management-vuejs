@@ -1,6 +1,5 @@
 <template>
   <v-layout>
-
     <div class="row">
       <div class="col-md-12">
         <router-link
@@ -79,7 +78,8 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div><!-- end of body -->
+
       <div slot="footer">
         Made by abc
       </div>

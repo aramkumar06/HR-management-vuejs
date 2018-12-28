@@ -6,28 +6,67 @@
  * client module.
  */
 
+import Vue from 'vue';
+import store from '@/store';
+import ClientProxy from '@/proxies/ClientProxy';
 import Transformer from '@/transformers/ClientTransformer';
 import * as types from './mutation-types';
 
-export const find = ({ commit }) => {
-  /*
-   * Normally you would use a proxy to fetch the client:
-   *
-   * new Proxy()
-   *  .find()
-   *  .then((response) => {
-   *    commit(types.FIND, Transformer.fetch(response));
-   *  })
-   *  .catch(() => {
-   *    console.log('Request failed...');
-   *  });
-   */
-  const client = {
-  };
+export const find = ({ commit }, payload) => {
+  return new ClientProxy().find(payload);
+};
 
-  commit(types.FIND, Transformer.fetch(client));
+export const index = ({ commit }) => {
+  return new ClientProxy().index();
+};
+
+export const create = ({ commit }, payload) => {
+  new ClientProxy()
+    .create(payload)
+    .then((response) => {
+      if (response.success === true) {
+        store.dispatch('client/index');
+        Vue.router.push({
+          name: 'client.index',
+        });
+      } else {
+        /*
+         * TODO
+         * should integrate with vuejs notification
+         */
+        console.log('Request failed...');
+      }
+    })
+    .catch(() => {
+      console.log('Request failed...');
+    });
+};
+
+export const update = ({ commit }, payload) => {
+  new ClientProxy()
+    .update(payload.id, payload.data)
+    .then((response) => {
+      if (response.success === true) {
+        store.dispatch('client/index');
+        Vue.router.push({
+          name: 'client.index',
+        });
+      } else {
+        /*
+         * TODO
+         * should integrate with vuejs notification
+         */
+        console.log('Request failed...');
+      }
+    })
+    .catch(() => {
+      console.log('Request failed...');
+    });
 };
 
 export default {
   find,
+  index,
+  create,
+  update
 };
