@@ -105,6 +105,7 @@ import VLayout from '@/layouts/Default.vue';
 import VCard from '@/components/Card.vue';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
+import store from '@/store';
 
 export default {
   /**
@@ -127,9 +128,13 @@ export default {
     };
   },
 
+  beforeRouteEnter(to, from, next) {
+    store.dispatch('country/index');
+    store.dispatch('site/index');
+    next();
+  },
+
   mounted() {
-    this.$store.dispatch('country/index');
-    this.$store.dispatch('site/index');
   },
 
   methods: {

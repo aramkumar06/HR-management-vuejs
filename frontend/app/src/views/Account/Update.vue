@@ -149,6 +149,7 @@ import VLayout from '@/layouts/Default.vue';
 import VCard from '@/components/Card.vue';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
+import store from '@/store';
 
 export default {
   /**
@@ -171,10 +172,24 @@ export default {
     };
   },
 
+  beforeRouteEnter(to, from, next) {
+    store.dispatch('country/index');
+    store.dispatch('site/index');
+    store.dispatch('account/find', to.params.account_id)
+      .then((response) => {
+        if (response.success === true) {
+          store.commit('account/FIND', response.account);
+          next();
+        } else {
+          console.log('Request failed...');
+        }
+      })
+      .catch(() => {
+        console.log('Request failed...');
+      });
+  },
+
   mounted() {
-    this.$store.dispatch('country/index');
-    this.$store.dispatch('site/index');
-    this.$store.dispatch('account/find', this.$route.params.account_id);
   },
 
   methods: {

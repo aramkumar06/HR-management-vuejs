@@ -97,6 +97,7 @@
 
 import VLayout from '@/layouts/Default.vue';
 import VCard from '@/components/Card.vue';
+import store from '@/store';
 
 export default {
   /**
@@ -112,8 +113,22 @@ export default {
     VCard,
   },
 
+  beforeRouteEnter(to, from, next) {
+    store.dispatch('account/index')
+      .then((response) => {
+        if (response.success === true) {
+          store.commit('account/INDEX', response.accounts);
+          next();
+        } else {
+          console.log('Request failed...');
+        }
+      })
+      .catch(() => {
+        console.log('Request failed...');
+      });
+  },
+
   mounted() {
-    this.$store.dispatch('account/index');
   },
 };
 </script>

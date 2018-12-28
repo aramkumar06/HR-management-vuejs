@@ -13,33 +13,11 @@ import Transformer from '@/transformers/AccountTransformer';
 import * as types from './mutation-types';
 
 export const find = ({ commit }, payload) => {
-   new AccountProxy()
-    .find(payload)
-    .then((response) => {
-      if (response.success === true) {
-        commit(types.FIND, response.account);
-      } else {
-        console.log('Request failed...');
-      }
-    })
-    .catch(() => {
-      console.log('Request failed...');
-    });
+  return new AccountProxy().find(payload);
 };
 
 export const index = ({ commit }) => {
-  new AccountProxy()
-    .index()
-    .then((response) => {
-      if (response.success === true) {
-        commit(types.INDEX, response.accounts);
-      } else {
-        console.log('Request failed...');
-      }
-    })
-    .catch(() => {
-      console.log('Request failed...');
-    });
+  return new AccountProxy().index();
 };
 
 export const create = ({ commit }, payload) => {
