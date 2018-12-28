@@ -24,7 +24,7 @@ version 1
     overview
 version 2
     avatar
-    tags - tech tags like Python, Django 
+    tags - tech tags like Python, Django
 """
 
 

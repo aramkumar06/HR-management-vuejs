@@ -64,11 +64,10 @@ class AccountsView(viewsets.ViewSet):
                 'message': serializer.errors
             })
         else:
-            validated_data = serializer.validated_data
-            created = Account.objects.create(**validated_data)
+            serializer.save()
             response = Response({
                 'success': True,
-                'id': created.id
+                'message': 'successfully created!'
             })
 
         return response
@@ -76,10 +75,10 @@ class AccountsView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         try:
             account = Account.objects.get(pk=pk)
-            serializer = self.serializer_class(data=account)
+            serializer = self.serializer_class(account)
             response = Response({
                 'success': True,
-                'account': serializer
+                'account': serializer.data
             })
         except Account.DoesNotExist:
             response = Response({
@@ -95,15 +94,27 @@ class AccountsView(viewsets.ViewSet):
         return response
 
     def update(self, request, pk=None):
+        #
+        # TODO
+        # should check permission
+        # for shared accounts, general user couldn't update account detail
+        #
         try:
             account = Account.objects.get(pk=pk)
             self.check_object_permissions(request, account)
-            serializer = self.serializer_class(data=account)
-            account.save(update_fields=serializer)
-            response = Response({
-                'success': True,
-                'id': account.id
-            })
+            serializer = self.serializer_class(data=request.data, instance=account)
+            serializer.is_valid(raise_exception=True)
+            if serializer.errors:
+                response = Response({
+                    'success': False,
+                    'message': serializer.errors
+                })
+            else:
+                serializer.save()
+                response = Response({
+                    'success': True,
+                    'message': 'successfully updated!'
+                })
         except Account.DoesNotExist:
             response = Response({
                 'success': False,
