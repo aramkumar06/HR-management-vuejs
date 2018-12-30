@@ -67,21 +67,27 @@
               class="form-control"
               required />
           </div>
-          <div class="form-group pull-right">
-            <router-link
-              :to="{ name: 'account.index'}"
-              class="btn btn-danger"
-            >
-              Cancel
-            </router-link>
-            <button
-              type="button"
-              class="btn btn-success"
-              :disabled="account.country == null || account.site == null || account.first_name == null || account.last_name == null || account.email == null || account.email_password == null || account.skype == null || account.phone_number == null || account.title == null || account.overview == null || account.recital == null || account.created_date == null"
-              @click="createAccount()"
-            >
-              Create Account
-            </button>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-1 offset-md-9">
+                <router-link
+                  :to="{ name: 'account.index'}"
+                  class="btn btn-danger"
+                >
+                  Cancel
+                </router-link>
+              </div>
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn btn-success pull-right"
+                  :disabled="account.country == null || account.site == null || account.first_name == null || account.last_name == null || account.email == null || account.email_password == null || account.skype == null || account.phone_number == null || account.title == null || account.overview == null || account.recital == null || account.created_date == null"
+                  @click="createAccount()"
+                >
+                  Create Account
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div><!-- end of body -->

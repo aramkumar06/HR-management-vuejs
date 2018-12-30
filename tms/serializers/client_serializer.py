@@ -3,7 +3,7 @@ from rest_framework import serializers
 from tms.models import Client
 
 
-class ClientSerializer(serializers.HyperlinkedModelSerializer):
+class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = (
@@ -17,5 +17,6 @@ class ClientSerializer(serializers.HyperlinkedModelSerializer):
             'recital',
             'country',
             'account',
-            'site'
+            'site',
+            'user'
         )

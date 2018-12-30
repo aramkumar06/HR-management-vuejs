@@ -40,18 +40,18 @@
             </th>
           </thead>
           <tbody>
-            <tr v-for="client in clients">
+            <tr v-for="client in $store.state.client.clients">
               <td>
                 {{ client.country_name }}
               </td>
               <td>
-                {{ client.account_name }}
+                {{ client.account_first_name + ' ' + client.account_last_name }}
               </td>
               <td>
-                {{ client.client_name }}
+                {{ client.client_first_name + ' ' + client.client_last_name }}
               </td>
               <td>
-                {{ client.registed_date }}
+                {{ client.client_registered_date }}
               </td>
               <td>
                 <button class="btn btn-xs btn-primary">
@@ -61,7 +61,7 @@
               </td>
               <td>
                 <router-link
-                  :to="{name: 'client.update', params: {client_id: client.client_id}}"
+                  :to="{name: 'client.update', params: {client_id: client.id}}"
                   class="btn btn-xs btn-info">
                   Edit
                 </router-link>
@@ -87,7 +87,7 @@ export default {
   /**
    * The name of the page.
    */
-  name: 'AccountIndex',
+  name: 'ClientIndex',
 
   /**
    * The components that the page can use.

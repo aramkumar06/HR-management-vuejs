@@ -40,7 +40,7 @@ class AccountsView(viewsets.ViewSet):
         ret = []
         for account in accounts:
             ret.append({
-                "account_id": account.id,
+                "id": account.id,
                 "account_first_name": account.account_first_name,
                 "account_last_name": account.account_last_name,
                 "account_status": account.account_status,

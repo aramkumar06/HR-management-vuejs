@@ -15,7 +15,7 @@ class ClientsView(viewsets.ViewSet):
     def list(self, request):
         raw_query = """
             SELECT
-              , tc.id               AS id
+                tc.id               AS id
               , tc.first_name       AS client_first_name
               , tc.last_name        AS client_last_name
               , tc.registered_date  AS client_registered_date
@@ -25,27 +25,23 @@ class ClientsView(viewsets.ViewSet):
               , ts.name             AS site_name
             FROM
               tms_client AS tc
-            INNER JOIN tms_account AS ta ON tc.account_id = ta.id;
+            INNER JOIN tms_account AS ta ON tc.account_id = ta.id
             INNER JOIN tms_user AS tu ON ta.user_id = tu.id
             INNER JOIN tms_site AS ts ON tc.site_id = ts.id
             INNER JOIN tms_country AS tc1 ON tc.country_id = tc1.id
             WHERE tu.id = {user_id}
-            {account_query};
         """.format(
             user_id=request.user.id
         )
         account_id = request.GET.get('account_id', None)
         if account_id is not None:
-            account_query = "WHERE ta.id = " + account_id
-            raw_query.format(account_query=account_query)
-        else:
-            raw_query.format(account_query="")
+            raw_query = raw_query + " WHERE ta.id = " + account_id
 
         clients = Client.objects.raw(raw_query)
         ret = []
         for client in clients:
             ret.append({
-                "client_id": client.id,
+                "id": client.id,
                 "client_first_name": client.client_first_name,
                 "client_last_name": client.client_last_name,
                 "client_registered_date": client.client_registered_date,
@@ -56,7 +52,7 @@ class ClientsView(viewsets.ViewSet):
             })
         response = Response({
             'success': True,
-            'accounts': ret
+            'clients': ret
         })
 
         return response
@@ -77,7 +73,6 @@ class ClientsView(viewsets.ViewSet):
             })
 
         return response
-        pass
 
     def retrieve(self, request, pk=None):
         try:

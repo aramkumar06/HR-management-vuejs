@@ -70,7 +70,7 @@
               </th>
               <th>
                 <router-link
-                  :to="{name: 'account.update', params: {account_id: account.account_id}}"
+                  :to="{name: 'account.update', params: {account_id: account.id}}"
                   class="btn btn-xs btn-info">
                   Edit
                 </router-link>
