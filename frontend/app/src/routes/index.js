@@ -90,11 +90,35 @@ export default [
     },
   },
 
-  // Project
+  // Project Index
   {
     path: '/project',
     name: 'project.index',
     component: () => import('@/views/Project/Index.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Project Create
+  {
+    path: '/project/create',
+    name: 'project.create',
+    component: () => import('@/views/Project/Create.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Project Update
+  {
+    path: '/project/:project_id/update',
+    name: 'project.update',
+    component: () => import('@/views/Project/Update.vue'),
 
     // If the user needs to be authenticated to view this page.
     meta: {

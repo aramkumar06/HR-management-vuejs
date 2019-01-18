@@ -21,5 +21,6 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
             'applied_proposals_count',
             'interview_count',
             'account',
-            'client'
+            'client',
+            'user'
         )

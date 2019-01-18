@@ -41,14 +41,14 @@ class ClientsView(viewsets.ViewSet):
         ret = []
         for client in clients:
             ret.append({
-                "id": client.id,
-                "client_first_name": client.client_first_name,
-                "client_last_name": client.client_last_name,
-                "client_registered_date": client.client_registered_date,
-                "account_first_name": client.account_first_name,
-                "account_last_name": client.account_last_name,
-                "country_name": client.country_name,
-                "site_name": client.site_name,
+                "id":                       client.id,
+                "client_first_name":        client.client_first_name,
+                "client_last_name":         client.client_last_name,
+                "client_registered_date":   client.client_registered_date,
+                "account_first_name":       client.account_first_name,
+                "account_last_name":        client.account_last_name,
+                "country_name":             client.country_name,
+                "site_name":                client.site_name,
             })
         response = Response({
             'success': True,

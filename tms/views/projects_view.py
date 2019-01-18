@@ -13,11 +13,55 @@ class ProjectsView(viewsets.ViewSet):
             raise PermissionDenied()
 
     def list(self, request):
-        projects = Project.objects.filter(user_id__exact=request.user.id)
-        serializer = self.serializer_class(projects, many=True)
+        raw_query = """
+            SELECT
+                tp.id           AS id
+              , tp.title        AS title
+              , tp.start_date   AS start_date
+              , tp.project_type AS project_type
+              , tp.status       AS status
+              , tc.first_name   AS client_first_name
+              , tc.last_name    AS client_last_name
+              , ta.first_name   AS account_first_name
+              , ta.last_name    AS account_last_name
+              , ts.name         AS site_name
+            FROM
+              tms_project AS tp
+            INNER JOIN tms_client AS tc ON tp.client_id = tc.id
+            INNER JOIN tms_account AS ta ON tp.account_id = ta.id
+            INNER JOIN tms_site AS ts ON tc.site_id = ts.id
+            WHERE tp.user_id = {user_id}
+              AND tp.status = 'ST'
+        """.format(
+            user_id=request.user.id
+        )
+        client_id = request.GET.get('client_id', None)
+        account_id = request.GET.get('account_id', None)
+        if client_id is not None:
+            raw_query = raw_query + " WHERE tp.id = " + client_id
+
+        if account_id is not None:
+            raw_query = raw_query + " WHERE tp.id = " + account_id
+
+        projects = Project.objects.raw(raw_query)
+        ret = []
+        for project in projects:
+            ret.append({
+                "id":                   project.id,
+                "title":                project.title,
+                "start_date":           project.start_date,
+                "project_type":         project.project_type,
+                "status":               project.status,
+                "client_first_name":    project.client_first_name,
+                "client_last_name":     project.client_last_name,
+                "account_first_name":   project.account_first_name,
+                "account_last_name":    project.account_last_name,
+                "site_name":            project.site_name
+            })
+
         response = Response({
             'success': True,
-            'projects': serializer.data
+            'clients': ret
         })
 
         return response

@@ -40,13 +40,13 @@ class AccountsView(viewsets.ViewSet):
         ret = []
         for account in accounts:
             ret.append({
-                "id": account.id,
-                "account_first_name": account.account_first_name,
-                "account_last_name": account.account_last_name,
-                "account_status": account.account_status,
-                "account_email": account.account_email,
-                "country_name": account.country_name,
-                "site_name": account.site_name,
+                "id":                   account.id,
+                "account_first_name":   account.account_first_name,
+                "account_last_name":    account.account_last_name,
+                "account_status":       account.account_status,
+                "account_email":        account.account_email,
+                "country_name":         account.country_name,
+                "site_name":            account.site_name,
             })
         response = Response({
             'success': True,
