@@ -1,3 +1,4 @@
+<script src="../../../../../../../beforehire/bookbrush/custom-code/js/custom-image-tool.js"></script>
 <template>
   <v-layout>
     <v-card contextual-style="dark">
@@ -25,23 +26,27 @@
           </div>
           <div class="form-group">
             <label>Description</label>
-            <input type="input" class="form-control" v-model="project.description" required />
+            <textarea class="form-control" v-model="project.description" required />
           </div>
           <div class="form-group">
             <label>Start Date</label>
-            <input type="input" class="form-control" v-model="project.start_date" />
+            <datepicker v-model="project.start_date" />
           </div>
           <div class="form-group">
             <label>End Date</label>
-            <input type="input" class="form-control" v-model="project.end_date" />
+            <datepicker v-model="project.end_date" />
           </div>
           <div class="form-group">
             <label>Status</label>
-            <input type="input" class="form-control" v-model="project.status" />
+            <select v-model="project.status" class="form-control">
+              <option v-for="status in statuses" v-bind:value="status.key">{{ status.value }}</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Project Type</label>
-            <input type="input" class="form-control" v-model="project.project_type" />
+            <select v-model="project.project_type" class="form-control">
+              <option v-for="projectType in projectTypes" v-bind:value="projectType.key">{{ projectType.value }}</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Price</label>
@@ -49,23 +54,23 @@
           </div>
           <div class="form-group">
             <label>Limit</label>
-            <input type="input" class="form-control" v-model="client.recital" />
+            <input type="input" class="form-control" v-model="project.limit" />
           </div>
           <div class="form-group">
             <label>Posted DateTime</label>
-            <input type="input" class="form-control" v-model="client.recital" />
+            <datepicker v-model="project.posted_datetime" />
           </div>
           <div class="form-group">
             <label>Applied DateTime</label>
-            <datepicker v-model="client.recital" class="form-control" />
+            <datepicker v-model="project.applied_datetime" />
           </div>
           <div class="form-group">
             <label>Applied Proposals Count</label>
-            <input type="input" class="form-control" v-model="client.recital" />
+            <input type="input" class="form-control" v-model="project.applied_proposals_count" />
           </div>
           <div class="form-group">
             <label>Interview Count</label>
-            <input type="input" class="form-control" v-model="client.recital" />
+            <input type="input" class="form-control" v-model="project.interview_count" />
           </div>
           <div class="form-group">
             <div class="row">
@@ -130,12 +135,51 @@ export default {
 
   data() {
     return {
-      client: {},
+      project: {},
+      statuses: [
+        {
+          key: "ST",
+          value: "Start"
+        },
+        {
+          key: "EN",
+          value: "End"
+        },
+        {
+          key: "DS",
+          value: "Dispute"
+        },
+      ],
+      projectTypes: [
+        {
+          key: "HR",
+          value: "Hourly"
+        },
+        {
+          key: "FX",
+          value: "Fixed"
+        }
+      ]
     };
   },
 
   beforeRouteEnter(to, from, next) {
-    store.dispatch('account/index');
+    store.dispatch('account/index')
+      .then((response) => {
+        if (response.success === true) {
+          store.commit('account/INDEX', response.accounts);
+        } else {
+          console.log('Request failed...');
+        }
+      })
+      .catch(() => {
+        console.log('Request failed...');
+      });
+    /*
+     * TODO
+     * Client selection should depend on account selection.
+     * Need to get only clients corresponding to that account.
+     */
     store.dispatch('client/index')
       .then((response) => {
         if (response.success === true) {
@@ -155,7 +199,23 @@ export default {
 
   methods: {
     createProject() {
-      this.client.user = this.$store.state.auth.user.id;
+      this.project.user = this.$store.state.auth.user.id;
+      if (this.project.start_date) {
+        this.project.start_date = moment(this.project.start_date).format('YYYY-MM-DD');
+      }
+
+      if (this.project.end_date) {
+        this.project.end_date = moment(this.project.end_date).format('YYYY-MM-DD');
+      }
+
+      if (this.project.posted_datetime) {
+        this.project.posted_datetime = moment(this.project.posted_datetime).format('YYYY-MM-DDT00:00');
+      }
+
+      if (this.project.applied_datetime) {
+        this.project.applied_datetime = moment(this.project.applied_datetime).format('YYYY-MM-DDThh:00');
+      }
+
       this.$store.dispatch('project/create', this.project);
     },
   },

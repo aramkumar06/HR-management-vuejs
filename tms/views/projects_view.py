@@ -61,7 +61,7 @@ class ProjectsView(viewsets.ViewSet):
 
         response = Response({
             'success': True,
-            'clients': ret
+            'projects': ret
         })
 
         return response

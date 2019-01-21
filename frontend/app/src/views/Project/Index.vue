@@ -59,13 +59,19 @@
                 {{ project.status }}
               </td>
               <td>
-                {{ project.client_first_name + ' ' + client.client_last_name }}
+                {{ project.client_first_name + ' ' + project.client_last_name }}
               </td>
               <td>
-                {{ project.account_first_name + ' ' + client.account_last_name }}
+                {{ project.account_first_name + ' ' + project.account_last_name }}
               </td>
               <td>
                 {{ project.site_name }}
+              </td>
+              <td>
+                <button class="btn btn-xs btn-primary">
+                  Earning
+                  <i class="fa fa-arrow-right" />
+                </button>
               </td>
               <td>
                 <router-link
@@ -73,12 +79,6 @@
                   class="btn btn-xs btn-info">
                   Edit
                 </router-link>
-              </td>
-              <td>
-                <button class="btn btn-xs btn-primary">
-                  Earning
-                  <i class="fa fa-arrow-right" />
-                </button>
               </td>
             </tr>
           </tbody>

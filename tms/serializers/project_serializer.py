@@ -3,7 +3,7 @@ from rest_framework import  serializers
 from tms.models import Project
 
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
