@@ -6,4 +6,28 @@
  */
 
 export default {
+  statuses: [
+    {
+      key: "ST",
+      value: "Start"
+    },
+    {
+      key: "EN",
+      value: "End"
+    },
+    {
+      key: "DS",
+      value: "Dispute"
+    },
+  ],
+  projectTypes: [
+    {
+      key: "HR",
+      value: "Hourly"
+    },
+    {
+      key: "FX",
+      value: "Fixed"
+    }
+  ]
 };

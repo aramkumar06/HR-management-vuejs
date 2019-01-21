@@ -13,7 +13,7 @@ import Transformer from '@/transformers/ProjectTransformer';
 import * as types from './mutation-types';
 
 export const find = ({ commit }, payload) => {
-  return new ProjectProxy.find(payload);
+  return new ProjectProxy().find(payload);
 };
 
 export const index = ({ commit }) => {

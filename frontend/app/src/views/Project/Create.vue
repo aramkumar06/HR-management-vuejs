@@ -1,4 +1,3 @@
-<script src="../../../../../../../beforehire/bookbrush/custom-code/js/custom-image-tool.js"></script>
 <template>
   <v-layout>
     <v-card contextual-style="dark">
@@ -39,13 +38,13 @@
           <div class="form-group">
             <label>Status</label>
             <select v-model="project.status" class="form-control">
-              <option v-for="status in statuses" v-bind:value="status.key">{{ status.value }}</option>
+              <option v-for="status in $store.state.project.statuses" v-bind:value="status.key">{{ status.value }}</option>
             </select>
           </div>
           <div class="form-group">
             <label>Project Type</label>
             <select v-model="project.project_type" class="form-control">
-              <option v-for="projectType in projectTypes" v-bind:value="projectType.key">{{ projectType.value }}</option>
+              <option v-for="projectType in $store.state.project.projectTypes" v-bind:value="projectType.key">{{ projectType.value }}</option>
             </select>
           </div>
           <div class="form-group">
@@ -136,30 +135,6 @@ export default {
   data() {
     return {
       project: {},
-      statuses: [
-        {
-          key: "ST",
-          value: "Start"
-        },
-        {
-          key: "EN",
-          value: "End"
-        },
-        {
-          key: "DS",
-          value: "Dispute"
-        },
-      ],
-      projectTypes: [
-        {
-          key: "HR",
-          value: "Hourly"
-        },
-        {
-          key: "FX",
-          value: "Fixed"
-        }
-      ]
     };
   },
 
@@ -200,6 +175,11 @@ export default {
   methods: {
     createProject() {
       this.project.user = this.$store.state.auth.user.id;
+      /*
+       * TODO
+       * should add validation whether start_date is before end date
+       * should add validatation whether posted_datetime is before applied_datetime
+       */
       if (this.project.start_date) {
         this.project.start_date = moment(this.project.start_date).format('YYYY-MM-DD');
       }
