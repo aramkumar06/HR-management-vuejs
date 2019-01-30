@@ -74,3 +74,42 @@
 
   </v-layout>
 </template>
+
+<script>
+import VLayout from '@/layouts/Default.vue';
+import VCard from '@/components/Card.vue';
+import store from '@/store';
+
+export default {
+  /**
+   * The name of the page.
+   */
+  name: 'EarningIndex',
+
+  /**
+   * The components that the page can use.
+   */
+  components: {
+    VLayout,
+    VCard,
+  },
+
+  beforeRouteEnter(to, from, next) {
+    store.dispatch('earning/index')
+      .then((response) => {
+        if (response.success === true) {
+          store.commit('earning/INDEX', response.earnings);
+          next();
+        } else {
+          console.log('Request failed...');
+        }
+      })
+      .catch(() => {
+        console.log('Request failed...');
+      });
+  },
+
+  mounted() {
+  },
+};
+</script>

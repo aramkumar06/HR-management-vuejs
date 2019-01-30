@@ -178,7 +178,7 @@ export default {
       /*
        * TODO
        * should add validation whether start_date is before end date
-       * should add validatation whether posted_datetime is before applied_datetime
+       * should add validation whether posted_datetime is before applied_datetime
        */
       if (this.project.start_date) {
         this.project.start_date = moment(this.project.start_date).format('YYYY-MM-DD');

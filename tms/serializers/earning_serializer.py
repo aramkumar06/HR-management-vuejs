@@ -3,7 +3,7 @@ from rest_framework import serializers
 from tms.models import Earning
 
 
-class EarningSerializer(serializers.HyperlinkedModelSerializer):
+class EarningSerializer(serializers.ModelSerializer):
     class Meta:
         model = Earning
         fields = (
@@ -14,9 +14,9 @@ class EarningSerializer(serializers.HyperlinkedModelSerializer):
             'week_of_year',
             'month_of_year',
             'year',
-            'week_year',
-            'updated_date',
-            'status',
+            'confirmed',
             'project',
-            'earn_type'
+            'approved_date',
+            'withdrawn_date',
+            'approved_by'
         )

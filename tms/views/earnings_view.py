@@ -13,11 +13,59 @@ class EarningsView(viewsets.ViewSet):
             raise PermissionDenied()
 
     def list(self, request):
-        earnings = Earning.objects.filter(user_id__exact=request.user.id)
-        serializer = self.serializer_class(earnings, many=True)
+        # TODO
+        # should display only this month earning
+        raw_query = """
+            SELECT
+                te.id AS id
+              , te.year AS year
+              , te.week_of_year AS week_of_year
+              , te.confirmed AS confirmed
+              , ts.name AS site_name
+              , ta.first_name AS account_first_name
+              , ta.last_name AS account_last_name
+              , tc.first_name AS client_first_name
+              , tc.last_name AS client_last_name
+              , tp.title AS project_title 
+            FROM
+              tms_earning AS te
+            INNER JOIN tms_project AS tp ON te.project_id = tp.id
+            INNER JOIN tms_client AS tc ON tp.client_id = tc.id
+            INNER JOIN tms_account AS ta ON tc.account_id = ta.id
+            INNER JOIN tms_site AS ts ON ta.site_id = ts.id
+            INNER JOIN tms_user AS tu tp.user_in_charge = tu.id        
+                
+        """
+        project_id = request.GET.get('project_id', None)
+        client_id = request.GET.get('client_id', None)
+        account_id = request.GET.get('account_id', None)
+        if project_id is not None:
+            raw_query = raw_query + " WHERE tp.id = " + project_id
+
+        if client_id is not None:
+            raw_query = raw_query + " WHERE tc.id = " + client_id
+
+        if account_id is not None:
+            raw_query = raw_query + " WHERE ta.id = " + account_id
+
+        earnings = Earning.objects.raw(raw_query)
+        ret = []
+        for earning in earnings:
+            ret.append({
+                "id": earning.id,
+                "year": earning.year,
+                "week_of_year": earning.week_of_year,
+                "confirmed": earning.confirmed,
+                "site_name": earning.site_name,
+                "account_first_name": earning.account_first_name,
+                "account_last_name": earning.account_last_name,
+                "client_first_name": earning.client_first_name,
+                "client_last_name": earning.client_last_name,
+                "project_title": earning.project_title
+            })
         response = Response({
             'success': True,
-            'earnings': serializer.data
+            'earnings': ret
         })
 
         return response

@@ -22,5 +22,5 @@ class ProjectSerializer(serializers.ModelSerializer):
             'interview_count',
             'account',
             'client',
-            'user'
+            'user_in_charge'
         )

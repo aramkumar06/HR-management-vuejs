@@ -30,7 +30,7 @@ class ProjectsView(viewsets.ViewSet):
             INNER JOIN tms_client AS tc ON tp.client_id = tc.id
             INNER JOIN tms_account AS ta ON tp.account_id = ta.id
             INNER JOIN tms_site AS ts ON tc.site_id = ts.id
-            WHERE tp.user_id = {user_id}
+            WHERE tp.user_in_charge = {user_id}
               AND tp.status = 'ST'
         """.format(
             user_id=request.user.id
