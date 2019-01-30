@@ -185,7 +185,6 @@ export default {
 
   methods: {
     createProject() {
-      // this.project.user = this.$store.state.auth.user.id;
       if (this.project.start_date) {
         this.project.start_date = moment(this.project.start_date).format('YYYY-MM-DD');
       }
@@ -204,7 +203,7 @@ export default {
 
       const payload = {
         id: this.$route.params.project_id,
-        data: this.project
+        data: this.project,
       };
 
       this.$store.dispatch('project/update', payload);

@@ -19,20 +19,24 @@ class Earning(models.Model):
     STATUS_PENDING = 'PD'
     STATUS_BALANCE = 'BL'
     STATUS_WITHDRAW = 'WD'
+    STATUS_FEE = 'FE'
+    STATUS_RF = 'RF'
     STATUS_CHOICES = (
         (STATUS_PENDING, 'Pending'),
         (STATUS_BALANCE, 'Balance'),
         (STATUS_WITHDRAW, 'Withdraw'),
+        (STATUS_FEE, 'Fee'),
+        (STATUS_RF, 'Refund'),
     )
-    EARN_TYPE_GET = 'GT'
-    EARN_TYPE_FEE = 'FE'
-    EARN_TYPE_REFUND = 'RF'
-    EARN_TYPE_CHOICES = (
-        (EARN_TYPE_GET, 'Get'),
-        (EARN_TYPE_FEE, 'Fee'),
-        (EARN_TYPE_REFUND, 'Refund'),
-    )
-    earn_type = models.CharField(max_length=2, choices=EARN_TYPE_CHOICES, default=EARN_TYPE_GET, help_text='')
+    # EARN_TYPE_GET = 'GT'
+    # EARN_TYPE_FEE = 'FE'
+    # EARN_TYPE_REFUND = 'RF'
+    # EARN_TYPE_CHOICES = (
+    #     (EARN_TYPE_GET, 'Get'),
+    #     (EARN_TYPE_FEE, 'Fee'),
+    #     (EARN_TYPE_REFUND, 'Refund'),
+    # )
+    # earn_type = models.CharField(max_length=2, choices=EARN_TYPE_CHOICES, default=EARN_TYPE_GET, help_text='')
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=STATUS_PENDING, help_text='')
     approved_date = models.DateTimeField(null=True, help_text='Date Time when confirm balance')
     withdrawn_date = models.DateTimeField(null=True, help_text='Date Time when withdraw')

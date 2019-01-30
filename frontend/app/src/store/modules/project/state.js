@@ -8,26 +8,26 @@
 export default {
   statuses: [
     {
-      key: "ST",
-      value: "Start"
+      key: 'ST',
+      value: 'Start',
     },
     {
-      key: "EN",
-      value: "End"
+      key: 'EN',
+      value: 'End',
     },
     {
-      key: "DS",
-      value: "Dispute"
+      key: 'DS',
+      value: 'Dispute',
     },
   ],
   projectTypes: [
     {
-      key: "HR",
-      value: "Hourly"
+      key: 'HR',
+      value: 'Hourly',
     },
     {
-      key: "FX",
-      value: "Fixed"
-    }
-  ]
+      key: 'FX',
+      value: 'Fixed',
+    },
+  ],
 };

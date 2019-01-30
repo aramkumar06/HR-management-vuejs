@@ -6,28 +6,67 @@
  * earning module.
  */
 
+import Vue from 'vue';
+import store from '@/store';
+import EarningProxy from '@/proxies/EarningProxy';
 import Transformer from '@/transformers/EarningTransformer';
 import * as types from './mutation-types';
 
-export const find = ({ commit }) => {
-  /*
-   * Normally you would use a proxy to fetch the earning:
-   *
-   * new Proxy()
-   *  .find()
-   *  .then((response) => {
-   *    commit(types.FIND, Transformer.fetch(response));
-   *  })
-   *  .catch(() => {
-   *    console.log('Request failed...');
-   *  });
-   */
-  const earning = {
-  };
+export const find = ({ commit }, payload) => {
+  return new EarningProxy.find(payload);
+};
 
-  commit(types.FIND, Transformer.fetch(earning));
+export const index = ({ commit }) => {
+  return new EarningProxy().index();
+};
+
+export const create = ({ commit }, payload) => {
+  new EarningProxy()
+    .create(payload)
+    .then((response) => {
+      if (response.success === true) {
+        store.dispatch('earning/index');
+        Vue.router.push({
+          name: 'earning.index',
+        });
+      } else {
+        /*
+         * TODO
+         * should integrate with vuejs notification
+         */
+        console.log('Request failed...');
+      }
+    })
+    .catch(() => {
+      console.log('Request failed...');
+    });
+};
+
+export const update = ({ commit }, payload) => {
+  new EarningProxy()
+    .create(payload)
+    .then((response) => {
+      if (response.success === true) {
+        store.dispatch('earning/index');
+        Vue.router.push({
+          name: 'earning.index',
+        });
+      } else {
+        /*
+         * TODO
+         * should integrate with vuejs notification
+         */
+        console.log('Request failed...');
+      }
+    })
+    .catch(() => {
+      console.log('Request failed...');
+    });
 };
 
 export default {
   find,
+  index,
+  create,
+  update,
 };

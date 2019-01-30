@@ -126,11 +126,35 @@ export default [
     },
   },
 
-  // Earning
+  // Earning Index
   {
     path: '/earning',
     name: 'earning.index',
     component: () => import('@/views/Earning/Index.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Earning Create
+  {
+    path: '/earning/create',
+    name: 'earning.create',
+    component: () => import('@/views/Eanring/Create.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
+  // Earning Update
+  {
+    path: '/earning/:earning_id/update',
+    name: 'earning.update',
+    component: () => import('@/views/Earning/Update.vue'),
 
     // If the user needs to be authenticated to view this page.
     meta: {
