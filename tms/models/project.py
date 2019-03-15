@@ -57,6 +57,6 @@ class Project(models.Model):
 
     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
     client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='')
-    user_in_charge = models.ForeignKey(User, null=False, on_delete=models.SET_NULL, help_text='')
+    user_in_charge = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='')
 
     pass

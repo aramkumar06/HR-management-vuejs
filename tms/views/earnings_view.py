@@ -33,8 +33,8 @@ class EarningsView(viewsets.ViewSet):
             INNER JOIN tms_client AS tc ON tp.client_id = tc.id
             INNER JOIN tms_account AS ta ON tc.account_id = ta.id
             INNER JOIN tms_site AS ts ON ta.site_id = ts.id
-            INNER JOIN tms_user AS tu tp.user_in_charge = tu.id        
-                
+            INNER JOIN tms_user AS tu ON tp.user_in_charge_id = tu.id        
+        ;
         """
         project_id = request.GET.get('project_id', None)
         client_id = request.GET.get('client_id', None)

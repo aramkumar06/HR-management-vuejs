@@ -15,7 +15,7 @@
 
     <v-card contextual-style="dark">
       <span slot="header">
-        My Projects
+        My Earnings
       </span>
 
       <div slot="body">

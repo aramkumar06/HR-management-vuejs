@@ -142,7 +142,7 @@ export default [
   {
     path: '/earning/create',
     name: 'earning.create',
-    component: () => import('@/views/Eanring/Create.vue'),
+    component: () => import('@/views/Earning/Create.vue'),
 
     // If the user needs to be authenticated to view this page.
     meta: {

@@ -13,7 +13,7 @@ import Transformer from '@/transformers/EarningTransformer';
 import * as types from './mutation-types';
 
 export const find = ({ commit }, payload) => {
-  return new EarningProxy.find(payload);
+  return new EarningProxy().find(payload);
 };
 
 export const index = ({ commit }) => {
