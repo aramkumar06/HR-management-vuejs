@@ -174,7 +174,7 @@ export default {
 
   methods: {
     createProject() {
-      this.project.user = this.$store.state.auth.user.id;
+      this.project.user_in_charge = this.$store.state.auth.user.id;
       /*
        * TODO
        * should add validation whether start_date is before end date

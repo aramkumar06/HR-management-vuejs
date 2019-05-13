@@ -25,6 +25,11 @@ export default {
       state.user.role_name = localStorage.getItem('user_role_name');
       state.user.team_id = localStorage.getItem('user_team_id');
       Vue.$http.defaults.headers.common.Authorization = `Token ${localStorage.getItem('token')}`;
+      // set whole app variables
+      state.app = {};
+      state.app.book_dates = JSON.parse(localStorage.getItem('book_dates'));
+      state.app.active_year = localStorage.getItem('active_year');
+      state.app.active_month = localStorage.getItem('active_month');
     }
   },
 
@@ -41,13 +46,23 @@ export default {
     localStorage.setItem('user_role_name', user.role_name);
     localStorage.setItem('user_team_id', user.team_id);
     Vue.$http.defaults.headers.common.Authorization = `Token ${user.token}`;
+    // set whole app variables
+    state.app = {};
+    state.app.book_dates = user.book_dates;
+    state.app.active_year = user.active_year;
+    state.app.active_month = user.active_month;
+    localStorage.setItem('book_dates', JSON.stringify(state.app.book_dates));
+    localStorage.setItem('active_year', state.app.active_year);
+    localStorage.setItem('active_month', state.app.active_month);
   },
 
   [LOGOUT](state) {
     state.authenticated = false;
     state.user = null;
+    state.app = null;
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('book_dates');
     Vue.$http.defaults.headers.common.Authorization = '';
   },
 };

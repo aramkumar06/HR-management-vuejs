@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.core.exceptions import PermissionDenied
 from tms.models import Earning
 from tms.serializers import EarningSerializer
+from datetime import datetime
 
 
 class EarningsView(viewsets.ViewSet):
@@ -21,7 +22,61 @@ class EarningsView(viewsets.ViewSet):
         #   month
         #   year
         # if not specified use current week and current year
+        # all time is utc time
         #
+        project_id = request.GET.get('project_id', None)
+        client_id = request.GET.get('client_id', None)
+        account_id = request.GET.get('account_id', None)
+        week = request.GET.get('week', None)
+        month = request.GET.get('month', None)
+        year = request.GET.get('year', None)
+        if month is None and year is None:
+            response = Response({
+                'success': False,
+                'error_message': 'Month or Year should be provided'
+            })
+
+            return response
+
+        if project_id is not None:
+            project_query = " AND tp.id = " + project_id
+        else:
+            project_query = ""
+
+        if client_id is not None:
+            client_query = " AND tc.id = " + client_id
+        else:
+            client_query = ""
+
+        if account_id is not None:
+            account_query = " AND ta.id = " + account_id
+        else:
+            account_query = ""
+
+        if week is not None:
+            week_query = " AND te.week_of_year = " + week
+        else:
+            week_query = ""
+
+        if month is not None:
+            month_query = """
+            INNER JOIN LATERAL (
+                SELECT *
+                FROM tms_book AS tb
+                WHERE te.year = tb.year 
+                AND te.week_of_year = ANY(tb.weeks)
+                AND tb.month = %s
+                LIMIT 1
+            ) x ON TRUE
+            """ % (month, )
+        else:
+            month_query = ""
+
+        if year is not None:
+            year_query = " AND te.year = " + year
+        else:
+            year_query = ""
+
         raw_query = """
             SELECT
                 te.id AS id
@@ -41,23 +96,19 @@ class EarningsView(viewsets.ViewSet):
             INNER JOIN tms_client AS tc ON tp.client_id = tc.id
             INNER JOIN tms_account AS ta ON tc.account_id = ta.id
             INNER JOIN tms_site AS ts ON ta.site_id = ts.id
-            INNER JOIN tms_user AS tu ON tp.user_in_charge_id = tu.id        
+            INNER JOIN tms_user AS tu ON tp.user_in_charge_id = tu.id
+            %s
+            WHERE te.deleted_at IS NULL
+            %s
+            %s
+            %s
+            %s
+            %s
         ;
-        """
-        project_id = request.GET.get('project_id', None)
-        client_id = request.GET.get('client_id', None)
-        account_id = request.GET.get('account_id', None)
-        if project_id is not None:
-            raw_query = raw_query + " WHERE tp.id = " + project_id
-
-        if client_id is not None:
-            raw_query = raw_query + " WHERE tc.id = " + client_id
-
-        if account_id is not None:
-            raw_query = raw_query + " WHERE ta.id = " + account_id
-
+        """ % (month_query, project_query, client_query, account_query, week_query, year_query)
         earnings = Earning.objects.raw(raw_query)
         ret = []
+        summary = 0.0
         for earning in earnings:
             ret.append({
                 "id": earning.id,
@@ -72,9 +123,12 @@ class EarningsView(viewsets.ViewSet):
                 "client_last_name": earning.client_last_name,
                 "project_title": earning.project_title
             })
+            summary += earning.cost
+
         response = Response({
             'success': True,
-            'earnings': ret
+            'earnings': ret,
+            'summary': summary,
         })
 
         return response
