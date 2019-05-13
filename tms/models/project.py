@@ -23,6 +23,9 @@ version 1
     refer to client
 version 2
     tags
+    
+TODO
+     
 """
 
 
@@ -33,11 +36,9 @@ class Project(models.Model):
     end_date = models.DateField(null=True, help_text='Project end date')
     STATUS_STARTED = 'ST'
     STATUS_ENDED = 'EN'
-    STATUS_DISPUTED = 'DS'
     STATUS_CHOICES = (
         (STATUS_STARTED, 'Start'),
         (STATUS_ENDED, 'End'),
-        (STATUS_DISPUTED, 'Dispute'),
     )
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=STATUS_STARTED, help_text='')
     JOB_HOURLY = 'HR'
@@ -54,6 +55,7 @@ class Project(models.Model):
     applied_proposals_count = models.IntegerField(null=True, help_text='Total proposals when hiring')
     interview_count = models.IntegerField(null=True, help_text='Total interview count when hiring')
     registered_date = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, help_text='deleted date')
 
     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
     client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='')

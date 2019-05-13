@@ -68,10 +68,13 @@
                 {{ project.site_name }}
               </td>
               <td>
-                <button class="btn btn-xs btn-primary">
-                  Earning
+                <router-link
+                  :to="{name: 'earning.create', params: {project_id: project.id}}"
+                  class="btn btn-xs btn-primary"
+                >
+                  Add Earnings
                   <i class="fa fa-arrow-right" />
-                </button>
+                </router-link>
               </td>
               <td>
                 <router-link

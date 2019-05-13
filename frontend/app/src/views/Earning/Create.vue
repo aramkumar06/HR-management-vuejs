@@ -2,36 +2,40 @@
   <v-layout>
     <v-card contextual-style="dark">
       <span slot="header">
-
       </span>
 
       <div slot="body">
         <form class="form">
           <div class="form-group">
-            <label>Project</label>
-            <select class="form-control" v-model="earning.project" required>
-              <option v-for="project in $store.state.project.projects" v-bind:value="project.id">{{ project.title }}</option>
+            <label>Earned Week</label>
+            <input
+              type="week"
+              class="form-control"
+              v-model="earning.week"
+            />
+          </div>
+          <div class="form-group">
+            <label>{{ earningWeekRange }}</label>
+          </div>
+          <div class="form-group">
+            <label>Cost</label>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              v-model="earning.cost"
+            />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select
+              class="form-control"
+              v-model="earning.status"
+            >
+              <option v-for="status in $store.state.earning.earningStatuses" :value="status.value">
+                {{ status.caption }}
+              </option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Start Week Date</label>
-            <datepicker v-model="earning.start_week_date"></datepicker>
-          </div>
-          <div class="form-group">
-            <label>End Week Date</label>
-            <datepicker v-model="earning.end_week_date"></datepicker>
-          </div>
-          <div class="form-group">
-            <label>Week Of Year</label>
-            <input type="input" class="form-control" v-model="earning.week_of_year" />
-          </div>
-          <div class="form-group">
-            <label>Month Of Year</label>
-            <input type="input" class="form-control" v-model="earning.month_of_year" />
-          </div>
-          <div class="form-group">
-            <label>Year</label>
-            <input type="input" class="form-control" v-model="earning.year" />
           </div>
           <div class="form-group">
             <div class="row">
@@ -47,7 +51,7 @@
                 <button
                   type="button"
                   class="btn btn-success pull-right"
-                  :disabled="earning.project == null || earning.start_week_date == null || earning.end_week_date == null || earning.week_of_year == null || earning.month_of_year == null || earning.year == null"
+                  :disabled="earning.week === null || earning.cost === null || earning.status === null"
                   @click="createEarning()"
                 >
                   Save
@@ -62,70 +66,97 @@
 </template>
 
 <script>
-/* ============
- * Project Create Page
- * ============
- *
- * Page where the user can create project.
- */
-
-import VLayout from '@/layouts/Default.vue';
-import VCard from '@/components/Card.vue';
-import Datepicker from 'vuejs-datepicker';
-import moment from 'moment';
-import store from '@/store';
-
-export default {
-  /**
-   * The name of the page.
+  /* ============
+   * Earning Input Page
+   * ============
+   *
+   * Page where the user can input earning.
    */
-  name: 'EarningCreate',
 
-  /**
-   * The components that the page can use.
-   */
-  components: {
-    VLayout,
-    VCard,
-    Datepicker,
-  },
+  import VLayout from '@/layouts/Default.vue';
+  import VCard from '@/components/Card.vue';
+  import Datepicker from 'vuejs-datepicker';
+  import moment from 'moment';
+  import store from '@/store';
 
-  data() {
-    return {
-      earning: {},
-    };
-  },
+  export default {
+    /**
+     * The name of the page.
+     */
+    name: 'EarningCreate',
 
-  beforeRouteEnter(to, from, next) {
-    store.dispatch('project/index')
-      .then((response) => {
-        if (response.success === true) {
-          store.commit('project/INDEX', response.projects);
-          next();
-        } else {
-          console.log('Request failed...');
-        }
-      })
-      .catch(() => {
-        console.log('Request failed...');
-      });
-  },
-
-  mounted() {
-  },
-
-  methods: {
-    createEarning() {
-      if (this.earning.start_week_date) {
-        this.earning.start_week_date = moment(this.earning.start_week_date).format('YYYY-MM-DD');
-      }
-
-      if (this.earning.end_week_date) {
-        this.earning.end_week_date = moment(this.earning.end_week_date).format('YYYY-MM-DD');
-      }
-
-      this.$store.dispatch('earning/create', this.earning);
+    /**
+     * The components that the page can use.
+     */
+    components: {
+      VLayout,
+      VCard,
+      Datepicker,
     },
-  },
-};
+    data() {
+      return {
+        earning: {},
+        project: null,
+      };
+    },
+    beforeRouteEnter(to, from, next) {
+      store.dispatch('project/find', to.params.project_id)
+        .then((response) => {
+          if (response.success === true) {
+            store.commit('project/FIND', response.project);
+            next();
+          } else {
+            console.log('Request failed...');
+          }
+        })
+        .catch(() => {
+          console.log('Request failed...');
+        });
+    },
+    mounted() {
+      this.project = store.state.project.project;
+    },
+    computed: {
+      earningWeekRange() {
+        let range = "";
+        if (this.earning.week != "undefined" &&  this.earning.week != null) {
+          const year = parseInt(this.earning.week.split("-")[0]);
+          const week_of_year = parseInt(this.earning.week.split("-")[1].replace(/\D+/g, ''));
+          const new_year_date_str = `${year}-01-01`
+          let from_date = moment(new_year_date_str);
+          let end_date = moment(new_year_date_str);
+          const from_date_str = from_date.add(7 * (week_of_year - 1) - 1, 'days').format('YYYY-MM-DD');
+          const end_date_str = end_date.add(7 * week_of_year - 2, 'days').format('YYYY-MM-DD');
+
+          range = `From ${from_date_str} To ${end_date_str}`;
+        }
+
+        return range;
+      }
+    },
+    methods: {
+      createEarning() {
+        // extract week_of_year and year number from earning.week
+        const year = parseInt(this.earning.week.split("-")[0]);
+        const week_of_year = parseInt(this.earning.week.split("-")[1].replace(/\D+/g, ''));
+        // validation
+        const currentYear = (new Date()).getFullYear();
+
+        if (year > currentYear || year < currentYear - 2 || week_of_year < 1 || week_of_year > 54) {
+          // alert the user
+          console.log('Error in date');
+
+          return;
+        }
+
+        this.earning.week_of_year = week_of_year;
+        this.earning.year = year;
+        this.earning.project = this.project.id;
+
+        delete this.earning['week'];
+
+        this.$store.dispatch('earning/create', this.earning);
+      },
+    },
+  };
 </script>

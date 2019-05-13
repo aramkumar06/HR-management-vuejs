@@ -9,12 +9,9 @@ class EarningSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'cost',
-            'start_week_date',
-            'end_week_date',
             'week_of_year',
-            'month_of_year',
             'year',
-            'confirmed',
+            'status',
             'project',
             'approved_date',
             'withdrawn_date',

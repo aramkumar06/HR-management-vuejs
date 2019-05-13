@@ -45,6 +45,7 @@ class Account(models.Model):
                                                                      'address and other information.')
     title = models.CharField(max_length=150, null=False, help_text='Title')
     overview = models.TextField(max_length=5000, null=False, help_text='Overview')
+    deleted_at = models.DateTimeField(null=True, help_text='deleted date')
 
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='Owner of account')

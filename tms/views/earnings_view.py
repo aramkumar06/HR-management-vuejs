@@ -15,12 +15,20 @@ class EarningsView(viewsets.ViewSet):
     def list(self, request):
         # TODO
         # should display only this month earning
+        # expected parameters
+        #   project_id
+        #   week
+        #   month
+        #   year
+        # if not specified use current week and current year
+        #
         raw_query = """
             SELECT
                 te.id AS id
+              , te.cost AS cost  
               , te.year AS year
               , te.week_of_year AS week_of_year
-              , te.confirmed AS confirmed
+              , te.status AS status
               , ts.name AS site_name
               , ta.first_name AS account_first_name
               , ta.last_name AS account_last_name
@@ -53,9 +61,10 @@ class EarningsView(viewsets.ViewSet):
         for earning in earnings:
             ret.append({
                 "id": earning.id,
+                "cost": earning.cost,
                 "year": earning.year,
                 "week_of_year": earning.week_of_year,
-                "confirmed": earning.confirmed,
+                "status": earning.status,
                 "site_name": earning.site_name,
                 "account_first_name": earning.account_first_name,
                 "account_last_name": earning.account_last_name,
@@ -71,6 +80,10 @@ class EarningsView(viewsets.ViewSet):
         return response
 
     def create(self, request):
+        # TODO
+        #   should validate permission
+        #   should validate whether week is in current month or not
+        #
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid()
         if serializer.errors:

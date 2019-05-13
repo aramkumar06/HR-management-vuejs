@@ -2,12 +2,12 @@
   <v-layout>
     <div class="row">
       <div class="col-md-12">
-        <router-link
-          :to="{ name: 'earning.create' }"
-          class="btn btn-success pull-right offset-md-10 col-md-2"
-        >
-          Add New Earning
-        </router-link>
+        <!--<router-link-->
+          <!--:to="{ name: 'earning.create' }"-->
+          <!--class="btn btn-success pull-right offset-md-10 col-md-2"-->
+        <!--&gt;-->
+          <!--Add New Earning-->
+        <!--</router-link>-->
       </div>
     </div>
 
@@ -55,10 +55,10 @@
                 {{ earning.project_title }}
               </td>
               <td>
-                {{ earning.client_first_name + ' ' + earining.client_last_name }}
+                {{ earning.client_first_name + ' ' + earning.client_last_name }}
               </td>
               <td>
-                {{ earning.week }}
+                {{ earning.year }}-{{ earning.week_of_year }}
               </td>
               <td>
                 {{ earning.cost }}
@@ -95,7 +95,14 @@ export default {
   },
 
   beforeRouteEnter(to, from, next) {
-    store.dispatch('earning/index')
+    /**
+     * expected query parameter
+     *   project_id
+     *   week
+     *   month
+     *   year
+     */
+    store.dispatch('earning/index', to.query)
       .then((response) => {
         if (response.success === true) {
           store.commit('earning/INDEX', response.earnings);

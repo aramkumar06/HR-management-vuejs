@@ -16,8 +16,8 @@ export const find = ({ commit }, payload) => {
   return new EarningProxy().find(payload);
 };
 
-export const index = ({ commit }) => {
-  return new EarningProxy().index();
+export const index = ({ commit }, payload) => {
+  return new EarningProxy(payload).index();
 };
 
 export const create = ({ commit }, payload) => {
@@ -25,7 +25,7 @@ export const create = ({ commit }, payload) => {
     .create(payload)
     .then((response) => {
       if (response.success === true) {
-        store.dispatch('earning/index');
+        // store.dispatch('earning/index');
         Vue.router.push({
           name: 'earning.index',
         });
@@ -47,7 +47,7 @@ export const update = ({ commit }, payload) => {
     .create(payload)
     .then((response) => {
       if (response.success === true) {
-        store.dispatch('earning/index');
+        // store.dispatch('earning/index');
         Vue.router.push({
           name: 'earning.index',
         });

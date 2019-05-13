@@ -31,6 +31,7 @@ class Client(models.Model):
     url = models.URLField(max_length=100, null=True, help_text='Reference URL')
     recital = models.TextField(max_length=1000, null=True, help_text='Explain his attitude and other experiences.')
     registered_date = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, help_text='deleted date')
 
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')

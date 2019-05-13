@@ -140,7 +140,7 @@ export default [
 
   // Earning Create
   {
-    path: '/earning/create',
+    path: '/project/:project_id/earning/create',
     name: 'earning.create',
     component: () => import('@/views/Earning/Create.vue'),
 
