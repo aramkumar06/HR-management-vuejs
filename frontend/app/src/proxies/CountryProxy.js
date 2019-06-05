@@ -1,6 +1,6 @@
-import Proxy from './Proxy';
+import BaseProxy from './Proxy';
 
-class CountryProxy extends Proxy {
+class CountryProxy extends BaseProxy {
   /**
    * The constructor for the CountryProxy.
    *
@@ -8,15 +8,6 @@ class CountryProxy extends Proxy {
    */
   constructor(parameters = {}) {
     super('api/v1/tms/countries', parameters);
-  }
-
-  /**
-   * Method used to fetch all countries from the API.
-   *
-   * @returns {Promise} The result in a promise.
-   */
-  index() {
-    return this.all();
   }
 }
 

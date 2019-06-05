@@ -1,7 +1,7 @@
 import store from '@/store';
-import Proxy from './Proxy';
+import BaseProxy from './Proxy';
 
-class AccountProxy extends Proxy {
+class AccountProxy extends BaseProxy {
   /**
    * The constructor for the AccountProxy.
    *

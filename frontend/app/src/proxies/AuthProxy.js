@@ -1,6 +1,6 @@
-import Proxy from './Proxy';
+import BaseProxy from './Proxy';
 
-class AuthProxy extends Proxy {
+class AuthProxy extends BaseProxy {
   /**
    * The constructor for the AuthProxy.
    *

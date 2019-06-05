@@ -6,7 +6,7 @@
  * country module.
  */
 
-import CountryProxy from '@/proxies/CountryProxy'
+import CountryProxy from '@/proxies/CountryProxy';
 import Transformer from '@/transformers/CountryTransformer';
 import * as types from './mutation-types';
 
@@ -15,7 +15,7 @@ export const find = ({ commit }) => {
 
 export const index = ({ commit }) => {
   new CountryProxy()
-    .index()
+    .all()
     .then((response) => {
       commit(types.INDEX, response);
     })

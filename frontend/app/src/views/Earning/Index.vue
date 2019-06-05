@@ -76,6 +76,14 @@
 
         <br />
 
+        <div class="row">
+          <div class="col-12">
+            <v-line-chart></v-line-chart>
+          </div>
+        </div>
+
+        <br />
+
         <table class="table table-striped">
           <thead>
             <th>
@@ -157,6 +165,7 @@ import VCard from '@/components/Card.vue';
 import store from '@/store';
 import EarningProxy from '@/proxies/EarningProxy.js';
 import NumberUtil from '@/utils/NumberUtil.js';
+import VLineChart from '@/components/LineChart.js';
 
 export default {
   /**
@@ -170,6 +179,7 @@ export default {
   components: {
     VLayout,
     VCard,
+    VLineChart,
   },
   data() {
     return {

@@ -1,6 +1,6 @@
-import Proxy from './Proxy';
+import BaseProxy from './Proxy';
 
-class EarningProxy extends Proxy {
+class EarningProxy extends BaseProxy {
   /**
    * The constructor for the ClientProxy.
    *

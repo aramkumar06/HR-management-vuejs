@@ -10,13 +10,13 @@
           <div class="form-group">
             <label>Country</label>
             <select class="form-control" v-model="account.country" required >
-              <option v-for="country in $store.state.country.countries" v-bind:value="country.id">{{country.name}}</option>
+              <option v-for="country in countries" :value="country.id">{{country.name}}</option>
             </select>
           </div>
           <div class="form-group">
             <label>Site</label>
             <select class="form-control" v-model="account.site" required >
-              <option v-for="site in $store.state.site.sites" v-bind:value="site.id">{{site.name}}</option>
+              <option v-for="site in sites" :value="site.id">{{site.name}}</option>
             </select>
           </div>
           <div class="form-group">
@@ -134,20 +134,25 @@ export default {
     };
   },
 
-  beforeRouteEnter(to, from, next) {
-    store.dispatch('country/index');
-    store.dispatch('site/index');
-    next();
+  computed: {
+    countries() {
+      return this.$store.state.country.countries;
+    },
+    sites() {
+      return this.$store.state.site.sites;
+    },
   },
 
   mounted() {
+    store.dispatch('country/index');
+    store.dispatch('site/index');
   },
 
   methods: {
     createAccount() {
       this.account.created_date = moment(this.account.created_date).format('YYYY-MM-DD');
       this.account.user = this.$store.state.auth.user.id;
-      this.$store.dispatch('account/create', this.account);
+      store.dispatch('account/create', this.account);
     },
   },
 };
