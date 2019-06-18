@@ -8,12 +8,6 @@
       <div slot="body">
         <form class="form">
           <div class="form-group">
-            <label>Account</label>
-            <select class="form-control" v-model="project.account" required >
-              <option v-for="account in $store.state.account.accounts" v-bind:value="account.id">{{ account.account_first_name + ' ' +  account.account_last_name }}</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label>Client</label>
             <select class="form-control" v-model="project.client" required >
               <option v-for="client in $store.state.client.clients" v-bind:value="client.id">{{ client.client_first_name + ' ' + client.client_last_name }}</option>
@@ -139,22 +133,6 @@ export default {
   },
 
   beforeRouteEnter(to, from, next) {
-    store.dispatch('account/index')
-      .then((response) => {
-        if (response.success === true) {
-          store.commit('account/INDEX', response.accounts);
-        } else {
-          console.log('Request failed...');
-        }
-      })
-      .catch(() => {
-        console.log('Request failed...');
-      });
-    /*
-     * TODO
-     * Client selection should depend on account selection.
-     * Need to get only clients corresponding to that account.
-     */
     store.dispatch('client/index')
       .then((response) => {
         if (response.success === true) {

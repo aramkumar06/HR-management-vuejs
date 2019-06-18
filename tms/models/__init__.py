@@ -9,5 +9,4 @@ from .project import Project
 from .earning import Earning
 from .book import Book
 
-from .fi_account import FiAccount
 from .withdraw import Withdraw

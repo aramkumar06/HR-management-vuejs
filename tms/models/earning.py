@@ -1,7 +1,5 @@
 from django.db import models
 
-from tms.models import Account
-from tms.models import Client
 from tms.models import Project
 from tms.models import User
 

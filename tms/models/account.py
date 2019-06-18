@@ -31,7 +31,7 @@ version 2
 class Account(models.Model):
     first_name = models.CharField(max_length=15, null=False, help_text='')
     last_name = models.CharField(max_length=15, null=False, help_text='')
-    email = models.EmailField(max_length=30, null=False, help_text='Email ')
+    email = models.EmailField(max_length=30, null=False, help_text='Email')
     email_password = models.CharField(max_length=40, null=False, help_text='Email password')
     skype = models.CharField(max_length=30, null=True, help_text='Skype username. It could be null.')
     skype_password = models.CharField(max_length=30, null=True, help_text='Skype password. It could be null.')
@@ -50,5 +50,7 @@ class Account(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, help_text='')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='Owner of account')
     site = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL, help_text='Working site')
+
+    is_payment_account = models.BooleanField(null=False, default=False, help_text='Indicates whether it is payment gateway account or not')
 
     pass

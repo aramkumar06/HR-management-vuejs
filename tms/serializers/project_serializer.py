@@ -20,7 +20,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'applied_datetime',
             'applied_proposals_count',
             'interview_count',
-            'account',
             'client',
             'user_in_charge'
         )

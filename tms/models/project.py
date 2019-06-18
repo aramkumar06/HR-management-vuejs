@@ -56,8 +56,8 @@ class Project(models.Model):
     interview_count = models.IntegerField(null=True, help_text='Total interview count when hiring')
     registered_date = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True, help_text='deleted date')
+    share_percent = models.FloatField(null=True, help_text='Percent that is used when calculating outsourcing project profit')
 
-    account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL, help_text='')
     client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, help_text='')
     user_in_charge = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, help_text='')
 
