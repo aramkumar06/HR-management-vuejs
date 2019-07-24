@@ -24,5 +24,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'overview',
             'country',
             'user',
-            'site'
+            'site',
+            'is_payment_account',
         )

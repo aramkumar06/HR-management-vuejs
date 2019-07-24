@@ -25,6 +25,8 @@ version 1
 version 2
     avatar
     tags - tech tags like Python, Django
+    balance
+    is_payment_account
 """
 
 

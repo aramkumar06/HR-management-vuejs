@@ -12,8 +12,10 @@ class EarningSerializer(serializers.ModelSerializer):
             'week_of_year',
             'year',
             'status',
-            'project',
-            'approved_date',
             'withdrawn_date',
+            'comments',
+            'earned_by',
+            'account',
+            'approved_date',
             'approved_by'
         )

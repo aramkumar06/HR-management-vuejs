@@ -16,15 +16,12 @@ class EarningsView(viewsets.ViewSet):
         # TODO
         # should display only this month earning
         # expected parameters
-        #   project_id
         #   week
         #   month
         #   year
         # if not specified use current week and current year
         # all time is utc time
         #
-        project_id = request.GET.get('project_id', None)
-        client_id = request.GET.get('client_id', None)
         account_id = request.GET.get('account_id', None)
         week = request.GET.get('week', None)
         month = request.GET.get('month', None)
@@ -37,7 +34,7 @@ class EarningsView(viewsets.ViewSet):
 
             return response
 
-        ret, summary = get_earnings(account_id, client_id, project_id, year, month, week)
+        ret, summary = get_earnings(account_id, year, month, week)
 
         response = Response({
             'success': True,
