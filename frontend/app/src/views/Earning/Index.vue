@@ -60,7 +60,7 @@
                 v-for="(week, w_index) in weeks"
                 :value="week.value"
               >
-                {{ w_index + 1 }} week
+                Week {{ w_index + 1 }}
               </option>
             </select>
           </div>

@@ -118,5 +118,13 @@
       "name": "Brazil",
       "code": "BR"
     }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 16,
+    "fields": {
+      "name": "Serbia",
+      "code": "RS"
+    }
   }
 ]
