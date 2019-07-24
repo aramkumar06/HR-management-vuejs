@@ -78,7 +78,11 @@
 
         <div class="row">
           <div class="col-12">
-            <v-line-chart></v-line-chart>
+            <v-line-chart
+              v-if="earningsLoaded"
+              :chart-data="chartData"
+              :options="options"
+            ></v-line-chart>
           </div>
         </div>
 
@@ -128,7 +132,7 @@
                 {{ earning.year }}-{{ earning.week_of_year }}
               </td>
               <td>
-                {{ earning.cost }}
+                {{ dollarFormat(earning.cost) }}
               </td>
               <td>
                 {{ earning.status }}
@@ -166,6 +170,7 @@ import store from '@/store';
 import EarningProxy from '@/proxies/EarningProxy.js';
 import NumberUtil from '@/utils/NumberUtil.js';
 import VLineChart from '@/components/LineChart.js';
+import '@/utils/ColorUtil.js';
 
 export default {
   /**
@@ -194,6 +199,9 @@ export default {
       earnings: [],
       summary: null,
       isLoading: false,
+      chartData: null,
+      options: null,
+      earningsLoaded: false,
     }
   },
   computed: {
@@ -255,6 +263,8 @@ export default {
           if (response.success === true) {
             this.earnings = response.earnings;
             this.summary = response.summary;
+            this.earningsLoaded = true;
+            this.fillChartData();
           } else {
 
           }
@@ -265,6 +275,92 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    fillChartData() {
+      let labels = [];
+      let data = [];
+      let backgroundColors = [];
+      let suggestedMax;
+      let suggestedMin;
+      let max = 0;
+      let min = 0;
+      let index = 0;
+      const multiplier = 1.5;
+      const week_of_month = 4;
+      const top_threshold = 2500;
+      const intermediate_threshold = 2000;
+      const elementary__threshold = 1500;
+      const last_threshold = 500;
+
+      for (const earning of this.earnings) {
+        labels.push(`Week ${index + 1}`);
+        data.push(earning.cost);
+        index = index + 1;
+        if (earning.cost > max) {
+          max = earning.cost;
+        }
+
+        if (earning.cost < min) {
+          min = earning.cost;
+        }
+
+        if (earning.cost >= top_threshold) {
+          backgroundColors.push(window.chartColors.green);
+        } else if (earning.cost >= intermediate_threshold) {
+          backgroundColors.push(window.chartColors.blue);
+        } else if (earning.cost >= elementary__threshold) {
+          backgroundColors.push(window.chartColors.orange);
+        } else if (earning.cost >= last_threshold) {
+          backgroundColors.push(window.chartColors.yellow);
+        } else {
+          backgroundColors.push(window.chartColors.red);
+        }
+      }
+
+      if (week_of_month - index > 0) {
+        for (let i=0; i<week_of_month - index; i++) {
+          labels.push(`Week ${index + 1}`);
+          data.push(0);
+          backgroundColors.push(window.chartColors.red);
+          index = index + 1;
+        }
+      }
+
+      suggestedMax = max * multiplier;
+      suggestedMin = min * multiplier;
+
+      this.chartData = {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: backgroundColors,
+            label: 'Week',
+            data: data,
+            lineTension: 0,
+          },
+        ],
+      };
+
+      this.options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              barPercentage: 0.3,
+            }
+          ],
+          yAxes: [
+            {
+              ticks:
+                {
+                  suggestedMin: suggestedMin,
+                  suggestedMax: suggestedMax,
+                },
+            },
+          ],
+        }
+      };
     },
   },
 };
