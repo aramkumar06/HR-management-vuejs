@@ -42,26 +42,6 @@
             </a>
           </router-link>
           <router-link
-            :to="{ name: 'client.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link">
-              Clients
-            </a>
-          </router-link>
-          <router-link
-            :to="{ name: 'project.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a class="nav-link">
-              Projects
-            </a>
-          </router-link>
-          <router-link
             :to="{ name: 'earning.index' }"
             active-class="active"
             class="nav-item"

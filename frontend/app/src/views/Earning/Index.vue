@@ -2,12 +2,12 @@
   <v-layout>
     <div class="row">
       <div class="col-md-12">
-        <!--<router-link-->
-          <!--:to="{ name: 'earning.create' }"-->
-          <!--class="btn btn-success pull-right offset-md-10 col-md-2"-->
-        <!--&gt;-->
-          <!--Add New Earning-->
-        <!--</router-link>-->
+        <router-link
+          :to="{ name: 'earning.create' }"
+          class="btn btn-success pull-right offset-md-10 col-md-2"
+        >
+          Add New Earning
+        </router-link>
       </div>
     </div>
 
@@ -97,12 +97,6 @@
               Account
             </th>
             <th>
-              Project
-            </th>
-            <th>
-              Client
-            </th>
-            <th>
               Week
             </th>
             <th>
@@ -121,12 +115,6 @@
               </td>
               <td>
                 {{ earning.account_first_name + ' ' + earning.account_last_name }}
-              </td>
-              <td>
-                {{ earning.project_title }}
-              </td>
-              <td>
-                {{ earning.client_first_name + ' ' + earning.client_last_name }}
               </td>
               <td>
                 {{ earning.year }}-{{ earning.week_of_year }}

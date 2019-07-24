@@ -12,8 +12,6 @@ import createLogger from 'vuex/dist/logger';
 
 // Modules
 import account from './modules/account';
-import client from './modules/client';
-import project from './modules/project';
 import earning from './modules/earning';
 import country from './modules/country';
 import site from './modules/site';
@@ -27,8 +25,6 @@ export default new Vuex.Store({
    */
   modules: {
     account,
-    client,
-    project,
     earning,
     country,
     site,

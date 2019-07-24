@@ -36,7 +36,9 @@
               <th>
                 Status
               </th>
-              <th />
+              <th>
+                Payment Account?
+              </th>
               <th />
             </tr>
           </thead>
@@ -62,12 +64,9 @@
                   Not Active
                 </strong>
               </td>
-              <th>
-                <button class="btn btn-xs btn-primary">
-                  Projects
-                  <i class="fa fa-arrow-right" />
-                </button>
-              </th>
+              <td>
+                {{ account.is_payment_account }}
+              </td>
               <th>
                 <router-link
                   :to="{name: 'account.update', params: {account_id: account.id}}"

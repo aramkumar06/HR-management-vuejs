@@ -54,78 +54,6 @@ export default [
     },
   },
 
-  // Client Index
-  {
-    path: '/client',
-    name: 'client.index',
-    component: () => import('@/views/Client/Index.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
-  // Client Create
-  {
-    path: '/client/create',
-    name: 'client.create',
-    component: () => import('@/views/Client/Create.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
-  // Client Update
-  {
-    path: '/client/:client_id/update',
-    name: 'client.update',
-    component: () => import('@/views/Client/Update.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
-  // Project Index
-  {
-    path: '/project',
-    name: 'project.index',
-    component: () => import('@/views/Project/Index.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
-  // Project Create
-  {
-    path: '/project/create',
-    name: 'project.create',
-    component: () => import('@/views/Project/Create.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
-  // Project Update
-  {
-    path: '/project/:project_id/update',
-    name: 'project.update',
-    component: () => import('@/views/Project/Update.vue'),
-
-    // If the user needs to be authenticated to view this page.
-    meta: {
-      auth: true,
-    },
-  },
-
   // Earning Index
   {
     path: '/earning',
@@ -140,7 +68,7 @@ export default [
 
   // Earning Create
   {
-    path: '/project/:project_id/earning/create',
+    path: '/earning/create',
     name: 'earning.create',
     component: () => import('@/views/Earning/Create.vue'),
 

@@ -57,7 +57,10 @@
           </div>
           <div class="form-group">
             <label>Recital</label>
-            <textarea class="form-control" v-model="account.recital" required />
+            <textarea
+              class="form-control"
+              v-model="account.recital"
+              required />
           </div>
           <div class="form-group">
             <label>Created Date</label>
@@ -66,6 +69,10 @@
               format="yyyy-MM-dd"
               class="form-control"
               required />
+          </div>
+          <div class="form-group">
+            <label>Is Payment Account?</label>
+            <input type="checkbox" class="form-control" v-model="account.is_payment_account" required />
           </div>
           <div class="form-group">
             <div class="row">

@@ -7,26 +7,6 @@
       <div slot="body">
         <form class="form">
           <div class="form-group">
-            <label>Earned Week</label>
-            <input
-              type="week"
-              class="form-control"
-              v-model="earning.week"
-            />
-          </div>
-          <div class="form-group">
-            <label>{{ earningWeekRange }}</label>
-          </div>
-          <div class="form-group">
-            <label>Cost</label>
-            <input
-              type="number"
-              step="0.01"
-              class="form-control"
-              v-model="earning.cost"
-            />
-          </div>
-          <div class="form-group">
             <label>Status</label>
             <select
               class="form-control"
@@ -36,6 +16,45 @@
                 {{ status.caption }}
               </option>
             </select>
+          </div>
+          <div class="form-group">
+            <label>Account</label>
+            <select
+              class="form-control"
+              v-model="earning.account"
+            >
+              <option v-for="account in $store.state.account.accounts" :value="account.id">
+                {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.account_email +'>' }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group" v-if="earning.status == 'Review'">
+            <label>Earned Week</label>
+            <input
+              type="week"
+              class="form-control"
+              v-model="earning.week"
+            />
+          </div>
+          <div class="form-group" v-if="earning.status == 'Review'">
+            <label>{{ earningWeekRange }}</label>
+          </div>
+          <div class="form-group" v-if="earning.status == 'Withdraw'">
+            <label>Created Date</label>
+            <datepicker
+              format="yyyy-MM-dd"
+              class="form-control"
+              v-model="earning.withdrawn_date"
+              required />
+          </div>
+          <div class="form-group">
+            <label>Cost</label>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              v-model="earning.cost"
+            />
           </div>
           <div class="form-group">
             <div class="row">
@@ -51,7 +70,7 @@
                 <button
                   type="button"
                   class="btn btn-success pull-right"
-                  :disabled="earning.week === null || earning.cost === null || earning.status === null"
+                  :disabled="earning.week === null || earning.cost === null || earning.status === null || earning.account == null"
                   @click="createEarning()"
                 >
                   Save
@@ -100,10 +119,10 @@
       };
     },
     beforeRouteEnter(to, from, next) {
-      store.dispatch('project/find', to.params.project_id)
+      store.dispatch('account/index')
         .then((response) => {
           if (response.success === true) {
-            store.commit('project/FIND', response.project);
+            store.commit('account/INDEX', response.accounts);
             next();
           } else {
             console.log('Request failed...');
@@ -114,7 +133,6 @@
         });
     },
     mounted() {
-      this.project = store.state.project.project;
     },
     computed: {
       earningWeekRange() {
@@ -147,6 +165,12 @@
           console.log('Error in date');
 
           return;
+        }
+
+        if (this.earning.status == 'Withdraw' && (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null)) {
+          return;
+
+          console.log('Withdraw date omitted');
         }
 
         this.earning.week_of_year = week_of_year;

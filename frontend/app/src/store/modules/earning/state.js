@@ -8,24 +8,12 @@
 export default {
   earningStatuses: [
     {
-      value: 'PD',
-      caption: 'Pending',
+      value: 'Review',
+      caption: 'Review',
     },
     {
-      value: 'BL',
-      caption: 'Balance',
-    },
-    {
-      value: 'WD',
+      value: 'Withdraw',
       caption: 'Withdraw',
-    },
-    {
-      value: 'FE',
-      caption: 'Fee',
-    },
-    {
-      value: 'RF',
-      caption: 'Refund',
     },
   ],
 };

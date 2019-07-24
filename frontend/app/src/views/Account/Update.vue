@@ -112,6 +112,15 @@
               required />
           </div>
           <div class="form-group">
+            <label>Is Payment Account?</label>
+            <input
+              type="checkbox"
+              class="form-control"
+              v-model="account.is_payment_account"
+              required
+            />
+          </div>
+          <div class="form-group">
             <div class="row">
               <div class="col-md-1 offset-md-9">
                 <router-link
