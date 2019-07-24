@@ -29,7 +29,7 @@ class CustomAuthToken(ObtainAuthToken):
                 else:
                     book_dates[row.year][row.month] = row.weeks
 
-                if row.status == 'AC':
+                if row.status == Book.STATUS_ACTIVE:
                     active_year = row.year
                     active_month = row.month
 

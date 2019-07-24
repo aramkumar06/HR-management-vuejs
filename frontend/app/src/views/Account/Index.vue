@@ -65,7 +65,12 @@
                 </strong>
               </td>
               <td>
-                {{ account.is_payment_account }}
+                <strong v-if="account.is_payment_account">
+                  Payment Account
+                </strong>
+                <strong v-if="account.is_payment_account == false">
+                  Freelancer Account
+                </strong>
               </td>
               <th>
                 <router-link

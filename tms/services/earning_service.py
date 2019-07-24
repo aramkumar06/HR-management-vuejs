@@ -1,7 +1,7 @@
 from tms.models import Earning
 
 
-def get_earnings(account_id=None, year=None, month=None, week=None):
+def get_earnings(account_id=None, year=None, month=None, week=None, user_id=None):
     if account_id is not None:
         account_query = " AND ta.id = " + account_id
     else:
@@ -31,6 +31,11 @@ def get_earnings(account_id=None, year=None, month=None, week=None):
     else:
         year_query = ""
 
+    if user_id is not None:
+        user_query = " AND tu.id = " + str(user_id)
+    else:
+        user_query = ""
+
     raw_query = """
         SELECT
             te.id AS id
@@ -45,15 +50,16 @@ def get_earnings(account_id=None, year=None, month=None, week=None):
           tms_earning AS te
         INNER JOIN tms_account AS ta ON te.account_id = ta.id
         INNER JOIN tms_site AS ts ON ta.site_id = ts.id
-        INNER JOIN tms_user AS tu ON te.earned_by = tu.id
+        INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
         %s
         WHERE te.deleted_at IS NULL
         %s
         %s
         %s
+        %s
         ORDER BY te.week_of_year ASC
     ;
-    """ % (month_query, account_query, week_query, year_query)
+    """ % (month_query, account_query, week_query, year_query, user_query)
     earnings = Earning.objects.raw(raw_query)
     ret = []
     summary = 0.0

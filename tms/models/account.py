@@ -38,7 +38,7 @@ class Account(models.Model):
     skype = models.CharField(max_length=30, null=True, help_text='Skype username. It could be null.')
     skype_password = models.CharField(max_length=30, null=True, help_text='Skype password. It could be null.')
     status = models.BooleanField(default=True, help_text='It represents whether account is active or not.')
-    phone_number = models.CharField(max_length=11, null=True, help_text='Phone number related to this account.'
+    phone_number = models.CharField(max_length=14, null=True, help_text='Phone number related to this account.'
                                                                         'It could be null')
     created_date = models.DateField(null=False, help_text='The date when the account is created.')
     suspended_date = models.DateField(null=True, help_text='The date when the account is suspended.')

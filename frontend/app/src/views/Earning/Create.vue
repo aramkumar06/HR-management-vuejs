@@ -115,7 +115,6 @@
     data() {
       return {
         earning: {},
-        project: null,
       };
     },
     beforeRouteEnter(to, from, next) {
@@ -175,7 +174,7 @@
 
         this.earning.week_of_year = week_of_year;
         this.earning.year = year;
-        this.earning.project = this.project.id;
+        this.earning.earned_by = this.$store.state.auth.user.id;
 
         delete this.earning['week'];
 

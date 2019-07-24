@@ -19,3 +19,6 @@
   - `python3 manage.py loaddata fixtures/countries.json`
   - `python3 manage.py loaddata fixtures/sites.json`
   - `python3 manage.py loaddata fixtures/roles.json`
+  - `python3 manage.py loaddata fixtures/teams.json`
+  - `python3 manage.py loaddata fixtures/accounts.json`
+  - `python3 manage.py loaddata fixtures/books.json`

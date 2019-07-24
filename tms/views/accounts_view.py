@@ -21,18 +21,21 @@ class AccountsView(viewsets.ViewSet):
         #
         raw_query = """  
           SELECT
-                ta.id           AS id
-              , ta.first_name   AS account_first_name
-              , ta.last_name    AS account_last_name
-              , ta.status       AS account_status
-              , ta.email        AS account_email
-              , tc.name         AS country_name
-              , ts.name         AS site_name
+                ta.id                 AS id
+              , ta.first_name         AS account_first_name
+              , ta.last_name          AS account_last_name
+              , ta.status             AS account_status
+              , ta.email              AS account_email
+              , tc.name               AS country_name
+              , ts.name               AS site_name
+              , ta.is_payment_account AS is_payment_account
           FROM
             tms_account AS ta
-          INNER JOIN tms_site AS ts ON ta.site_id = ts.id
+          LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
           INNER JOIN tms_country AS tc ON ta.country_id = tc.id
-          WHERE ta.user_id = {user_id} OR ta.user_id IS NULL;
+          WHERE (ta.user_id = {user_id}
+            AND ta.suspended_date IS NULL) 
+            OR ta.user_id IS NULL;
         """.format(
             user_id=request.user.id
         )
@@ -47,6 +50,7 @@ class AccountsView(viewsets.ViewSet):
                 "account_email":        account.account_email,
                 "country_name":         account.country_name,
                 "site_name":            account.site_name,
+                "is_payment_account":   account.is_payment_account,
             })
         response = Response({
             'success': True,

@@ -34,7 +34,7 @@ class EarningsView(viewsets.ViewSet):
 
             return response
 
-        ret, summary = get_earnings(account_id, year, month, week)
+        ret, summary = get_earnings(account_id, year, month, week, request.user.id)
 
         response = Response({
             'success': True,

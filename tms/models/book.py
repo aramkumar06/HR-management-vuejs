@@ -21,7 +21,7 @@ class Book(models.Model):
     year = models.IntegerField(null=False, help_text='booking year')
     month = models.IntegerField(null=False, help_text='booking month')
     STATUS_CALCULATED = 'Calculated'
-    STATUS_ACTIVE = 'Activate'
+    STATUS_ACTIVE = 'Active'
     STATUS_CHOICES = (
         (STATUS_CALCULATED, 'Calculated'),
         (STATUS_ACTIVE, 'Active'),

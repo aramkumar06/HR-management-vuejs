@@ -305,8 +305,9 @@ export default {
         }
       }
 
-      if (week_of_month - index > 0) {
-        for (let i=0; i<week_of_month - index; i++) {
+      const difference = week_of_month - index;
+      if ( difference > 0 ) {
+        for (let i=0; i<difference; i++) {
           labels.push(`Week ${index + 1}`);
           data.push(0);
           backgroundColors.push(window.chartColors.red);
