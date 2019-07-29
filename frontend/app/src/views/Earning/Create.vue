@@ -28,17 +28,6 @@
               </option>
             </select>
           </div>
-          <div class="form-group" v-if="earning.status == 'Review'">
-            <label>Earned Week</label>
-            <input
-              type="week"
-              class="form-control"
-              v-model="earning.week"
-            />
-          </div>
-          <div class="form-group" v-if="earning.status == 'Review'">
-            <label>{{ earningWeekRange }}</label>
-          </div>
           <div class="form-group" v-if="earning.status == 'Withdraw'">
             <label>Created Date</label>
             <datepicker
@@ -134,49 +123,16 @@
     mounted() {
     },
     computed: {
-      earningWeekRange() {
-        let range = "";
-        if (this.earning.week != "undefined" &&  this.earning.week != null) {
-          const year = parseInt(this.earning.week.split("-")[0]);
-          const week_of_year = parseInt(this.earning.week.split("-")[1].replace(/\D+/g, ''));
-          const new_year_date_str = `${year}-01-01`
-          let from_date = moment(new_year_date_str);
-          let end_date = moment(new_year_date_str);
-          const from_date_str = from_date.add(7 * (week_of_year - 1) - 1, 'days').format('YYYY-MM-DD');
-          const end_date_str = end_date.add(7 * week_of_year - 2, 'days').format('YYYY-MM-DD');
-
-          range = `From ${from_date_str} To ${end_date_str}`;
-        }
-
-        return range;
-      }
     },
     methods: {
       createEarning() {
-        // extract week_of_year and year number from earning.week
-        const year = parseInt(this.earning.week.split("-")[0]);
-        const week_of_year = parseInt(this.earning.week.split("-")[1].replace(/\D+/g, ''));
-        // validation
-        const currentYear = (new Date()).getFullYear();
-
-        if (year > currentYear || year < currentYear - 2 || week_of_year < 1 || week_of_year > 54) {
-          // alert the user
-          console.log('Error in date');
-
-          return;
-        }
-
         if (this.earning.status == 'Withdraw' && (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null)) {
           return;
 
           console.log('Withdraw date omitted');
         }
 
-        this.earning.week_of_year = week_of_year;
-        this.earning.year = year;
         this.earning.earned_by = this.$store.state.auth.user.id;
-
-        delete this.earning['week'];
 
         this.$store.dispatch('earning/create', this.earning);
       },

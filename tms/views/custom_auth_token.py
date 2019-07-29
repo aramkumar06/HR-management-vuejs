@@ -22,12 +22,12 @@ class CustomAuthToken(ObtainAuthToken):
             token, created = Token.objects.get_or_create(user=user)
 
             book_dates = {}
-            rows = Book.objects.all()
+            rows = Book.objects.all().order_by('year').order_by('month')
             for row in rows:
                 if row.year not in book_dates.keys():
-                    book_dates[row.year] = {row.month: row.weeks}
+                    book_dates[row.year] = [row.month]
                 else:
-                    book_dates[row.year][row.month] = row.weeks
+                    book_dates[row.year].append(row.month)
 
                 if row.status == Book.STATUS_ACTIVE:
                     active_year = row.year

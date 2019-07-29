@@ -8,10 +8,6 @@
 export default {
   earningStatuses: [
     {
-      value: 'Review',
-      caption: 'Review',
-    },
-    {
       value: 'Withdraw',
       caption: 'Withdraw',
     },
