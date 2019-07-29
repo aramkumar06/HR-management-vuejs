@@ -1,16 +1,11 @@
 from tms.models import Earning
 
 
-def get_earnings(account_id=None, year=None, month=None, week=None, user_id=None):
+def get_earnings(account_id=None, year=None, month=None, user_id=None):
     if account_id is not None:
         account_query = " AND ta.id = " + account_id
     else:
         account_query = ""
-
-    if week is not None:
-        week_query = " AND te.week_of_year = " + week
-    else:
-        week_query = ""
 
     if month is not None:
         month_query = """
@@ -56,10 +51,9 @@ def get_earnings(account_id=None, year=None, month=None, week=None, user_id=None
         %s
         %s
         %s
-        %s
         ORDER BY te.week_of_year ASC
     ;
-    """ % (month_query, account_query, week_query, year_query, user_query)
+    """ % (month_query, account_query, year_query, user_query)
     earnings = Earning.objects.raw(raw_query)
     ret = []
     summary = 0.0
@@ -68,7 +62,6 @@ def get_earnings(account_id=None, year=None, month=None, week=None, user_id=None
             "id": earning.id,
             "cost": earning.cost,
             "year": earning.year,
-            "week_of_year": earning.week_of_year,
             "status": earning.status,
             "site_name": earning.site_name,
             "account_first_name": earning.account_first_name,

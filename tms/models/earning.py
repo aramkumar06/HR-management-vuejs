@@ -6,15 +6,12 @@ from tms.models import User
 
 class Earning(models.Model):
     cost = models.FloatField(null=False, help_text='')
-    week_of_year = models.IntegerField(null=False, help_text='')
     year = models.IntegerField(null=False, help_text='')
-    STATUS_REVIEW = 'Review'
     STATUS_WITHDRAW = 'Withdraw'
     STATUS_CHOICES = (
-        (STATUS_REVIEW, 'Review'),
         (STATUS_WITHDRAW, 'Withdraw'),
     )
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_REVIEW, help_text='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_WITHDRAW, help_text='')
     withdrawn_date = models.DateField(null=True, help_text='date time when withdraw')
     comments = models.TextField(max_length=1024, null=True, help_text='description')
     created_at = models.DateField(auto_now_add=True, null=False, help_text='created date')
