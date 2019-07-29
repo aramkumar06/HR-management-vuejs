@@ -28,7 +28,7 @@
               </option>
             </select>
           </div>
-          <div class="form-group" v-if="earning.status == 'Withdraw'">
+          <div class="form-group">
             <label>Created Date</label>
             <datepicker
               format="yyyy-MM-dd"
@@ -59,7 +59,7 @@
                 <button
                   type="button"
                   class="btn btn-success pull-right"
-                  :disabled="earning.week === null || earning.cost === null || earning.status === null || earning.account == null"
+                  :disabled="earning.cost === null || earning.status === null || earning.account == null"
                   @click="createEarning()"
                 >
                   Save
@@ -103,7 +103,11 @@
     },
     data() {
       return {
-        earning: {},
+        earning: {
+          cost: null,
+          status: null,
+          account: null,
+        },
       };
     },
     beforeRouteEnter(to, from, next) {
@@ -132,6 +136,8 @@
           console.log('Withdraw date omitted');
         }
 
+        this.earning.year = moment(this.earning.withdrawn_date).year();
+        this.earning.withdrawn_date = moment(this.earning.withdrawn_date).format('YYYY-MM-DD');
         this.earning.earned_by = this.$store.state.auth.user.id;
 
         this.$store.dispatch('earning/create', this.earning);

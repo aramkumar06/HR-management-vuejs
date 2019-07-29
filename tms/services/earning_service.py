@@ -13,9 +13,9 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         year_query = ""
 
     if month is not None and year is not None:
-        querying_book = Book.objects.filter(year__exact=year, month_query=month)[:1]
+        querying_book = Book.objects.filter(year__exact=year, month__exact=month).first()
         month_query = """
-            AND te.withdrawn_date BETWEEN DATE(%s) AND DATE(%s) + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
+            AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
         """ % (querying_book.start_date, querying_book.end_date)
     else:
         month_query = ""
@@ -33,7 +33,11 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         , te.status                    AS status
         , COALESCE(ts.name, ta.title)  AS site_name
         , ta.first_name                AS account_first_name
-        , ta.last_name                 AS account_last_name 
+        , ta.last_name                 AS account_last_name
+        , CASE WHEN te.approved_date IS NULL
+            THEN TRUE
+            ELSE FALSE
+          END AS approved
       FROM
         tms_earning AS te
       INNER JOIN tms_account AS ta ON te.account_id = ta.id
@@ -59,6 +63,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
             "site_name": earning.site_name,
             "account_first_name": earning.account_first_name,
             "account_last_name": earning.account_last_name,
+            "approved": earning.approved,
         })
         summary += earning.cost
 
@@ -78,7 +83,7 @@ def get_pending_earnings(team_id):
         , ta.first_name                AS account_first_name
         , ta.last_name                 AS account_last_name
         , te.cost                      AS cost
-        , te.withdrawn_date            AS withdrawn_date         
+        , te.withdrawn_date            AS withdrawn_date
       FROM
         tms_earning AS te
       INNER JOIN tms_account AS ta ON te.account_id = ta.id
@@ -86,9 +91,9 @@ def get_pending_earnings(team_id):
       INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
       WHERE tu.team_id = %s
         AND te.approved_by_id IS NULL
-        AND te.approved_by_date IS NULL
+        AND te.approved_date IS NULL
         AND te.deleted_at IS NULL
-      ORDER BY te.user_id AS ASC
+      ORDER BY ta.user_id ASC
     ; 
     """ % (team_id, )
     pending_earnings = Earning.objects.raw(raw_query)
@@ -97,7 +102,7 @@ def get_pending_earnings(team_id):
         ret.append({
             "id": earning.id,
             "member_first_name": earning.member_first_name,
-            "member_first_name": earning.member_first_name,
+            "member_last_name": earning.member_last_name,
             "site_name": earning.site_name,
             "account_first_name": earning.account_first_name,
             "account_last_name": earning.account_last_name,

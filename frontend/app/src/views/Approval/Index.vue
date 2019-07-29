@@ -40,7 +40,7 @@
                 {{ earning.account_first_name + ' ' + earning.account_last_name }}
               </td>
               <td>
-                {{ earning.cost }}
+                {{ dollarFormat(earning.cost) }}
               </td>
               <td>
                 {{ earning.withdrawn_date }}
@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      pendingEarnings: [],
     };
   },
   computed: {
@@ -92,9 +93,12 @@ export default {
     this.getPendingEarnings();
   },
   methods: {
+    dollarFormat(value) {
+      return NumberUtil.currencyFormatter(value);
+    },
     getPendingEarnings() {
       this.isLoading = true;
-      const params = { team_id: this.store.state.auth.user.team_id };
+      const params = { team_id: this.$store.state.auth.user.team_id };
       new EarningProxy().getPendingEarnings(params)
         .then((response) => {
           if (response.success == true) {
@@ -116,7 +120,7 @@ export default {
       }
 
       this.isLoading = true;
-      new EarningProxy.approvePendingEarning(params)
+      new EarningProxy().approvePendingEarning(earning_id)
         .then((response) => {
           if (response.success == true) {
             this.pendingEarnings = response.pending_earnings;

@@ -52,7 +52,7 @@
             </a>
           </router-link>
           <router-link
-            v-if="store.state.auth.user.role_name == 'Officer'"
+            v-if="$store.state.auth.user.role_name == 'Officer'"
             :to="{ name: 'approval.index' }"
             active-class="active"
             class="nav-item"
@@ -97,6 +97,8 @@
  * Layouts are used to store a lot of shared code.
  * This way the app stays clean.
  */
+
+import store from '@/store';
 
 export default {
   /**

@@ -75,6 +75,9 @@
             <th>
               Status
             </th>
+            <th>
+              Approval
+            </th>
           </thead>
           <tbody v-if="earnings.length > 0">
             <tr
@@ -91,6 +94,14 @@
               </td>
               <td>
                 {{ earning.status }}
+              </td>
+              <td>
+                <strong v-if="earning.approved == true">
+                  Approved
+                </strong>
+                <strong v-if="earning.approved != true">
+                  Not approved yet
+                </strong>
               </td>
             </tr>
           </tbody>
@@ -188,7 +199,7 @@ export default {
         return;
       }
 
-      for (const key of Object.keys(store.state.auth.app.book_dates[this.filterObject.year])) {
+      for (const key of store.state.auth.app.book_dates[this.filterObject.year]) {
         this.months.push({ value: key, caption: key })
       }
     },

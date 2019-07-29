@@ -25,7 +25,7 @@ class EarningProxy extends BaseProxy {
    * @returns {Promise} The result in a promise
    */
   getPendingEarnings(parameters={}) {
-    const pending_earning_url = this.endpoint + '/get_pending_earnings';
+    const pending_earning_url = this.endpoint + '/get_pending_earnings/';
     return this.submit('post', `/${pending_earning_url}`, parameters)
   }
 
@@ -35,7 +35,7 @@ class EarningProxy extends BaseProxy {
    * @returns {Promise} The result in a promise
    */
   approvePendingEarning(earning_id) {
-    const pending_approve_url = this.endpoint + '/' + earning_id + '/approve';
+    const pending_approve_url = this.endpoint + '/' + earning_id + '/approve/';
     return this.submit('post', `/${pending_approve_url}`)
   }
 }

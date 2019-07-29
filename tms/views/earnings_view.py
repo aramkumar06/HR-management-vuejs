@@ -159,7 +159,7 @@ class EarningsView(viewsets.ViewSet):
         # TODO
         # permission check
         #
-        team_id = int(request.POST.get('team_id', None))
+        team_id = int(request.data.get('team_id', None))
         if team_id is None:
             response = Response({
                 'success': False,
@@ -172,7 +172,7 @@ class EarningsView(viewsets.ViewSet):
             if request.user.team_id != team_id:
                 raise PermissionDenied()
 
-            officer_role_id = int(os.getenv('OFFICER_ID'))
+            officer_role_id = int(os.getenv('ROLE_OFFICER_ID'))
             delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
             if request.user.role_id != officer_role_id and request.user.role_id != delegate_role_id:
                 raise PermissionDenied()
