@@ -35,6 +35,17 @@ router.beforeEach((to, from, next) => {
     next({
       name: 'home.index',
     });
+  } else if (to.matched.some(m => m.meta.team) && store.state.auth.authenticated) {
+    /*
+     * If the user is team owner then allows, if a user without permission is trying, rejects it
+     */
+    if (store.state.auth.user.role_name == 'Officer') {
+      next();
+    } else {
+      next({
+        name: 'home.index',
+      });
+    }
   } else {
     next();
   }

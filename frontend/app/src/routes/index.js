@@ -90,6 +90,18 @@ export default [
     },
   },
 
+  // Approval Index
+  {
+    path: '/approval',
+    name: 'approval.index',
+    component: () => import('@/views/Approval/Index.vue'),
+
+    // Only team owner can view this page
+    meta: {
+      team: true,
+    },
+  },
+
   // Login
   {
     path: '/login',

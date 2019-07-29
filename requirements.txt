@@ -5,3 +5,4 @@ markdown
 django-filter
 django-cors-headers==2.4.0
 django-extensions==2.1.1
+python-dotenv==0.10.3

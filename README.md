@@ -22,3 +22,4 @@
   - `python3 manage.py loaddata fixtures/teams.json`
   - `python3 manage.py loaddata fixtures/accounts.json`
   - `python3 manage.py loaddata fixtures/books.json`
+  - `python3 manage.py loaddata fixtures/users.json`

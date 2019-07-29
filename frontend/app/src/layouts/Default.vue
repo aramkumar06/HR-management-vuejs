@@ -51,6 +51,17 @@
               Earnings
             </a>
           </router-link>
+          <router-link
+            v-if="store.state.auth.user.role_name == 'Officer'"
+            :to="{ name: 'approval.index' }"
+            active-class="active"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Approvals
+            </a>
+          </router-link>
         </ul>
         <span class="navbar-text">
           <a

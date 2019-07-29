@@ -124,8 +124,6 @@ import VCard from '@/components/Card.vue';
 import store from '@/store';
 import EarningProxy from '@/proxies/EarningProxy.js';
 import NumberUtil from '@/utils/NumberUtil.js';
-import VLineChart from '@/components/LineChart.js';
-import '@/utils/ColorUtil.js';
 
 export default {
   /**
@@ -139,7 +137,6 @@ export default {
   components: {
     VLayout,
     VCard,
-    VLineChart,
   },
   data() {
     return {
@@ -153,7 +150,6 @@ export default {
       earnings: [],
       summary: null,
       isLoading: false,
-      chartData: null,
       options: null,
     }
   },
@@ -204,7 +200,7 @@ export default {
             this.earnings = response.earnings;
             this.summary = response.summary;
           } else {
-
+            console.log(response.message);
           }
         })
         .catch((error) => {

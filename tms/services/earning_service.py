@@ -1,4 +1,4 @@
-from tms.models import Earning
+from tms.models import Earning, Book
 
 
 def get_earnings(account_id=None, year=None, month=None, user_id=None):
@@ -7,24 +7,18 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
     else:
         account_query = ""
 
-    if month is not None:
-        month_query = """
-        INNER JOIN LATERAL (
-            SELECT *
-            FROM tms_book AS tb
-            WHERE te.year = tb.year 
-                AND te.week_of_year = ANY(tb.weeks)
-                AND tb.month = %s
-            LIMIT 1
-        ) x ON TRUE
-        """ % (month,)
-    else:
-        month_query = ""
-
     if year is not None:
         year_query = " AND te.year = " + year
     else:
         year_query = ""
+
+    if month is not None and year is not None:
+        querying_book = Book.objects.filter(year__exact=year, month_query=month)[:1]
+        month_query = """
+            AND te.withdrawn_date BETWEEN DATE(%s) AND DATE(%s) + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
+        """ % (querying_book.start_date, querying_book.end_date)
+    else:
+        month_query = ""
 
     if user_id is not None:
         user_query = " AND tu.id = " + str(user_id)
@@ -32,26 +26,25 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         user_query = ""
 
     raw_query = """
-        SELECT
-            te.id AS id
-          , te.cost AS cost  
-          , te.year AS year
-          , te.week_of_year AS week_of_year
-          , te.status AS status
-          , ts.name AS site_name
-          , ta.first_name AS account_first_name
-          , ta.last_name AS account_last_name 
-        FROM
-          tms_earning AS te
-        INNER JOIN tms_account AS ta ON te.account_id = ta.id
-        INNER JOIN tms_site AS ts ON ta.site_id = ts.id
-        INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+      SELECT
+          te.id                        AS id
+        , te.cost                      AS cost  
+        , te.year                      AS year
+        , te.status                    AS status
+        , COALESCE(ts.name, ta.title)  AS site_name
+        , ta.first_name                AS account_first_name
+        , ta.last_name                 AS account_last_name 
+      FROM
+        tms_earning AS te
+      INNER JOIN tms_account AS ta ON te.account_id = ta.id
+      LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+      INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
         %s
-        WHERE te.deleted_at IS NULL
-        %s
+      WHERE te.deleted_at IS NULL
         %s
         %s
-        ORDER BY te.week_of_year ASC
+        %s
+      ORDER BY te.id ASC
     ;
     """ % (month_query, account_query, year_query, user_query)
     earnings = Earning.objects.raw(raw_query)
@@ -70,3 +63,46 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         summary += earning.cost
 
     return ret, summary
+
+
+def get_pending_earnings(team_id):
+    if team_id is None:
+        return []
+
+    raw_query = """
+      SELECT
+          te.id                        AS id
+        , tu.first_name                AS member_first_name
+        , tu.last_name                 AS member_last_name
+        , COALESCE(ts.name, ta.title)  AS site_name
+        , ta.first_name                AS account_first_name
+        , ta.last_name                 AS account_last_name
+        , te.cost                      AS cost
+        , te.withdrawn_date            AS withdrawn_date         
+      FROM
+        tms_earning AS te
+      INNER JOIN tms_account AS ta ON te.account_id = ta.id
+      LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+      INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+      WHERE tu.team_id = %s
+        AND te.approved_by_id IS NULL
+        AND te.approved_by_date IS NULL
+        AND te.deleted_at IS NULL
+      ORDER BY te.user_id AS ASC
+    ; 
+    """ % (team_id, )
+    pending_earnings = Earning.objects.raw(raw_query)
+    ret = []
+    for earning in pending_earnings:
+        ret.append({
+            "id": earning.id,
+            "member_first_name": earning.member_first_name,
+            "member_first_name": earning.member_first_name,
+            "site_name": earning.site_name,
+            "account_first_name": earning.account_first_name,
+            "account_last_name": earning.account_last_name,
+            "cost": earning.cost,
+            "withdrawn_date": earning.withdrawn_date,
+        })
+
+    return ret

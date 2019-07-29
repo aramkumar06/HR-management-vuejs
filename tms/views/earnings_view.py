@@ -1,5 +1,9 @@
+import os
+import datetime
+
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.core.exceptions import PermissionDenied
 from tms.serializers import EarningSerializer
 from tms.services.earning_service import *
@@ -9,8 +13,11 @@ class EarningsView(viewsets.ViewSet):
     serializer_class = EarningSerializer
 
     def check_object_permissions(self, request, obj):
-        if obj.user_id != request.user.id:
-            raise PermissionDenied()
+        if self.action == 'get_pending_earnings' or self.action == 'approve':
+            pass
+        else:
+            if obj.user_id != request.user.id:
+                raise PermissionDenied()
 
     def list(self, request):
         # TODO
@@ -28,6 +35,14 @@ class EarningsView(viewsets.ViewSet):
             response = Response({
                 'success': False,
                 'error_message': 'Month or Year should be provided'
+            })
+
+            return response
+
+        if year is None and month is not None:
+            response = Response({
+                'success': False,
+                'error_message': 'Month is provided but Year is not provided'
             })
 
             return response
@@ -138,3 +153,74 @@ class EarningsView(viewsets.ViewSet):
             })
 
         return response
+
+    @action(detail=False, methods=['post'])
+    def get_pending_earnings(self, request):
+        # TODO
+        # permission check
+        #
+        team_id = int(request.POST.get('team_id', None))
+        if team_id is None:
+            response = Response({
+                'success': False,
+                'message': 'no such a team'
+            })
+
+            return response
+
+        try:
+            if request.user.team_id != team_id:
+                raise PermissionDenied()
+
+            officer_role_id = int(os.getenv('OFFICER_ID'))
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.role_id != officer_role_id and request.user.role_id != delegate_role_id:
+                raise PermissionDenied()
+
+            ret = get_pending_earnings(team_id)
+
+            response = Response({
+                'success': True,
+                'pending_earnings': ret,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
+
+    @action(detail=True, methods=['post'])
+    def approve(self, request, pk=None):
+        # TODO
+        # permission check
+        #
+        try:
+            earning = Earning.objects.get(pk=pk)
+            if earning.earned_by.team_id != request.user.team_id:
+                raise PermissionDenied()
+
+            earning.approved_by = request.user
+            earning.approved_date = datetime.datetime.utcnow()
+            earning.save()
+
+            ret = get_pending_earnings(request.user.team_id)
+
+            response = Response({
+                'success': True,
+                'pending_earnings': ret,
+            })
+        except Earning.DoesNotExist:
+            response = Response({
+                'success': False,
+                'message': 'no such a earnings'
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
+

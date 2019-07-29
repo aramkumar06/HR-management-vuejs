@@ -18,6 +18,26 @@ class EarningProxy extends BaseProxy {
   index() {
     return this.submit('get', `/${this.endpoint}`);
   }
+
+  /**
+   * Method used to fetch all pending earnings from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  getPendingEarnings(parameters={}) {
+    const pending_earning_url = this.endpoint + '/get_pending_earnings';
+    return this.submit('post', `/${pending_earning_url}`, parameters)
+  }
+
+  /**
+   * Method used to approve pending earning from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  approvePendingEarning(earning_id) {
+    const pending_approve_url = this.endpoint + '/' + earning_id + '/approve';
+    return this.submit('post', `/${pending_approve_url}`)
+  }
 }
 
 export default EarningProxy;
