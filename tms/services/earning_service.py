@@ -35,8 +35,8 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         , ta.first_name                AS account_first_name
         , ta.last_name                 AS account_last_name
         , CASE WHEN te.approved_date IS NULL
-            THEN TRUE
-            ELSE FALSE
+            THEN FALSE 
+            ELSE TRUE
           END AS approved
       FROM
         tms_earning AS te

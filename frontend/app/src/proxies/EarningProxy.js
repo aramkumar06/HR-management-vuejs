@@ -38,6 +38,16 @@ class EarningProxy extends BaseProxy {
     const pending_approve_url = this.endpoint + '/' + earning_id + '/approve/';
     return this.submit('post', `/${pending_approve_url}`)
   }
+
+  /**
+   * Method used to delete pending earning from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  deletePendingEarning(earning_id) {
+    const pending_delete_url = this.endpoint + '/' + earning_id + '/delete/';
+    return this.submit('post', `/${pending_delete_url}`)
+  }
 }
 
 export default EarningProxy;

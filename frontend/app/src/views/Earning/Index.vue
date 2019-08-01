@@ -78,6 +78,7 @@
             <th>
               Approval
             </th>
+            <td></td>
           </thead>
           <tbody v-if="earnings.length > 0">
             <tr
@@ -102,6 +103,15 @@
                 <strong v-if="earning.approved != true">
                   Not approved yet
                 </strong>
+              </td>
+              <td>
+                <button
+                  class="btn btn-sm btn-danger"
+                  v-if="earning.approved != true"
+                  @click="removeEarning(earning.id)"
+                >
+                  Remove
+                </button>
               </td>
             </tr>
           </tbody>
@@ -153,7 +163,6 @@ export default {
     return {
       years: [],
       months: [],
-      weeks: [],
       filterObject: {
         year: null,
         month: null,
@@ -190,7 +199,7 @@ export default {
       return NumberUtil.currencyFormatter(value);
     },
     populateYears() {
-      for (const key of Object.keys(store.state.auth.app.book_dates)) {
+      for (const key of Object.keys(this.$store.state.auth.app.book_dates)) {
         this.years.push({ value: key, caption: key});
       }
     },
@@ -199,7 +208,7 @@ export default {
         return;
       }
 
-      for (const key of store.state.auth.app.book_dates[this.filterObject.year]) {
+      for (const key of this.$store.state.auth.app.book_dates[this.filterObject.year]) {
         this.months.push({ value: key, caption: key })
       }
     },
@@ -210,6 +219,23 @@ export default {
           if (response.success === true) {
             this.earnings = response.earnings;
             this.summary = response.summary;
+          } else {
+            console.log(response.message);
+          }
+        })
+        .catch((error) => {
+          console.log('Request failed...');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    removeEarning(earning_id) {
+      this.isLoading = true;
+      new EarningProxy().deletePendingEarning(earning_id)
+        .then((response) => {
+          if (response.success === true) {
+            this.queryEarnings();
           } else {
             console.log(response.message);
           }

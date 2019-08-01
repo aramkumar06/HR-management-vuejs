@@ -122,7 +122,7 @@ export default {
       this.isLoading = true;
       new EarningProxy().approvePendingEarning(earning_id)
         .then((response) => {
-          if (response.success == true) {
+          if (response.success === true) {
             this.pendingEarnings = response.pending_earnings;
           } else {
             console.log(response.message);

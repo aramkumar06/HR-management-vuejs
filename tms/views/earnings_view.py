@@ -224,3 +224,35 @@ class EarningsView(viewsets.ViewSet):
 
         return response
 
+    @action(detail=True, methods=['post'])
+    def delete(self, request, pk=None):
+        # TODO
+        # permission check
+        #
+        try:
+            earning = Earning.objects.get(pk=pk)
+            if earning.earned_by.id != request.user.id:
+                raise PermissionDenied()
+
+            if earning.approved_by is not None or earning.approved_date is not None:
+                raise PermissionDenied()
+
+            earning.deleted_at = datetime.datetime.utcnow()
+            earning.save()
+
+            response = Response({
+                'success': True,
+            })
+        except Earning.DoesNotExist:
+            response = Response({
+                'success': False,
+                'message': 'no such a earnings'
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
+
