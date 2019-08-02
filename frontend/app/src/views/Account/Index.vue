@@ -21,6 +21,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <th></th>
               <th>
                 Country
               </th>
@@ -43,7 +44,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="account in $store.state.account.accounts">
+            <tr v-for="(account, index) in $store.state.account.accounts">
+              <td>
+                {{ index + 1 }}
+              </td>
               <td>
                 {{ account.country_name }}
               </td>
@@ -75,7 +79,9 @@
               <th>
                 <router-link
                   :to="{name: 'account.update', params: {account_id: account.id}}"
-                  class="btn btn-xs btn-info">
+                  class="btn btn-xs btn-info"
+                  v-if="account.ediatable == true"
+                >
                   Edit
                 </router-link>
               </th>

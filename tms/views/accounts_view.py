@@ -19,7 +19,7 @@ class AccountsView(viewsets.ViewSet):
         # v2
         #   role based query
         #
-        raw_query = """  
+        raw_query = """
           SELECT
                 ta.id                 AS id
               , ta.first_name         AS account_first_name
@@ -29,6 +29,11 @@ class AccountsView(viewsets.ViewSet):
               , tc.name               AS country_name
               , ts.name               AS site_name
               , ta.is_payment_account AS is_payment_account
+              , CASE WHEN ta.user_id IS NULL OR ta.is_payment_account IS TRUE THEN
+                  FALSE 
+                ELSE
+                  TRUE
+                END AS editable
           FROM
             tms_account AS ta
           LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
@@ -51,6 +56,7 @@ class AccountsView(viewsets.ViewSet):
                 "country_name":         account.country_name,
                 "site_name":            account.site_name,
                 "is_payment_account":   account.is_payment_account,
+                "editable":             account.editable,
             })
         response = Response({
             'success': True,
