@@ -18,7 +18,7 @@
         My Accounts
       </span>
       <div slot="body">
-        <table class="table table-striped">
+        <table class="table">
           <thead>
             <tr>
               <th></th>
@@ -55,7 +55,7 @@
                 {{ account.site_name }}
               </td>
               <td>
-                {{ account.account_first_name }} {{ account.account_last_name }}
+                {{ account.account_first_name + ' ' + account.account_last_name }}
               </td>
               <td>
                 {{ account.account_email }}

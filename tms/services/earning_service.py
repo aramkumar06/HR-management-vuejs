@@ -34,6 +34,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         , COALESCE(ts.name, ta.title)  AS site_name
         , ta.first_name                AS account_first_name
         , ta.last_name                 AS account_last_name
+        , te.withdrawn_date            AS withdrawn_date
         , CASE WHEN te.approved_date IS NULL
             THEN FALSE 
             ELSE TRUE
@@ -48,7 +49,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
         %s
         %s
         %s
-      ORDER BY te.id ASC
+      ORDER BY te.withdrawn_date ASC
     ;
     """ % (month_query, account_query, year_query, user_query)
     earnings = Earning.objects.raw(raw_query)
@@ -61,6 +62,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
             "year": earning.year,
             "status": earning.status,
             "site_name": earning.site_name,
+            "withdrawn_date": earning.withdrawn_date,
             "account_first_name": earning.account_first_name,
             "account_last_name": earning.account_last_name,
             "approved": earning.approved,
@@ -82,6 +84,7 @@ def get_pending_earnings(team_id):
         , COALESCE(ts.name, ta.title)  AS site_name
         , ta.first_name                AS account_first_name
         , ta.last_name                 AS account_last_name
+        , tu.id                        AS user_id
         , te.cost                      AS cost
         , te.withdrawn_date            AS withdrawn_date
       FROM
@@ -93,9 +96,10 @@ def get_pending_earnings(team_id):
         AND te.approved_by_id IS NULL
         AND te.approved_date IS NULL
         AND te.deleted_at IS NULL
-      ORDER BY ta.user_id ASC
+      ORDER BY tu.id ASC, te.withdrawn_date ASC
     ; 
     """ % (team_id, )
+
     pending_earnings = Earning.objects.raw(raw_query)
     ret = []
     for earning in pending_earnings:

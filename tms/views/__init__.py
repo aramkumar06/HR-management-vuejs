@@ -4,3 +4,4 @@ from .countries_view import CountriesView
 from .earnings_view import EarningsView
 from .reports_view import ReportsView
 from .sites_view import SitesView
+from .users_view import UsersView

@@ -7,6 +7,24 @@
       <div slot="body">
         <form class="form">
           <div class="form-group">
+            <input type="checkbox" v-model="earned_by_me" />
+            <label>Earned by me?</label>
+          </div>
+          <div
+            class="form-group"
+            v-if="earned_by_me == false"
+          >
+            <label>Earned by</label>
+            <select
+              class="form-control"
+              v-model="earning.earned_by"
+              >
+              <option v-for="user in users" :value="user.id">
+                {{ user.name }} <{{ user.username }}>
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Status</label>
             <select
               class="form-control"
@@ -86,6 +104,7 @@
   import Datepicker from 'vuejs-datepicker';
   import moment from 'moment';
   import store from '@/store';
+  import UserProxy from '@/proxies/UserProxy.js';
 
   export default {
     /**
@@ -108,6 +127,8 @@
           status: null,
           account: null,
         },
+        earned_by_me: true,
+        users: [],
       };
     },
     beforeRouteEnter(to, from, next) {
@@ -125,6 +146,7 @@
         });
     },
     mounted() {
+      this.fetchDelegationMembers();
     },
     computed: {
     },
@@ -136,11 +158,35 @@
           console.log('Withdraw date omitted');
         }
 
+        if (this.earned_by_me == false && (this.earning.earned_by === "undefined" || this.earning.earned_by === null)) {
+          console.log('Please select earned by');
+        }
+
+        if (this.earned_by_me == true) {
+          this.earning.earned_by = this.$store.state.auth.user.id;
+        }
+
         this.earning.year = moment(this.earning.withdrawn_date).year();
         this.earning.withdrawn_date = moment(this.earning.withdrawn_date).format('YYYY-MM-DD');
-        this.earning.earned_by = this.$store.state.auth.user.id;
 
         this.$store.dispatch('earning/create', this.earning);
+      },
+      fetchDelegationMembers() {
+        this.isLoading = true;
+        new UserProxy().index()
+          .then((response) => {
+            if (response.success == true) {
+              this.users = response.users;
+            } else {
+              console.log(response.message);
+            }
+          })
+          .catch((error) => {
+            console.log('Request failed...');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
       },
     },
   };

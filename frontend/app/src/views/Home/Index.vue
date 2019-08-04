@@ -144,7 +144,7 @@ export default {
       const last_threshold = 500;
 
       for (const earning of this.earnings_by_member) {
-        labels.push(earning.username);
+        labels.push(earning.name);
         data.push(earning.cost);
         index = index + 1;
         if (earning.cost > max) {

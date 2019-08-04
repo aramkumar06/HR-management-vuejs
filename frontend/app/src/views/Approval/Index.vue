@@ -6,7 +6,7 @@
       </span>
 
       <div slot="body">
-        <table class="table table-striped">
+        <table class="table">
           <thead>
             <th>
               Member

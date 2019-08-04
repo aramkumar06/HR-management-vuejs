@@ -126,5 +126,13 @@
       "name": "Serbia",
       "code": "RS"
     }
-  }
+  },
+  {
+    "model": "tms.Country",
+    "pk": 17,
+    "fields": {
+      "name": "Venezuela",
+      "code": "VE"
+    }
+  },
 ]

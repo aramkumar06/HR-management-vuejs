@@ -61,7 +61,7 @@
 
         <br />
 
-        <table class="table table-striped">
+        <table class="table">
           <thead>
             <th>
               Site
@@ -76,6 +76,9 @@
               Status
             </th>
             <th>
+              Actioned Date
+            </th>
+            <th>
               Approval
             </th>
             <td></td>
@@ -88,13 +91,16 @@
                 {{ earning.site_name }}
               </td>
               <td>
-                {{ earning.account_first_name + ' ' + earning.account_last_name }}
+                {{ earning.account_first_name }} {{ earning.account_last_name }}
               </td>
               <td>
                 {{ dollarFormat(earning.cost) }}
               </td>
               <td>
                 {{ earning.status }}
+              </td>
+              <td>
+                {{ earning.withdrawn_date }}
               </td>
               <td>
                 <strong v-if="earning.approved == true">

@@ -21,7 +21,7 @@ def report_member(team_id=None, year=None, month=None):
 
     raw_query = """
       SELECT
-          tu.username                        AS    username
+          tu.name                            AS    name  
         , COALESCE(summaries.earning_sum, 0) AS    earning_sum
       FROM tms_user AS tu
       LEFT JOIN (
@@ -50,7 +50,7 @@ def report_member(team_id=None, year=None, month=None):
     summary = 0.0
     for earning in members_earned:
         ret.append({
-            "username": earning[0],
+            "name": earning[0],
             "cost": earning[1],
         })
 

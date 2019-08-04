@@ -13,7 +13,6 @@ class AccountsView(viewsets.ViewSet):
             raise PermissionDenied()
 
     def list(self, request):
-
         # TODO
         #   if user id is specified, return only user related accounts and share accounts like freelancer
         # v2
@@ -21,16 +20,16 @@ class AccountsView(viewsets.ViewSet):
         #
         raw_query = """
           SELECT
-                ta.id                 AS id
-              , ta.first_name         AS account_first_name
-              , ta.last_name          AS account_last_name
-              , ta.status             AS account_status
-              , ta.email              AS account_email
-              , tc.name               AS country_name
-              , ts.name               AS site_name
+                ta.id                           AS id
+              , ta.first_name                   AS account_first_name
+              , ta.last_name                    AS account_last_name
+              , ta.status                       AS account_status
+              , ta.email                        AS account_email
+              , tc.name                         AS country_name
+              , COALESCE(ts.name, ta.title)     AS site_name
               , ta.is_payment_account AS is_payment_account
               , CASE WHEN ta.user_id IS NULL OR ta.is_payment_account IS TRUE THEN
-                  FALSE 
+                  FALSE
                 ELSE
                   TRUE
                 END AS editable
