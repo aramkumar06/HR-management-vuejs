@@ -5,7 +5,10 @@
         {{ $t('general.welcome') }}
       </span>
       <div slot="body">
-        <div class="row">
+        <div
+          class="row"
+          v-if="!isLoading"
+        >
           <div class="col-6">
             <v-line-chart
               v-if="memberEarningsLoaded"
@@ -20,6 +23,12 @@
               :options="teamOptions"
             ></v-line-chart>
           </div>
+        </div>
+        <div class="loading-parent">
+          <loading
+            :active.sync="isLoading"
+            :can-cancel=false
+            :is-full-page=true />
         </div>
       </div>
       <div slot="footer">
@@ -37,6 +46,8 @@
  * The home index page.
  */
 
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import VLayout from '@/layouts/Default.vue';
 import VCard from '@/components/Card.vue';
 import store from '@/store';
@@ -54,12 +65,14 @@ export default {
    * The components that the page can use.
    */
   components: {
+    Loading,
     VLayout,
     VCard,
     VLineChart,
   },
   data() {
     return {
+      isLoading: false,
       filterObject: {
         year: null,
         month: null,
@@ -68,7 +81,6 @@ export default {
       earnings_by_team: [],
       summary_member: null,
       summary_team: null,
-      isLoading: false,
       memberChartData: null,
       teamChartData: null,
       memberOptions: null,

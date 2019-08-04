@@ -28,21 +28,14 @@ class AccountsView(viewsets.ViewSet):
               , tc.name                         AS country_name
               , COALESCE(ts.name, ta.title)     AS site_name
               , ta.is_payment_account AS is_payment_account
-              , CASE WHEN ta.user_id IS NULL OR ta.is_payment_account IS TRUE THEN
-                  FALSE
-                ELSE
-                  TRUE
-                END AS editable
           FROM
             tms_account AS ta
           LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
           INNER JOIN tms_country AS tc ON ta.country_id = tc.id
-          WHERE (ta.user_id = {user_id}
-            AND ta.suspended_date IS NULL) 
-            OR ta.user_id IS NULL;
-        """.format(
-            user_id=request.user.id
-        )
+          WHERE ta.user_id = %s
+            AND ta.suspended_date IS NULL
+        """ % (request.user.id, )
+
         accounts = Account.objects.raw(raw_query)
         ret = []
         for account in accounts:
@@ -55,7 +48,6 @@ class AccountsView(viewsets.ViewSet):
                 "country_name":         account.country_name,
                 "site_name":            account.site_name,
                 "is_payment_account":   account.is_payment_account,
-                "editable":             account.editable,
             })
         response = Response({
             'success': True,
