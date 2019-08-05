@@ -19,6 +19,15 @@ class AccountProxy extends BaseProxy {
   index() {
     return this.submit('get', `/${this.endpoint}?user_id=${store.state.auth.user.id}`);
   }
+
+  /**
+   * Method used to fetch all accounts with common from the API.
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  with_common() {
+    return this.submit('post', `/${this.endpoint}/with_common/`);
+  }
 }
 
 export default AccountProxy;

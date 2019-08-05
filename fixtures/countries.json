@@ -135,4 +135,12 @@
       "code": "VE"
     }
   },
+  {
+    "model": "tms.Country",
+    "pk": 17,
+    "fields": {
+      "name": "Canada",
+      "code": "CA"
+    }
+  }
 ]

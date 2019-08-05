@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.core.exceptions import PermissionDenied
 from tms.models import Account
 from tms.serializers import AccountSerializer
@@ -27,27 +28,25 @@ class AccountsView(viewsets.ViewSet):
               , ta.email                        AS account_email
               , tc.name                         AS country_name
               , COALESCE(ts.name, ta.title)     AS site_name
-              , ta.is_payment_account AS is_payment_account
           FROM
             tms_account AS ta
           LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
           INNER JOIN tms_country AS tc ON ta.country_id = tc.id
           WHERE ta.user_id = %s
-            AND ta.suspended_date IS NULL
-        """ % (request.user.id, )
+            AND ta.suspended_date IS NULL   
+        ;""" % (request.user.id,)
 
         accounts = Account.objects.raw(raw_query)
         ret = []
         for account in accounts:
             ret.append({
-                "id":                   account.id,
-                "account_first_name":   account.account_first_name,
-                "account_last_name":    account.account_last_name,
-                "account_status":       account.account_status,
-                "account_email":        account.account_email,
-                "country_name":         account.country_name,
-                "site_name":            account.site_name,
-                "is_payment_account":   account.is_payment_account,
+                "id": account.id,
+                "account_first_name": account.account_first_name,
+                "account_last_name": account.account_last_name,
+                "account_status": account.account_status,
+                "account_email": account.account_email,
+                "country_name": account.country_name,
+                "site_name": account.site_name,
             })
         response = Response({
             'success': True,
@@ -151,5 +150,51 @@ class AccountsView(viewsets.ViewSet):
                 'success': False,
                 'message': 'no permission'
             })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def with_common(self, request):
+        # TODO
+        #   if user id is specified, return only user related accounts and share accounts like freelancer
+        # v2
+        #   role based query
+        #
+        raw_query = """
+          SELECT
+                ta.id                           AS id
+              , ta.first_name                   AS account_first_name
+              , ta.last_name                    AS account_last_name
+              , ta.status                       AS account_status
+              , ta.email                        AS account_email
+              , tc.name                         AS country_name
+              , COALESCE(ts.name, ta.title)     AS site_name
+              , ta.is_payment_account AS is_payment_account
+          FROM
+            tms_account AS ta
+          LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+          INNER JOIN tms_country AS tc ON ta.country_id = tc.id
+          WHERE (ta.user_id = %s
+            AND ta.suspended_date IS NULL)
+            OR ta.user_id IS NULL;
+        """ % (request.user.id,)
+
+        accounts = Account.objects.raw(raw_query)
+        ret = []
+        for account in accounts:
+            ret.append({
+                "id": account.id,
+                "account_first_name": account.account_first_name,
+                "account_last_name": account.account_last_name,
+                "account_status": account.account_status,
+                "account_email": account.account_email,
+                "country_name": account.country_name,
+                "site_name": account.site_name,
+                "is_payment_account": account.is_payment_account,
+            })
+        response = Response({
+            'success': True,
+            'accounts': ret
+        })
 
         return response

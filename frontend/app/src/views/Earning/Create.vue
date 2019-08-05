@@ -9,7 +9,7 @@
           class="row"
           v-if="!isLoading"
         >
-          <form class="form">
+          <form class="col-12 form">
             <div class="form-group">
               <input type="checkbox" v-model="earned_by_me" />
               <label>Earned by me?</label>
@@ -45,8 +45,8 @@
                 class="form-control"
                 v-model="earning.account"
               >
-                <option v-for="account in $store.state.account.accounts" :value="account.id">
-                  {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.account_email +'>' }}
+                <option v-for="account in accounts" :value="account.id">
+                  {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.site_name +'>' }}
                 </option>
               </select>
             </div>
@@ -118,6 +118,7 @@
   import moment from 'moment';
   import store from '@/store';
   import UserProxy from '@/proxies/UserProxy.js';
+  import AccountProxy from '@/proxies/AccountProxy.js';
 
   export default {
     /**
@@ -144,6 +145,7 @@
         },
         earned_by_me: true,
         users: [],
+        accounts: [],
       };
     },
     beforeRouteEnter(to, from, next) {
@@ -161,6 +163,7 @@
         });
     },
     mounted() {
+      this.fetchCommonAccounts();
       this.fetchDelegationMembers();
     },
     computed: {
@@ -192,6 +195,23 @@
           .then((response) => {
             if (response.success == true) {
               this.users = response.users;
+            } else {
+              console.log(response.message);
+            }
+          })
+          .catch((error) => {
+            console.log('Request failed...');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      fetchCommonAccounts() {
+        this.isLoading = true;
+        new AccountProxy().with_common()
+          .then((response) => {
+            if (response.success == true) {
+              this.accounts = response.accounts;
             } else {
               console.log(response.message);
             }

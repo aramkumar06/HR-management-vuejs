@@ -10,7 +10,7 @@
           class="row"
           v-if="!isLoading"
         >
-          <form class="form">
+          <form class="col-12 form">
             <div class="form-group">
               <label>Country</label>
               <select class="form-control" v-model="account.country" required >
@@ -74,10 +74,10 @@
                 class="form-control"
                 required />
             </div>
-            <div class="form-group">
-              <label>Is Payment Account?</label>
-              <input type="checkbox" v-model="account.is_payment_account" required />
-            </div>
+            <!--<div class="form-group">-->
+              <!--<label>Is Payment Account?</label>-->
+              <!--<input type="checkbox" v-model="account.is_payment_account" required />-->
+            <!--</div>-->
             <div class="form-group">
               <div class="row">
                 <div class="col-md-1 offset-md-9">
