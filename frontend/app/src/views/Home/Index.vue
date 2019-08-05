@@ -54,6 +54,7 @@ import store from '@/store';
 import ReportProxy from '@/proxies/ReportProxy.js';
 import VLineChart from '@/components/LineChart.js';
 import '@/utils/ColorUtil.js';
+import '@/utils/Constants.js';
 
 export default {
   /**
@@ -149,11 +150,6 @@ export default {
       let max = 0;
       let min = 0;
       let index = 0;
-      const multiplier = 1.5;
-      const top_threshold = 2500;
-      const intermediate_threshold = 2000;
-      const elementary__threshold = 1500;
-      const last_threshold = 500;
 
       for (const earning of this.earnings_by_member) {
         labels.push(earning.name);
@@ -167,21 +163,21 @@ export default {
           min = earning.cost;
         }
 
-        if (earning.cost >= top_threshold) {
+        if (earning.cost >= window.constants.top_threshold) {
           backgroundColors.push(window.chartColors.green);
-        } else if (earning.cost >= intermediate_threshold) {
+        } else if (earning.cost >= window.constants.intermediate_threshold) {
           backgroundColors.push(window.chartColors.blue);
-        } else if (earning.cost >= elementary__threshold) {
+        } else if (earning.cost >= window.constants.elementary__threshold) {
           backgroundColors.push(window.chartColors.orange);
-        } else if (earning.cost >= last_threshold) {
+        } else if (earning.cost >= window.constants.last_threshold) {
           backgroundColors.push(window.chartColors.yellow);
         } else {
           backgroundColors.push(window.chartColors.red);
         }
       }
 
-      suggestedMax = max * multiplier;
-      suggestedMin = min * multiplier;
+      suggestedMax = max * window.constants.multiplier;
+      suggestedMin = min * window.constants.multiplier;
 
       this.memberChartData = {
         labels: labels,
@@ -225,11 +221,6 @@ export default {
       let max = 0;
       let min = 0;
       let index = 0;
-      const multiplier = 1.5;
-      const top_threshold = 2500;
-      const intermediate_threshold = 2000;
-      const elementary__threshold = 1500;
-      const last_threshold = 500;
 
       for (const earning of this.earnings_by_team) {
         labels.push(earning.team_name);
@@ -243,21 +234,21 @@ export default {
           min = earning.cost;
         }
 
-        if (earning.cost >= top_threshold) {
+        if (earning.cost >= window.constants.top_threshold) {
           backgroundColors.push(window.chartColors.green);
-        } else if (earning.cost >= intermediate_threshold) {
+        } else if (earning.cost >= window.constants.intermediate_threshold) {
           backgroundColors.push(window.chartColors.blue);
-        } else if (earning.cost >= elementary__threshold) {
+        } else if (earning.cost >= window.constants.elementary__threshold) {
           backgroundColors.push(window.chartColors.orange);
-        } else if (earning.cost >= last_threshold) {
+        } else if (earning.cost >= window.constants.last_threshold) {
           backgroundColors.push(window.chartColors.yellow);
         } else {
           backgroundColors.push(window.chartColors.red);
         }
       }
 
-      suggestedMax = max * multiplier;
-      suggestedMin = min * multiplier;
+      suggestedMax = max * window.constants.multiplier;
+      suggestedMin = min * window.constants.multiplier;
 
       this.teamChartData = {
         labels: labels,

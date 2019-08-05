@@ -46,6 +46,17 @@ router.beforeEach((to, from, next) => {
         name: 'home.index',
       });
     }
+  } else if (to.matched.some(m => m.meta.delegate) && store.state.auth.authenticated) {
+    /*
+     * If the user is delegate owner then allows, if a user without permission is trying, rejects it
+     */
+    if (store.state.auth.user.role_name == 'Delegate') {
+      next();
+    } else {
+      next({
+        name: 'home.index',
+      })
+    }
   } else {
     next();
   }
