@@ -2,7 +2,7 @@
   <v-layout>
     <v-card contextual-style="dark">
       <span slot="header">
-        Delegate Pending Earnings
+        Delegate Active Month Earnings
       </span>
 
       <div slot="body">
@@ -30,12 +30,12 @@
               <th>
               </th>
             </thead>
-            <tbody v-if="pendingEarnings.length > 0">
+            <tbody v-if="earnings.length > 0">
               <tr
-                v-for="earning in pendingEarnings"
+                v-for="earning in earnings"
               >
                 <td>
-                  {{ earning.member_first_name + ' ' + earning.member_last_name }}
+                  {{ earning.member_last_name + ' ' + earning.member_first_name }}
                 </td>
                 <td>
                   {{ earning.site_name }}
@@ -52,10 +52,16 @@
                 <td>
                   <button
                     class="btn btn-sm btn-primary"
-                    @click="approvePendingEarning(earning.id)"
+                    v-if="earning.approved == false"
+                    @click="approvePendingEarning(earning)"
                   >
                     Approve
                   </button>
+                  <strong class="text-success"
+                          v-if="earning.approved == true"
+                  >
+                    Approved
+                  </strong>
                 </td>
               </tr>
             </tbody>
@@ -105,7 +111,7 @@
     data() {
       return {
         isLoading: false,
-        pendingEarnings: [],
+        earnings: [],
       };
     },
     computed: {
@@ -121,10 +127,10 @@
         this.isLoading = true;
 //        const params = { team_id: this.$store.state.auth.user.team_id };
         const params = {}
-        new EarningProxy().getPendingEarnings(params)
+        new EarningProxy().getActiveMonthEarnings(params)
           .then((response) => {
             if (response.success == true) {
-              this.pendingEarnings = response.pending_earnings;
+              this.earnings = response.earnings;
             } else {
               console.log(response.message);
             }
@@ -136,16 +142,19 @@
             this.isLoading = false;
           });
       },
-      approvePendingEarning(earning_id) {
-        if (earning_id == "undefined" || earning_id == null) {
-          console.log('earning_id is undefined or null');
+      approvePendingEarning(earning) {
+        if (earning == "undefined" || earning == null) {
+          console.log('earning is undefined or null');
+        }
+        if (earning.id == "undefined" || earning.id == null) {
+          console.log('id is undefined or null');
         }
 
         this.isLoading = true;
-        new EarningProxy().approvePendingEarning(earning_id)
+        new EarningProxy().approvePendingEarning(earning.id)
           .then((response) => {
             if (response.success === true) {
-              this.pendingEarnings = response.pending_earnings;
+              earning.approved = true;
             } else {
               console.log(response.message);
             }

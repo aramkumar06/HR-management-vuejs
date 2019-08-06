@@ -30,6 +30,16 @@ class EarningProxy extends BaseProxy {
   }
 
   /**
+   * Method used to fetch all active month earnings from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  getActiveMonthEarnings(parameters={}) {
+    const active_month_earning_url = this.endpoint + '/get_active_month_earnings/';
+    return this.submit('post', `/${active_month_earning_url}`, parameters)
+  }
+
+  /**
    * Method used to approve pending earning from the API.
    *
    * @returns {Promise} The result in a promise
