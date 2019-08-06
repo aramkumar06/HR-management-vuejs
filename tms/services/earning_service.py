@@ -72,9 +72,11 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
     return ret, summary
 
 
-def get_pending_earnings(team_id):
-    if team_id is None:
-        return []
+def get_pending_earnings(team_id=None):
+    if team_id is not None:
+        team_query = "AND tu.team_id = %s" % (team_id, )
+    else:
+        team_query = ""
 
     raw_query = """
       SELECT
@@ -92,13 +94,13 @@ def get_pending_earnings(team_id):
       INNER JOIN tms_account AS ta ON te.account_id = ta.id
       LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
       INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
-      WHERE tu.team_id = %s
-        AND te.approved_by_id IS NULL
+      WHERE te.approved_by_id IS NULL
         AND te.approved_date IS NULL
         AND te.deleted_at IS NULL
-      ORDER BY tu.id ASC, te.withdrawn_date ASC
+        %s
+      ORDER BY ta.id ASC, te.withdrawn_date ASC
     ; 
-    """ % (team_id, )
+    """ % (team_query, )
 
     pending_earnings = Earning.objects.raw(raw_query)
     ret = []

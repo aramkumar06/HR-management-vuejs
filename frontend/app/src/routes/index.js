@@ -96,9 +96,9 @@ export default [
     name: 'approval.index',
     component: () => import('@/views/Approval/Index.vue'),
 
-    // Only team owner can view this page
+    // Only delegate owner can view this page
     meta: {
-      team: true,
+      delegate: true,
     },
   },
 

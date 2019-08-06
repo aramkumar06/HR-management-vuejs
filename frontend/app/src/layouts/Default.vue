@@ -52,7 +52,7 @@
             </a>
           </router-link>
           <router-link
-            v-if="$store.state.auth.user.role_name == 'Officer'"
+            v-if="$store.state.auth.user.is_boss == true"
             :to="{ name: 'approval.index' }"
             active-class="active"
             class="nav-item"

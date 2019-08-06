@@ -2,7 +2,7 @@
   <v-layout>
     <v-card contextual-style="dark">
       <span slot="header">
-        Team Pending Earnings
+        Delegate Pending Earnings
       </span>
 
       <div slot="body">
@@ -119,7 +119,8 @@
       },
       getPendingEarnings() {
         this.isLoading = true;
-        const params = { team_id: this.$store.state.auth.user.team_id };
+//        const params = { team_id: this.$store.state.auth.user.team_id };
+        const params = {}
         new EarningProxy().getPendingEarnings(params)
           .then((response) => {
             if (response.success == true) {

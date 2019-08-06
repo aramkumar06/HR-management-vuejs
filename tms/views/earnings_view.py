@@ -159,22 +159,10 @@ class EarningsView(viewsets.ViewSet):
         # TODO
         # permission check
         #
-        team_id = int(request.data.get('team_id', None))
-        if team_id is None:
-            response = Response({
-                'success': False,
-                'message': 'no such a team'
-            })
-
-            return response
-
+        team_id = request.data.get('team_id', None)
         try:
-            if request.user.team_id != team_id:
-                raise PermissionDenied()
-
-            officer_role_id = int(os.getenv('ROLE_OFFICER_ID'))
             delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
-            if request.user.role_id != officer_role_id and request.user.role_id != delegate_role_id:
+            if request.user.role_id != delegate_role_id:
                 raise PermissionDenied()
 
             ret = get_pending_earnings(team_id)
@@ -198,9 +186,6 @@ class EarningsView(viewsets.ViewSet):
         #
         try:
             earning = Earning.objects.get(pk=pk)
-            if earning.earned_by.team_id != request.user.team_id:
-                raise PermissionDenied()
-
             earning.approved_by = request.user
             earning.approved_date = datetime.datetime.utcnow()
             earning.save()
