@@ -24,6 +24,7 @@ export default {
       state.user.role_id = localStorage.getItem('user_role_id');
       state.user.role_name = localStorage.getItem('user_role_name');
       state.user.team_id = localStorage.getItem('user_team_id');
+      state.user.is_boss = localStorage.getItem('user_is_boss') === "true";
       Vue.$http.defaults.headers.common.Authorization = `Token ${localStorage.getItem('token')}`;
       // set whole app variables
       state.app = {};
@@ -45,6 +46,7 @@ export default {
     localStorage.setItem('user_role_id', user.role_id);
     localStorage.setItem('user_role_name', user.role_name);
     localStorage.setItem('user_team_id', user.team_id);
+    localStorage.setItem('user_is_boss', user.is_boss);
     Vue.$http.defaults.headers.common.Authorization = `Token ${user.token}`;
     // set whole app variables
     state.app = {};

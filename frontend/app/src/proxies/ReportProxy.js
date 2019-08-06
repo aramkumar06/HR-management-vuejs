@@ -29,6 +29,16 @@ class ReportProxy extends BaseProxy {
     const team_url = this.endpoint + '/team/';
     return this.submit('post', `/${team_url}`, parameters)
   }
+
+  /**
+   * Method used to fetch earnings by delegate from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  delegate(parameters={}) {
+    const delegate_url = this.endpoint + '/delegate/';
+    return this.submit('post', `/${delegate_url}`, parameters)
+  }
 }
 
 export default ReportProxy;

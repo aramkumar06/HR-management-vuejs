@@ -1,3 +1,5 @@
+import os
+
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -33,16 +35,20 @@ class CustomAuthToken(ObtainAuthToken):
                     active_year = row.year
                     active_month = row.month
 
+            team_id = user.team.id if user.team else None
+            is_boss = user.role_id == int(os.getenv('ROLE_DELEGATE_ID'))
+
             response = Response({
                 'success': True,
                 'token': token.key,
                 'id': user.id,
-                'team_id': user.team.id,
+                'team_id': team_id,
                 'role_id': user.role.id,
                 'role_name': user.role.name,
                 'book_dates': book_dates,
                 'active_year': active_year,
                 'active_month': active_month,
+                'is_boss': is_boss,
             })
 
         return response

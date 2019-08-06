@@ -102,17 +102,17 @@ export default [
     },
   },
 
-/*  // Report Index
+  // Report Index
   {
     path: '/report',
-    name: 'approval.index',
+    name: 'report.index',
     component: () => import('@/views/Report/Index.vue'),
 
     // Only delegate owner can view this page
     meta: {
       delegate: true,
     },
-  },*/
+  },
 
   // Login
   {

@@ -2,27 +2,115 @@
   <v-layout>
     <v-card contextual-style="dark">
       <span slot="header">
-        {{ $t('general.welcome') }}
+        {{ $t('general.report') }}
       </span>
       <div slot="body">
         <div
-          class="row"
           v-if="!isLoading"
         >
-          <div class="col-6">
-            <v-bar-chart
-              v-if="memberEarningsLoaded"
-              :chart-data="memberChartData"
-              :options="memberOptions"
-            ></v-bar-chart>
-          </div>
-          <div class="col-6">
-            <v-bar-chart
-              v-if="teamEarningsLoaded"
-              :chart-data="teamChartData"
-              :options="teamOptions"
-            ></v-bar-chart>
-          </div>
+          <div class="row">
+            <div class="col-6">
+              <table class="table table-bordered">
+                <thead>
+                  <th>
+                    Name
+                  </th>
+                  <th>
+                    Earn
+                  </th>
+                  <th class="text-center">
+                    Rank
+                  </th>
+                </thead>
+                <tbody>
+                  <tr v-for="earning in earnings_by_delegate">
+                    <td>
+                      {{ earning.name }}
+                    </td>
+                    <td>
+                      {{ dollarFormat(earning.cost) }}
+                    </td>
+                    <td class="text-center">
+                      {{ earning.rank }}
+                    </td>
+                  </tr>
+                  <tr v-if="summary_delegate != null">
+                    <td colspan="2" class="text-right">
+                      <strong>
+                        Total :
+                      </strong>
+                    </td>
+                    <td>
+                      {{ dollarFormat(summary_delegate.total) }}
+                    </td>
+                  </tr>
+                  <tr v-if="summary_delegate != null">
+                    <td colspan="2" class="text-right">
+                      <strong>
+                        Average :
+                      </strong>
+                    </td>
+                    <td>
+                      {{ dollarFormat(summary_delegate.average) }}
+                    </td>
+                  </tr>
+                  <tr v-if="summary_delegate != null">
+                    <td colspan="2" class="text-right">
+                      <strong>
+                        Percentage :
+                      </strong>
+                    </td>
+                    <td>
+                      {{ summary_delegate.percentage }}%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div><!-- end of delegation table -->
+            <div class="col-6">
+              <table class="table table-bordered">
+                <thead>
+                  <th>
+                    Team Name
+                  </th>
+                  <th>
+                    Earn
+                  </th>
+                  <th>
+                    Average
+                  </th>
+                  <th class="text-center">
+                    Rank
+                  </th>
+                </thead>
+                <tbody>
+                  <tr v-for="earning in earnings_by_team">
+                    <td>
+                      {{ earning.team_name }}
+                    </td>
+                    <td>
+                      {{ dollarFormat(earning.cost) }}
+                    </td>
+                    <td>
+                      {{ dollarFormat(earning.average) }}
+                    </td>
+                    <td class="text-center">
+                      {{ earning.rank }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div><!-- end of team table -->
+          </div><!-- end of table -->
+          <div class="row">
+            <div class="col-12">
+              <v-line-chart
+                v-if="delegateEarningsLoaded"
+                :chart-data="delegateChartData"
+                :options="delegateOptions"
+              ></v-line-chart>
+            </div>
+          </div><!-- end of chart -->
         </div>
         <div class="loading-parent">
           <loading
@@ -40,10 +128,10 @@
 
 <script>
 /* ============
- * Home Index Page
+ * Report Index Page
  * ============
  *
- * The home index page.
+ * The report index page.
  */
 
 import Loading from 'vue-loading-overlay';
@@ -52,7 +140,8 @@ import VLayout from '@/layouts/Default.vue';
 import VCard from '@/components/Card.vue';
 import store from '@/store';
 import ReportProxy from '@/proxies/ReportProxy.js';
-import VBarChart from '@/components/BarChart.js';
+import VLineChart from '@/components/LineChart.js';
+import NumberUtil from '@/utils/NumberUtil.js';
 import '@/utils/ColorUtil.js';
 import '@/utils/Constants.js';
 
@@ -60,7 +149,7 @@ export default {
   /**
    * The name of the page.
    */
-  name: 'HomeIndex',
+  name: 'ReportIndex',
 
   /**
    * The components that the page can use.
@@ -69,7 +158,7 @@ export default {
     Loading,
     VLayout,
     VCard,
-    VBarChart,
+    VLineChart,
   },
   data() {
     return {
@@ -78,55 +167,28 @@ export default {
         year: null,
         month: null,
       },
-      earnings_by_member: [],
+      earnings_by_delegate: [],
       earnings_by_team: [],
-      summary_member: null,
+      summary_delegate: null,
       summary_team: null,
-      memberChartData: null,
+      delegateChartData: null,
       teamChartData: null,
-      memberOptions: null,
+      delegateOptions: null,
       teamOptions: null,
-      memberEarningsLoaded: false,
+      delegateEarningsLoaded: false,
       teamEarningsLoaded: false,
     }
   },
   mounted() {
-    this.getReportByMember();
-    this.getReportByTeam();
+    if (this.$store.state.auth.user.is_boss == true) {
+      this.getReportByDelegate();
+      this.getReportByTeam();
+    } else {
+    }
   },
   methods: {
-    getReportByMember() {
-      if (this.$store.state.auth.user.team_id === "undefined" || this.$store.state.auth.user.team_id === null) {
-        return;
-      }
-
-      this.isLoading = true;
-      const params = {
-        team_id: this.$store.state.auth.user.team_id,
-        year: this.filterObject.year,
-        month: this.filterObject.month,
-      };
-
-      new ReportProxy().members(params)
-        .then((response) => {
-          if (response.success === true) {
-            this.earnings_by_member = response.earnings_by_member;
-            this.summary_member = response.summary;
-
-            if (this.earnings_by_member.length > 0) {
-              this.memberEarningsLoaded = true;
-              this.fillMemberChartData();
-            }
-          } else {
-            console.log('Error occurred');
-          }
-        })
-        .catch((error) => {
-          console.log('Request failed...');
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
+    dollarFormat(value) {
+      return NumberUtil.currencyFormatter(value);
     },
     getReportByTeam() {
       this.isLoading = true;
@@ -138,7 +200,7 @@ export default {
 
             if (this.earnings_by_team.length > 0) {
               this.teamEarningsLoaded = true;
-              this.fillTeamChartData();
+//              this.fillTeamChartData();
             }
           } else {
             console.log('Error occurred');
@@ -151,76 +213,28 @@ export default {
           this.isLoading = false;
         });
     },
-    fillMemberChartData() {
-      let labels = [];
-      let data = [];
-      let backgroundColors = [];
-      let suggestedMax;
-      let suggestedMin;
-      let max = 0;
-      let min = 0;
-      let index = 0;
+    getReportByDelegate() {
+      this.isLoading = true;
+      new ReportProxy().delegate(this.filterObject)
+        .then((response) => {
+          if (response.success === true) {
+            this.earnings_by_delegate = response.earnings_by_delegate;
+            this.summary_delegate = response.summary;
 
-      for (const earning of this.earnings_by_member) {
-        labels.push(earning.name);
-        data.push(earning.cost);
-        index = index + 1;
-        if (earning.cost > max) {
-          max = earning.cost;
-        }
-
-        if (earning.cost < min) {
-          min = earning.cost;
-        }
-
-        if (earning.cost >= window.constants.top_threshold) {
-          backgroundColors.push(window.chartColors.green);
-        } else if (earning.cost >= window.constants.intermediate_threshold) {
-          backgroundColors.push(window.chartColors.blue);
-        } else if (earning.cost >= window.constants.elementary_threshold) {
-          backgroundColors.push(window.chartColors.orange);
-        } else if (earning.cost >= window.constants.last_threshold) {
-          backgroundColors.push(window.chartColors.yellow);
-        } else {
-          backgroundColors.push(window.chartColors.red);
-        }
-      }
-
-      suggestedMax = max * window.constants.multiplier;
-      suggestedMin = min * window.constants.multiplier;
-
-      this.memberChartData = {
-        labels: labels,
-        datasets: [
-          {
-            backgroundColor: backgroundColors,
-            label: 'Members',
-            data: data,
-            lineTension: 0,
-          },
-        ],
-      };
-
-      this.memberOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [
-            {
-              barPercentage: 0.3,
+            if (this.earnings_by_delegate.length > 0) {
+              this.delegateEarningsLoaded = true;
+              this.fillDelegateChartData();
             }
-          ],
-          yAxes: [
-            {
-              ticks:
-                {
-                  suggestedMin: suggestedMin,
-                  suggestedMax: suggestedMax,
-                },
-            },
-          ],
-        }
-      };
+          } else {
+            console.log('Error occurred');
+          }
+        })
+        .catch((error) => {
+          console.log('Request failed...');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     fillTeamChartData() {
       let labels = [];
@@ -230,12 +244,10 @@ export default {
       let suggestedMin;
       let max = 0;
       let min = 0;
-      let index = 0;
 
       for (const earning of this.earnings_by_team) {
         labels.push(earning.team_name);
         data.push(earning.cost);
-        index = index + 1;
         if (earning.cost > max) {
           max = earning.cost;
         }
@@ -290,6 +302,78 @@ export default {
                   suggestedMin: suggestedMin,
                   suggestedMax: suggestedMax,
                 },
+            },
+          ],
+        }
+      };
+    },
+    fillDelegateChartData() {
+      let labels = [];
+      let data = [];
+      let backgroundColors = [];
+      let suggestedMax;
+      let suggestedMin;
+      let max = 0;
+      let min = 0;
+
+      for (const earning of this.earnings_by_delegate) {
+        labels.push(earning.name);
+        data.push(earning.cost);
+        if (earning.cost > max) {
+          max = earning.cost;
+        }
+
+        if (earning.cost < min) {
+          min = earning.cost;
+        }
+
+        if (earning.cost >= window.constants.top_threshold) {
+          backgroundColors.push(window.chartColors.green);
+        } else if (earning.cost >= window.constants.intermediate_threshold) {
+          backgroundColors.push(window.chartColors.blue);
+        } else if (earning.cost >= window.constants.elementary_threshold) {
+          backgroundColors.push(window.chartColors.orange);
+        } else if (earning.cost >= window.constants.last_threshold) {
+          backgroundColors.push(window.chartColors.yellow);
+        } else {
+          backgroundColors.push(window.chartColors.red);
+        }
+      }
+
+      suggestedMax = max * window.constants.multiplier;
+      suggestedMin = min * window.constants.multiplier;
+
+      this.delegateChartData = {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: backgroundColors,
+            label: 'Delegate',
+            data: data,
+//            lineTension: 1,
+            fill: false,
+          },
+        ],
+      };
+
+      this.delegateOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              gridLines: false,
+            }
+          ],
+          yAxes: [
+            {
+              ticks:
+                {
+                  suggestedMin: suggestedMin,
+                  suggestedMax: suggestedMax,
+                  padding: 50
+                },
+              gridLines: false,
             },
           ],
         }

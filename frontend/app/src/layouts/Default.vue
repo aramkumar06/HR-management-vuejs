@@ -62,17 +62,17 @@
               Approvals
             </a>
           </router-link>
-          <!--<router-link-->
-            <!--v-if="$store.state.auth.user.role_name == 'Delegate'"-->
-            <!--:to="{ name: 'report.index' }"-->
-            <!--active-class="active"-->
-            <!--class="nav-item"-->
-            <!--tag="li"-->
-          <!--&gt;-->
-            <!--<a class="nav-link">-->
-              <!--Report-->
-            <!--</a>-->
-          <!--</router-link>-->
+          <router-link
+            v-if="$store.state.auth.user.is_boss == true"
+            :to="{ name: 'report.index' }"
+            active-class="active"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Report
+            </a>
+          </router-link>
         </ul>
         <span class="navbar-text">
           <a

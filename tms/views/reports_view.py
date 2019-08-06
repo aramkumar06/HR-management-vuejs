@@ -1,3 +1,4 @@
+import os
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -39,5 +40,31 @@ class ReportsView(viewsets.GenericViewSet):
             'earnings_by_team': earnings_by_team,
             'summary': summary,
         })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def delegate(self, request):
+        # TODO
+        #  check permissions
+        #
+        try:
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.role_id != delegate_role_id:
+                raise PermissionDenied
+
+            year = request.data.get('year', None)
+            month = request.data.get('month', None)
+            earnings_by_delegate, summary = report_delegation(year, month)
+            response = Response({
+                'success': True,
+                'earnings_by_delegate': earnings_by_delegate,
+                'summary': summary,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
 
         return response
