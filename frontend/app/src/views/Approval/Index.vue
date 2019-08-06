@@ -29,6 +29,7 @@
               </th>
               <th>
               </th>
+              <th></th>
             </thead>
             <tbody v-if="earnings.length > 0">
               <tr
@@ -57,11 +58,21 @@
                   >
                     Approve
                   </button>
-                  <strong class="text-success"
-                          v-if="earning.approved == true"
+                  <strong
+                    class="text-success"
+                    v-if="earning.approved == true"
                   >
                     Approved
                   </strong>
+                </td>
+                <td>
+                  <router-link
+                    :to="{name: 'approval.update', params: {earning_id: earning.id}}"
+                    class="btn btn-sm btn-warning"
+                    v-if="earning.approved == false"
+                  >
+                    Edit
+                  </router-link>
                 </td>
               </tr>
             </tbody>

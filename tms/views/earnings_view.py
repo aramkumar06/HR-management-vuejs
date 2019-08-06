@@ -102,7 +102,13 @@ class EarningsView(viewsets.ViewSet):
     def update(self, request, pk=None):
         try:
             earning = Earning.objects.get(pk=pk)
-            self.check_object_permissions(request, earning)
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.id != earning.earned_by_id and request.user.role_id != delegate_role_id:
+                raise PermissionDenied()
+
+            if earning.approved_by_id is not None and earning.approved_date is not None:
+                raise PermissionDenied()
+
             serializer = self.serializer_class(data=request.data, instance=earning)
             serializer.is_valid(raise_exception=True)
             if serializer.errors:
@@ -135,6 +141,9 @@ class EarningsView(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         try:
             earning = Earning.objects.get(pk=pk)
+            if earning.approved_by_id is not None and earning.approved_date is not None:
+                raise PermissionDenied()
+
             self.check_object_permissions(request, earning)
             earning.delete()
             response = Response({

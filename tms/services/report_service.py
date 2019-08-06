@@ -8,18 +8,20 @@ def report_member(team_id=None, year=None, month=None):
     if team_id is None:
         return [], 0.0
 
+    delta_start_date = os.getenv('DELTA_START_DATE')
+    delta_end_date = os.getenv('DELTA_END_DATE')
     if month is not None and year is not None:
         querying_book = Book.objects.filter(year__exact=year, month__exact=month).first()
         year_month_query = """
-                    AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
     elif month is None and year is not None:
         year_month_query = " AND te.year = " + year
     else:
         querying_book = Book.objects.filter(status__exact='Active').first()
         year_month_query = """
-                            AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                        """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
 
     raw_query = """
       SELECT
@@ -62,18 +64,20 @@ def report_member(team_id=None, year=None, month=None):
 
 
 def report_team(year=None, month=None):
+    delta_start_date = os.getenv('DELTA_START_DATE')
+    delta_end_date = os.getenv('DELTA_END_DATE')
     if month is not None and year is not None:
         querying_book = Book.objects.filter(year__exact=year, month__exact=month).first()
         year_month_query = """
-                    AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
     elif month is None and year is not None:
         year_month_query = " AND te.year = " + year
     else:
         querying_book = Book.objects.filter(status__exact='Active').first()
         year_month_query = """
-                            AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                        """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
 
     raw_query = """
       SELECT
@@ -92,6 +96,8 @@ def report_team(year=None, month=None):
         INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
         INNER JOIN tms_team AS tt1 ON tu.team_id = tt1.id 
         WHERE te.deleted_at IS NULL
+          AND te.approved_date IS NOT NULL
+          AND te.approved_by_id IS NOT NULL
           %s
         GROUP BY tt1.id
       ) summaries ON tt.id = summaries.id
@@ -126,18 +132,20 @@ def report_team(year=None, month=None):
 
 
 def report_delegation(year=None, month=None):
+    delta_start_date = os.getenv('DELTA_START_DATE')
+    delta_end_date = os.getenv('DELTA_END_DATE')
     if month is not None and year is not None:
         querying_book = Book.objects.filter(year__exact=year, month__exact=month).first()
         year_month_query = """
-                    AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
     elif month is None and year is not None:
         year_month_query = " AND te.year = " + year
     else:
         querying_book = Book.objects.filter(status__exact='Active').first()
         year_month_query = """
-                            AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-                        """ % (querying_book.start_date, querying_book.end_date)
+                    AND te.withdrawn_date BETWEEN DATE('%s') + %s AND DATE('%s') + %s
+                """ % (querying_book.start_date, delta_start_date, querying_book.end_date, delta_end_date)
 
     role_delegate_id = int(os.getenv('ROLE_DELEGATE_ID'))
     raw_query = """
@@ -154,6 +162,8 @@ def report_delegation(year=None, month=None):
           tms_user AS tu1
         LEFT JOIN tms_earning AS te ON tu1.id = te.earned_by_id 
         WHERE te.deleted_at IS NULL
+          AND te.approved_date IS NOT NULL
+          AND te.approved_by_id IS NOT NULL
           %s
         GROUP BY tu1.username      
       ) summaries ON tu.username = summaries.username

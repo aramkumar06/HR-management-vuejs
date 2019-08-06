@@ -44,7 +44,7 @@ export const create = ({ commit }, payload) => {
 
 export const update = ({ commit }, payload) => {
   new EarningProxy()
-    .create(payload)
+    .update(payload.id, payload.data)
     .then((response) => {
       if (response.success === true) {
         // store.dispatch('earning/index');

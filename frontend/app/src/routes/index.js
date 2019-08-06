@@ -102,6 +102,18 @@ export default [
     },
   },
 
+  // Approval Earning Update
+  {
+    path: '/approval/:earning_id/update',
+    name: 'approval.update',
+    component: () => import('@/views/Approval/Update.vue'),
+
+    // Only delegate owner can view this page
+    meta: {
+      delegate: true,
+    },
+  },
+
   // Report Index
   {
     path: '/report',

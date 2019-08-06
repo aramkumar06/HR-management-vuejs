@@ -11,47 +11,7 @@
         >
           <form class="col-12 form">
             <div class="form-group">
-              <input type="checkbox" v-model="earned_by_me" />
-              <label>Earned by me?</label>
-            </div>
-            <div
-              class="form-group"
-              v-if="earned_by_me == false"
-            >
-              <label>Earned by</label>
-              <select
-                class="form-control"
-                v-model="earning.earned_by"
-                >
-                <option v-for="user in users" :value="user.id">
-                  {{ user.name }} <{{ user.username }}>
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Status</label>
-              <select
-                class="form-control"
-                v-model="earning.status"
-              >
-                <option v-for="status in $store.state.earning.earningStatuses" :value="status.value">
-                  {{ status.caption }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Account</label>
-              <select
-                class="form-control"
-                v-model="earning.account"
-              >
-                <option v-for="account in accounts" :value="account.id">
-                  {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.site_name +'>' }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Created Date</label>
+              <label>Withdrawn Date</label>
               <datepicker
                 format="yyyy-MM-dd"
                 class="form-control"
@@ -71,7 +31,7 @@
               <div class="row">
                 <div class="col-md-1 offset-md-9">
                   <router-link
-                    :to="{ name: 'earning.index'}"
+                    :to="{ name: 'approval.index'}"
                     class="btn btn-danger"
                   >
                     Cancel
@@ -81,10 +41,10 @@
                   <button
                     type="button"
                     class="btn btn-success pull-right"
-                    :disabled="earning.cost === null || earning.status === null || earning.account == null"
-                    @click="createEarning()"
+                    :disabled="earning.cost === null"
+                    @click="updateEarning()"
                   >
-                    Save
+                    Update
                   </button>
                 </div>
               </div>
@@ -104,12 +64,12 @@
 
 <script>
   /* ============
-   * Earning Input Page
+   * Approval Earning Update Page
    * ============
    *
-   * Page where the user can input earning.
+   * Page where the user can update earning.
    */
-
+  import Vue from 'vue';
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/vue-loading.css';
   import VLayout from '@/layouts/Default.vue';
@@ -119,12 +79,13 @@
   import store from '@/store';
   import UserProxy from '@/proxies/UserProxy.js';
   import AccountProxy from '@/proxies/AccountProxy.js';
+  import EarningProxy from '@/proxies/EarningProxy.js';
 
   export default {
     /**
      * The name of the page.
      */
-    name: 'EarningCreate',
+    name: 'ApprovalUpdate',
 
     /**
      * The components that the page can use.
@@ -148,46 +109,47 @@
         accounts: [],
       };
     },
-//    beforeRouteEnter(to, from, next) {
-//      store.dispatch('account/index')
-//        .then((response) => {
-//          if (response.success === true) {
-//            store.commit('account/INDEX', response.accounts);
-//            next();
-//          } else {
-//            console.log('Request failed...');
-//          }
-//        })
-//        .catch(() => {
-//          console.log('Request failed...');
-//        });
-//    },
     mounted() {
+      this.fetchEarning();
       this.fetchCommonAccounts();
       this.fetchDelegationMembers();
     },
     computed: {
     },
     methods: {
-      createEarning() {
-        if (this.earning.status == 'Withdraw' && (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null)) {
+      updateEarning() {
+        if (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null) {
           return;
 
           console.log('Withdraw date omitted');
         }
 
-        if (this.earned_by_me == false && (this.earning.earned_by === "undefined" || this.earning.earned_by === null)) {
-          console.log('Please select earned by');
-        }
-
-        if (this.earned_by_me == true) {
-          this.earning.earned_by = this.$store.state.auth.user.id;
-        }
-
         this.earning.year = moment(this.earning.withdrawn_date).year();
         this.earning.withdrawn_date = moment(this.earning.withdrawn_date).format('YYYY-MM-DD');
 
-        this.$store.dispatch('earning/create', this.earning);
+        const earning_id = this.earning['id'];
+        delete this.earning['id'];
+
+        const params = {
+          id: earning_id,
+          data: this.earning
+        };
+
+//        this.$store.dispatch('earning/update', params);
+        new EarningProxy()
+          .update(params.id, params.data)
+          .then((response) => {
+            if (response.success === true) {
+              Vue.router.push({
+                name: 'approval.index',
+              });
+            } else {
+              console.log('Request failed...');
+            }
+          })
+          .catch(() => {
+            console.log('Request failed...');
+          });
       },
       fetchDelegationMembers() {
         this.isLoading = true;
@@ -212,6 +174,24 @@
           .then((response) => {
             if (response.success == true) {
               this.accounts = response.accounts;
+            } else {
+              console.log(response.message);
+            }
+          })
+          .catch((error) => {
+            console.log('Request failed...');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      fetchEarning() {
+        const earning_id = this.$route.params.earning_id;
+        this.isLoading = true;
+        new EarningProxy().find(earning_id)
+          .then((response) => {
+            if (response.success == true) {
+              this.earning = response.earning;
             } else {
               console.log(response.message);
             }
