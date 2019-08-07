@@ -244,13 +244,13 @@ export default {
           min = earning.cost;
         }
 
-        if (earning.cost >= window.constants.top_threshold) {
+        if (earning.cost >= window.constants.team_top_threshold) {
           backgroundColors.push(window.chartColors.green);
-        } else if (earning.cost >= window.constants.intermediate_threshold) {
+        } else if (earning.cost >= window.constants.team_intermediate_threshold) {
           backgroundColors.push(window.chartColors.blue);
-        } else if (earning.cost >= window.constants.elementary_threshold) {
+        } else if (earning.cost >= window.constants.team_elementary_threshold) {
           backgroundColors.push(window.chartColors.orange);
-        } else if (earning.cost >= window.constants.last_threshold) {
+        } else if (earning.cost >= window.constants.team_last_threshold) {
           backgroundColors.push(window.chartColors.yellow);
         } else {
           backgroundColors.push(window.chartColors.red);
