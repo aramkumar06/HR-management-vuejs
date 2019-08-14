@@ -1,4 +1,4 @@
-# A Django / Django REST framework based HR management ReactJS app for small companies
+# A Django / Django REST framework based HR management VueJS app for small companies
 
 - This is django / django rest based HR management app for small companies.
 
