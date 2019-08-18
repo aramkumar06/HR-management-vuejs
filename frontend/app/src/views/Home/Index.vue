@@ -23,6 +23,13 @@
               :options="teamOptions"
             ></v-bar-chart>
           </div>
+          <div class="col-12">
+            <v-line-chart
+              v-if="yearEarningsLoaded"
+              :chart-data="yearChartData"
+              :options="yearOptions"
+              ></v-line-chart>
+          </div>
         </div>
         <div class="loading-parent">
           <loading
@@ -53,6 +60,8 @@ import VCard from '@/components/Card.vue';
 import store from '@/store';
 import ReportProxy from '@/proxies/ReportProxy.js';
 import VBarChart from '@/components/BarChart.js';
+import VLineChart from '@/components/LineChart.js';
+import NumberUtil from '@/utils/NumberUtil.js';
 import '@/utils/ColorUtil.js';
 import '@/utils/Constants.js';
 
@@ -70,6 +79,7 @@ export default {
     VLayout,
     VCard,
     VBarChart,
+    VLineChart,
   },
   data() {
     return {
@@ -80,19 +90,25 @@ export default {
       },
       earnings_by_member: [],
       earnings_by_team: [],
+      earnings_by_year: [],
       summary_member: null,
       summary_team: null,
+      summary_year: null,
       memberChartData: null,
       teamChartData: null,
+      yearChartData: null,
       memberOptions: null,
       teamOptions: null,
+      yearOptions: null,
       memberEarningsLoaded: false,
       teamEarningsLoaded: false,
+      yearEarningsLoaded: false,
     }
   },
   mounted() {
     this.getReportByMember();
     this.getReportByTeam();
+    this.getReportByYear();
   },
   methods: {
     getReportByMember() {
@@ -142,6 +158,29 @@ export default {
             }
           } else {
             console.log('Error occurred');
+          }
+        })
+        .catch((error) => {
+          console.log('Request failed...');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getReportByYear() {
+      const params = { year: (new Date()).getFullYear() };
+      this.isLoading = true;
+      new ReportProxy().totalByDelegateMembers(params)
+        .then((response) => {
+          if (response.success == true) {
+            this.earnings_by_year = response.earnings;
+            this.summary_year = response.summary;
+            if (this.earnings_by_year.length > 0) {
+              this.yearEarningsLoaded = true;
+              this.fillYearChartData();
+            } else {
+              console.log('Error occurred');
+            }
           }
         })
         .catch((error) => {
@@ -290,6 +329,77 @@ export default {
                   suggestedMin: suggestedMin,
                   suggestedMax: suggestedMax,
                 },
+            },
+          ],
+        }
+      };
+    },
+    fillYearChartData() {
+      let labels = [];
+      let data = [];
+      let backgroundColors = [];
+      let suggestedMax;
+      let suggestedMin;
+      let max = 0;
+      let min = 0;
+
+      for (const earning of this.earnings_by_year) {
+        labels.push(earning.year + '.' + earning.month);
+        data.push(earning.cost);
+        if (earning.cost > max) {
+          max = earning.cost;
+        }
+
+        if (earning.cost < min) {
+          min = earning.cost;
+        }
+
+        if (earning.cost >= window.constants.top_threshold) {
+          backgroundColors.push(window.chartColors.green);
+        } else if (earning.cost >= window.constants.intermediate_threshold) {
+          backgroundColors.push(window.chartColors.blue);
+        } else if (earning.cost >= window.constants.elementary_threshold) {
+          backgroundColors.push(window.chartColors.orange);
+        } else if (earning.cost >= window.constants.last_threshold) {
+          backgroundColors.push(window.chartColors.yellow);
+        } else {
+          backgroundColors.push(window.chartColors.red);
+        }
+      }
+
+      suggestedMax = max * window.constants.multiplier;
+      suggestedMin = min * window.constants.multiplier;
+
+      this.yearChartData = {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: backgroundColors,
+            label: NumberUtil.currencyFormatter(this.summary_year),
+            data: data,
+            fill: false,
+          },
+        ],
+      };
+
+      this.yearOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              gridLines: false,
+            }
+          ],
+          yAxes: [
+            {
+              ticks:
+                {
+                  suggestedMin: suggestedMin,
+                  suggestedMax: suggestedMax,
+                  padding: 50
+                },
+              gridLines: false,
             },
           ],
         }

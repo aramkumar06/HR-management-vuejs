@@ -68,3 +68,24 @@ class ReportsView(viewsets.GenericViewSet):
             })
 
         return response
+
+    @action(detail=False, methods=['post'])
+    def total_by_member(self, request):
+        # TODO
+        #  check permissions
+        #
+        try:
+            year = request.data.get('year', None)
+            earnings_total, summary_year = report_monthly_summary_individual(year, request.user.id)
+            response = Response({
+                'success': True,
+                'earnings': earnings_total,
+                'summary': summary_year,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response

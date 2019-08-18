@@ -194,3 +194,126 @@ def report_delegation(year=None, month=None):
     summary['percentage'] = float(format(summary['total'] / goal_amount / members_count * 100, '.2f'))
 
     return ret, summary
+
+
+def report_monthly_summary_individual(year=None, user=None):
+    """
+        this report function calculates earnings by month
+    :param year: calculating year
+    :param user: user to calculate
+
+    :return:
+        [
+            {
+                'first_name': 'xxx',
+                'last_name': 'xxx',
+                'year': 2019,
+                'month': 1,
+                'cost': 5000
+            },
+            {
+                'first_name': 'xxx',
+                'last_name': 'xxx',
+                'year': 2019,
+                'month': 2,
+                'cost': 6000
+            }
+        ],
+        0.0
+    """
+    if user is None:
+        return []
+
+    user_query = "AND tu.id = %s" % (user, )
+
+    if year is None:
+        year_query = "AND te.year = %s" % (year, )
+    else:
+        year_query = ""
+
+    raw_query = """
+        SELECT
+            tu.first_name AS first_name
+          , tu.last_name  AS last_name
+          , tb.year       AS year
+          , tb.month      AS month
+          , SUM(te.cost)  AS cost
+        FROM tms_earning  AS te
+        INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
+        INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
+        WHERE te.deleted_at IS NULL
+          %s
+          %s
+        GROUP BY tu.first_name, tu.last_name, tb.year, tb.month
+        ;
+    """ % (user_query, year_query, )
+    cursor = connection.cursor()
+    cursor.execute(raw_query)
+    monthly_earned = cursor.fetchall()
+    ret = []
+    summary = 0.0
+    for earning in monthly_earned:
+        ret.append({
+            "first_name": earning[0],
+            "last_name": earning[1],
+            "year": earning[2],
+            "month": earning[3],
+            "cost": earning[4],
+        })
+
+        summary = summary + earning[4]
+
+    return ret, summary
+
+
+def report_total_summary_by_member(year=None):
+    """
+        this report function calculate total earning this year or from starting for each member
+    :param year: calculating year can be None
+    :return:
+        [
+            {
+                'first_name': 'xxx',
+                'last_name': 'xxx',
+                'cost': 5000
+            },
+            {
+                'first_name': 'xxx',
+                'last_name': 'xxx',
+                'cost': 6000
+            }
+        ]
+    """
+    if year is None:
+        year_query = "AND te.year = %s" % (year, )
+    else:
+        year_query = ""
+
+    raw_query = """
+        SELECT
+            tu.first_name AS first_name
+          , tu.last_name  AS last_name
+          , SUM(te.cost)  AS cost
+        FROM tms_earning AS te
+          INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
+          INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
+        WHERE te.deleted_at IS NULL
+          AND te.approved_date IS NOT NULL
+          AND te.approved_by_id IS NOT NULL
+          %s
+        GROUP BY tu.id, tu.first_name, tu.last_name
+        ORDER BY tu.id ASC
+        ;
+    """ % (year_query, )
+    cursor = connection.cursor()
+    cursor.execute(raw_query)
+    total_earnings = cursor.fetchall()
+    ret = []
+    for earning in total_earnings:
+        ret.append({
+            "first_name": earning[0],
+            "last_name": earning[1],
+            "cost": earning[2],
+        })
+
+    return ret

@@ -39,11 +39,10 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
             THEN FALSE 
             ELSE TRUE
           END AS approved
-      FROM
-        tms_earning AS te
-      INNER JOIN tms_account AS ta ON te.account_id = ta.id
-      LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
-      INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+      FROM tms_earning AS te
+        INNER JOIN tms_account AS ta ON te.account_id = ta.id
+        LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+        INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
         %s
       WHERE te.deleted_at IS NULL
         %s
@@ -89,11 +88,10 @@ def get_pending_earnings(team_id=None):
         , tu.id                        AS user_id
         , te.cost                      AS cost
         , te.withdrawn_date            AS withdrawn_date
-      FROM
-        tms_earning AS te
-      INNER JOIN tms_account AS ta ON te.account_id = ta.id
-      LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
-      INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+      FROM tms_earning AS te
+        INNER JOIN tms_account AS ta ON te.account_id = ta.id
+        LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+        INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
       WHERE te.approved_by_id IS NULL
         AND te.approved_date IS NULL
         AND te.deleted_at IS NULL
@@ -140,11 +138,10 @@ def get_active_month_earnings():
               ELSE
                 TRUE
               END                          AS approved
-          FROM
-            tms_earning AS te
-          INNER JOIN tms_account AS ta ON te.account_id = ta.id
-          LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
-          INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+          FROM tms_earning AS te
+            INNER JOIN tms_account AS ta ON te.account_id = ta.id
+            LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+            INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
           WHERE te.deleted_at IS NULL
             %s
           ORDER BY ta.id ASC, te.withdrawn_date ASC
