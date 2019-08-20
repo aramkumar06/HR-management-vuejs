@@ -70,7 +70,7 @@ class ReportsView(viewsets.GenericViewSet):
         return response
 
     @action(detail=False, methods=['post'])
-    def total_by_member(self, request):
+    def total_monthly_per_member(self, request):
         # TODO
         #  check permissions
         #
@@ -81,6 +81,31 @@ class ReportsView(viewsets.GenericViewSet):
                 'success': True,
                 'earnings': earnings_total,
                 'summary': summary_year,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def total_summary_by_member(self, request):
+        # TODO
+        #  check permissions
+        #
+        try:
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.role_id != delegate_role_id:
+                raise PermissionDenied
+
+            year = request.data.get('year', None)
+            earnings, summary = report_total_summary_by_member(year)
+            response = Response({
+                'success': True,
+                'earnings': earnings,
+                'summary': summary,
             })
         except PermissionDenied:
             response = Response({

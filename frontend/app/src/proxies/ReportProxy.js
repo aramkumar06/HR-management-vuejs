@@ -41,13 +41,23 @@ class ReportProxy extends BaseProxy {
   }
 
   /**
+   * Method used to fetch year total earnings per delegate member from the API.
+   *
+   * @returns {Promise} The result in a promise
+   */
+  totalPerDelegateMember(parameters={}) {
+    const total_earning_url = this.endpoint + '/total_monthly_per_member/';
+    return this.submit('post', `/${total_earning_url}`, parameters)
+  }
+
+  /**
    * Method used to fetch year total earnings for all delegate members from the API.
    *
    * @returns {Promise} The result in a promise
    */
   totalByDelegateMembers(parameters={}) {
-    const total_earning_url = this.endpoint + '/total_by_member/';
-    return this.submit('post', `/${total_earning_url}`, parameters)
+    const url = this.endpoint + '/total_summary_by_member/';
+    return this.submit('post', `/${url}`, parameters)
   }
 }
 

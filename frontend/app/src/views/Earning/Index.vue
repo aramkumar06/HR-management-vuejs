@@ -82,6 +82,9 @@
               <th>
                 Approval
               </th>
+              <th>
+                Comments
+              </th>
               <td></td>
               <td></td>
             </thead>
@@ -109,8 +112,11 @@
                     Approved
                   </strong>
                   <strong v-if="earning.approved != true">
-                    Not approved yet
+                    Not approved
                   </strong>
+                </td>
+                <td>
+                  {{ earning.comments }}
                 </td>
                 <td>
                   <router-link

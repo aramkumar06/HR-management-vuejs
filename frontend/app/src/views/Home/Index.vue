@@ -23,6 +23,10 @@
               :options="teamOptions"
             ></v-bar-chart>
           </div>
+        </div>
+        <div
+          class="row mt-4"
+          v-if="!isLoading">
           <div class="col-12">
             <v-line-chart
               v-if="yearEarningsLoaded"
@@ -170,7 +174,7 @@ export default {
     getReportByYear() {
       const params = { year: (new Date()).getFullYear() };
       this.isLoading = true;
-      new ReportProxy().totalByDelegateMembers(params)
+      new ReportProxy().totalPerDelegateMember(params)
         .then((response) => {
           if (response.success == true) {
             this.earnings_by_year = response.earnings;
@@ -370,12 +374,13 @@ export default {
       suggestedMax = max * window.constants.multiplier;
       suggestedMin = min * window.constants.multiplier;
 
+      const chartLabel = "Current Year : " + NumberUtil.currencyFormatter(this.summary_year);
       this.yearChartData = {
         labels: labels,
         datasets: [
           {
             backgroundColor: backgroundColors,
-            label: NumberUtil.currencyFormatter(this.summary_year),
+            label: chartLabel,
             data: data,
             fill: false,
           },

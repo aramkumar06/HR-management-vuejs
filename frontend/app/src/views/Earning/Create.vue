@@ -78,6 +78,14 @@
               />
             </div>
             <div class="form-group">
+              <label>Comments</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="earning.comments"
+              />
+            </div>
+            <div class="form-group">
               <div class="row">
                 <div class="col-md-1 offset-md-9">
                   <router-link

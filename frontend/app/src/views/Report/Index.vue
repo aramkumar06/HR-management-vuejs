@@ -102,7 +102,7 @@
               </table>
             </div><!-- end of team table -->
           </div><!-- end of table -->
-          <div class="row">
+          <div class="row mt-4">
             <div class="col-12">
               <v-line-chart
                 v-if="delegateEarningsLoaded"
@@ -110,7 +110,17 @@
                 :options="delegateOptions"
               ></v-line-chart>
             </div>
-          </div><!-- end of chart -->
+          </div><!-- end of active month chart -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <v-line-chart
+                v-if="totalYearEarningsLoaded"
+                :chart-data="totalYearChartData"
+                :options="totalYearOptions"
+              >
+              </v-line-chart>
+            </div>
+          </div><!-- end of total year chart -->
         </div>
         <div class="loading-parent">
           <loading
@@ -169,20 +179,26 @@ export default {
       },
       earnings_by_delegate: [],
       earnings_by_team: [],
+      earnings_by_total_year: [],
       summary_delegate: null,
       summary_team: null,
+      summary_total_year: null,
       delegateChartData: null,
       teamChartData: null,
+      totalYearChartData: null,
       delegateOptions: null,
       teamOptions: null,
+      totalYearOptions: null,
       delegateEarningsLoaded: false,
       teamEarningsLoaded: false,
+      totalYearEarningsLoaded: false,
     }
   },
   mounted() {
     if (this.$store.state.auth.user.is_boss == true) {
       this.getReportByDelegate();
       this.getReportByTeam();
+      this.getReportByTotalYear();
     } else {
     }
   },
@@ -224,6 +240,30 @@ export default {
             if (this.earnings_by_delegate.length > 0) {
               this.delegateEarningsLoaded = true;
               this.fillDelegateChartData();
+            }
+          } else {
+            console.log('Error occurred');
+          }
+        })
+        .catch((error) => {
+          console.log('Request failed...');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    getReportByTotalYear() {
+      this.isLoading = true;
+      const params = { year: (new Date()).getFullYear() };
+      new ReportProxy().totalByDelegateMembers(params)
+        .then((response) => {
+          if (response.success === true) {
+            this.earnings_by_total_year = response.earnings;
+            this.summary_total_year = response.summary;
+
+            if (this.earnings_by_total_year.length > 0) {
+              this.totalYearEarningsLoaded = true;
+              this.fillTotalYearChartData();
             }
           } else {
             console.log('Error occurred');
@@ -350,13 +390,83 @@ export default {
             backgroundColor: backgroundColors,
             label: 'Delegate',
             data: data,
-//            lineTension: 1,
             fill: false,
           },
         ],
       };
 
       this.delegateOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              gridLines: false,
+            }
+          ],
+          yAxes: [
+            {
+              ticks:
+                {
+                  suggestedMin: suggestedMin,
+                  suggestedMax: suggestedMax,
+                  padding: 50
+                },
+              gridLines: false,
+            },
+          ],
+        }
+      };
+    },
+    fillTotalYearChartData() {
+      let labels = [];
+      let data = [];
+      let backgroundColors = [];
+      let suggestedMax;
+      let suggestedMin;
+      let max = 0;
+      let min = 0;
+
+      for (const earning of this.earnings_by_total_year) {
+        labels.push(earning.name);
+        data.push(earning.cost);
+        if (earning.cost > max) {
+          max = earning.cost;
+        }
+
+        if (earning.cost < min) {
+          min = earning.cost;
+        }
+
+        if (earning.cost >= window.constants.top_threshold) {
+          backgroundColors.push(window.chartColors.green);
+        } else if (earning.cost >= window.constants.intermediate_threshold) {
+          backgroundColors.push(window.chartColors.blue);
+        } else if (earning.cost >= window.constants.elementary_threshold) {
+          backgroundColors.push(window.chartColors.orange);
+        } else if (earning.cost >= window.constants.last_threshold) {
+          backgroundColors.push(window.chartColors.yellow);
+        } else {
+          backgroundColors.push(window.chartColors.red);
+        }
+      }
+
+      suggestedMax = max * window.constants.multiplier;
+      suggestedMin = min * window.constants.multiplier;
+
+      this.totalYearChartData = {
+        labels: labels,
+        datasets: [
+          {
+            backgroundColor: backgroundColors,
+            label: 'Total Year',
+            data: data,
+            fill: false,
+          },
+        ],
+      };
+
+      this.totalYearOptions = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {

@@ -269,18 +269,25 @@ def report_monthly_summary_individual(year=None, user=None):
 def report_total_summary_by_member(year=None):
     """
         this report function calculate total earning this year or from starting for each member
+
+        TODO
+            removed "approved" criteria temporally but should be added again
+            AND te.approved_date IS NOT NULL
+            AND te.approved_by_id IS NOT NULL
     :param year: calculating year can be None
     :return:
         [
             {
                 'first_name': 'xxx',
                 'last_name': 'xxx',
-                'cost': 5000
+                'cost': 5000,
+                'ranking': 1,
             },
             {
                 'first_name': 'xxx',
                 'last_name': 'xxx',
-                'cost': 6000
+                'cost': 6000,
+                'ranking': 2,
             }
         ]
     """
@@ -291,15 +298,13 @@ def report_total_summary_by_member(year=None):
 
     raw_query = """
         SELECT
-            tu.first_name AS first_name
-          , tu.last_name  AS last_name
-          , SUM(te.cost)  AS cost
+            tu.name                                        AS name
+          , SUM(te.cost)                                   AS cost
+          , DENSE_RANK() OVER (ORDER BY SUM(te.cost) DESC) AS ranking
         FROM tms_earning AS te
           INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
           INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
         WHERE te.deleted_at IS NULL
-          AND te.approved_date IS NOT NULL
-          AND te.approved_by_id IS NOT NULL
           %s
         GROUP BY tu.id, tu.first_name, tu.last_name
         ORDER BY tu.id ASC
@@ -309,11 +314,16 @@ def report_total_summary_by_member(year=None):
     cursor.execute(raw_query)
     total_earnings = cursor.fetchall()
     ret = []
+    summary = 0.0
     for earning in total_earnings:
         ret.append({
-            "first_name": earning[0],
-            "last_name": earning[1],
-            "cost": earning[2],
+            "name": earning[0],
+            "cost": earning[1],
+            "ranking": earning[2],
         })
 
-    return ret
+        summary = summary + earning[1]
+
+    summary = float(format(summary, '.2f'))
+
+    return ret, summary

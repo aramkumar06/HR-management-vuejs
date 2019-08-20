@@ -28,7 +28,9 @@
                 Date
               </th>
               <th>
+                Comments
               </th>
+              <th></th>
               <th></th>
             </thead>
             <tbody v-if="earnings.length > 0">
@@ -49,6 +51,9 @@
                 </td>
                 <td>
                   {{ earning.withdrawn_date }}
+                </td>
+                <td>
+                  {{ earning.comments }}
                 </td>
                 <td>
                   <button

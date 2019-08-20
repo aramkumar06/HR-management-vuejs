@@ -39,6 +39,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
             THEN FALSE 
             ELSE TRUE
           END AS approved
+        , te.comments                  AS comments          
       FROM tms_earning AS te
         INNER JOIN tms_account AS ta ON te.account_id = ta.id
         LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
@@ -65,6 +66,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
             "account_first_name": earning.account_first_name,
             "account_last_name": earning.account_last_name,
             "approved": earning.approved,
+            "comments": earning.comments,
         })
         summary += earning.cost
 
@@ -88,6 +90,7 @@ def get_pending_earnings(team_id=None):
         , tu.id                        AS user_id
         , te.cost                      AS cost
         , te.withdrawn_date            AS withdrawn_date
+        , te.comments                  AS comments        
       FROM tms_earning AS te
         INNER JOIN tms_account AS ta ON te.account_id = ta.id
         LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
@@ -112,6 +115,7 @@ def get_pending_earnings(team_id=None):
             "account_last_name": earning.account_last_name,
             "cost": earning.cost,
             "withdrawn_date": earning.withdrawn_date,
+            "comments": earning.comments,
         })
 
     return ret
@@ -138,6 +142,7 @@ def get_active_month_earnings():
               ELSE
                 TRUE
               END                          AS approved
+            , te.comments                  AS comments              
           FROM tms_earning AS te
             INNER JOIN tms_account AS ta ON te.account_id = ta.id
             LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
@@ -161,6 +166,7 @@ def get_active_month_earnings():
             "cost": earning.cost,
             "withdrawn_date": earning.withdrawn_date,
             "approved": earning.approved,
+            "comments": earning.comments,
         })
 
     return ret

@@ -1,5 +1,5 @@
 window.constants = {
-  multiplier: 1.5,
+  multiplier: 1.2,
   top_threshold: 10000,
   intermediate_threshold: 8000,
   elementary_threshold: 5000,
