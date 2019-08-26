@@ -181,6 +181,8 @@
           .finally(() => {
             this.isLoading = false;
           });
+
+        return false;
       },
     },
   };

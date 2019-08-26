@@ -122,10 +122,13 @@ def get_pending_earnings(team_id=None):
 
 
 def get_active_month_earnings():
-    querying_book = Book.objects.filter(status__exact='Active').first()
-    year_month_query = """
-        AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND' 
-    """ % (querying_book.start_date, querying_book.end_date, )
+    # querying_book = Book.objects.filter(status__exact='Active').first()
+    # year_month_query = """
+    #     AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND'
+    # """ % (querying_book.start_date, querying_book.end_date, )
+    # TODO
+    #   temporarily remove year_month_query
+    year_month_query = ""
     raw_query = """
           SELECT
               te.id                        AS id

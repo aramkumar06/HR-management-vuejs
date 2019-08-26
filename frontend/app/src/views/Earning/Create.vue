@@ -5,16 +5,6 @@
       </span>
 
       <div slot="body">
-        <div class="row">
-          <div class="col-12">
-            <h4>January   2019.01.08 - 2019.01.31</h4>
-            <h4>February  2019.02.01 - 2019.03.01</h4>
-            <h4>March     2019.03.02 - 2019.04.03</h4>
-            <h4>April     2019.04.04 - 2019.05.03</h4>
-            <h4>May       2019.05.04 - 2019.06.05</h4>
-            <h4>June      2019.06.06 - 2019.07.02</h4>
-          </div>
-        </div>
         <div
           class="row"
           v-if="!isLoading"

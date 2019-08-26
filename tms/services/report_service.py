@@ -242,6 +242,8 @@ def report_monthly_summary_individual(year=None, user=None):
         INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
         INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
         WHERE te.deleted_at IS NULL
+          AND te.approved_date IS NOT NULL
+          AND te.approved_by_id IS NOT NULL        
           %s
           %s
         GROUP BY tu.first_name, tu.last_name, tb.year, tb.month
@@ -305,6 +307,8 @@ def report_total_summary_by_member(year=None):
           INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
           INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
         WHERE te.deleted_at IS NULL
+          AND te.approved_date IS NOT NULL
+          AND te.approved_by_id IS NOT NULL        
           %s
         GROUP BY tu.id, tu.first_name, tu.last_name
         ORDER BY tu.id ASC
