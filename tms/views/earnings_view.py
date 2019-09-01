@@ -189,16 +189,18 @@ class EarningsView(viewsets.ViewSet):
         return response
 
     @action(detail=False, methods=['post'])
-    def get_active_month_earnings(self, request):
+    def get_delegation_month_earnings(self, request):
         # TODO
         # permission check
         #
         try:
             delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            year = request.data.get('year', None)
+            month = request.data.get('month', None)
             if request.user.role_id != delegate_role_id:
                 raise PermissionDenied()
 
-            ret = get_active_month_earnings()
+            ret = get_delegation_month_earnings(year, month)
 
             response = Response({
                 'success': True,

@@ -1,18 +1,5 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <v-layout>
-    <div class="row">
-      <div class="col-md-12">
-        <router-link
-          :to="{ name: 'earning.create' }"
-          class="btn btn-success pull-right offset-md-10 col-md-2"
-        >
-          Add New Earning
-        </router-link>
-      </div>
-    </div>
-
-    <br />
-
     <v-card contextual-style="dark">
       <span slot="header">
         My Earnings
@@ -20,7 +7,15 @@
 
       <div slot="body">
         <div v-if="!isLoading">
-          <div class="row">
+          <div class="row mb-5">
+            <div class="col-5">
+              <router-link
+                :to="{ name: 'earning.create' }"
+                class="btn btn-success"
+              >
+                Add New Earning
+              </router-link>
+            </div>
             <div class="col-3">
               <select
                 class="form-control"
@@ -50,7 +45,7 @@
                 </option>
               </select>
             </div>
-            <div class="col-3">
+            <div class="col-1">
               <button
                 class="btn btn-xs btn-primary pull-right"
                 @click="queryEarnings()"
@@ -59,8 +54,6 @@
               </button>
             </div>
           </div>
-
-          <br />
 
           <table class="table">
             <thead>
@@ -85,8 +78,8 @@
               <th>
                 Comments
               </th>
-              <td></td>
-              <td></td>
+              <th></th>
+              <th></th>
             </thead>
             <tbody v-if="earnings.length > 0">
               <tr
@@ -222,7 +215,6 @@
       } else {
         this.filterObject.month = this.$route.query['month'];
       }
-
 
       this.populateYears();
       this.populateMonths();

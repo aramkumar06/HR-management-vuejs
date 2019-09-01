@@ -34,9 +34,9 @@ class EarningProxy extends BaseProxy {
    *
    * @returns {Promise} The result in a promise
    */
-  getActiveMonthEarnings(parameters={}) {
-    const active_month_earning_url = this.endpoint + '/get_active_month_earnings/';
-    return this.submit('post', `/${active_month_earning_url}`, parameters)
+  getDelegationMonthEarnings(parameters={}) {
+    const delegation_month_earning_url = this.endpoint + '/get_delegation_month_earnings/';
+    return this.submit('post', `/${delegation_month_earning_url}`, parameters)
   }
 
   /**
