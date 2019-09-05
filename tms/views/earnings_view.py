@@ -125,7 +125,7 @@ class EarningsView(viewsets.ViewSet):
         except Earning.DoesNotExist:
             response = Response({
                 'success': False,
-                'message': 'no such a earnings'
+                'message': 'no such a earning'
             })
         except PermissionDenied:
             response = Response({

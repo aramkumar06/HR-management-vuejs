@@ -97,13 +97,13 @@
                   {{ earning.comments }}
                 </td>
                 <td>
-                  <button
+                  <a
                     class="btn btn-sm btn-success"
                     v-if="earning.approved == false"
                     @click="approvePendingEarning(earning)"
                   >
                     Approve
-                  </button>
+                  </a>
                   <strong
                     class="text-success"
                     v-if="earning.approved == true"
@@ -240,7 +240,6 @@
           console.log('id is undefined or null');
         }
 
-        this.isLoading = true;
         new EarningProxy().approvePendingEarning(earning.id)
           .then((response) => {
             if (response.success === true) {
@@ -253,7 +252,6 @@
             console.log('Request failed...');
           })
           .finally(() => {
-            this.isLoading = false;
           });
 
         return false;

@@ -73,6 +73,15 @@
               Report
             </a>
           </router-link>
+          <router-link
+            :to="{ name: 'profile.update' }"
+            active-class="active"
+            class="nav-item"
+            tag="li">
+            <a class="nav-link">
+              Profile
+            </a>
+          </router-link>
         </ul>
         <span class="navbar-text">
           <a

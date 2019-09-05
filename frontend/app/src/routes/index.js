@@ -126,6 +126,18 @@ export default [
     },
   },
 
+  // Profile Update
+  {
+    path: '/profile',
+    name: 'profile.update',
+    component: () => import('@/views/Profile/Update.vue'),
+
+    // If the user needs to be authenticated to view this page.
+    meta: {
+      auth: true,
+    },
+  },
+
   // Login
   {
     path: '/login',

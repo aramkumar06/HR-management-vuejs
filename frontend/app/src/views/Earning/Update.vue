@@ -9,47 +9,49 @@
           class="row"
           v-if="!isLoading"
         >
-          <form class="col-12 form">
-            <div class="form-group">
-              <label>Withdrawn Date</label>
-              <datepicker
-                format="yyyy-MM-dd"
-                class="form-control"
-                v-model="earning.withdrawn_date"
-                required />
-            </div>
-            <div class="form-group">
-              <label>Cost</label>
-              <input
-                type="number"
-                step="0.01"
-                class="form-control"
-                v-model="earning.cost"
-              />
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-1 offset-md-9">
-                  <router-link
-                    :to="{ name: 'approval.index'}"
-                    class="btn btn-danger"
-                  >
-                    Cancel
-                  </router-link>
-                </div>
-                <div class="col-md-2">
-                  <button
-                    type="button"
-                    class="btn btn-success pull-right"
-                    :disabled="earning.cost === null"
-                    @click="updateEarning()"
-                  >
-                    Update
-                  </button>
+          <div class="col-12">
+            <form class="form">
+              <div class="form-group">
+                <label>Withdrawn Date</label>
+                <datepicker
+                  format="yyyy-MM-dd"
+                  class="form-control"
+                  v-model="earning.withdrawn_date"
+                  required />
+              </div>
+              <div class="form-group">
+                <label>Cost</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  v-model="earning.cost"
+                />
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-1 offset-9">
+                    <router-link
+                      :to="{ name: 'approval.index'}"
+                      class="btn btn-danger"
+                    >
+                      Cancel
+                    </router-link>
+                  </div>
+                  <div class="col-2">
+                    <button
+                      type="button"
+                      class="btn btn-success pull-right"
+                      :disabled="earning.cost === null"
+                      @click="updateEarning()"
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
         <div class="loading-parent">
           <loading
