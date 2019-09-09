@@ -8,7 +8,7 @@
       <div slot="body">
         <div class="row mb-5">
           <div class="col-5"></div>
-          <div class="col-3">
+          <div class="col-2">
             <select
               class="form-control"
               v-if="years && years.length > 0"
@@ -23,7 +23,7 @@
               </option>
             </select>
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <select
               class="form-control"
               v-if="months && months.length > 0"

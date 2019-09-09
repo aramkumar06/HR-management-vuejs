@@ -192,11 +192,13 @@ class EarningsView(viewsets.ViewSet):
     def get_delegation_month_earnings(self, request):
         # TODO
         # permission check
-        #
+        # need to filter with user_id and account_id
         try:
             delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
             year = request.data.get('year', None)
             month = request.data.get('month', None)
+            user_id = request.data.get('user_id', None)
+            account_id = request.data.get('account_id', None)
             if request.user.role_id != delegate_role_id:
                 raise PermissionDenied()
 
