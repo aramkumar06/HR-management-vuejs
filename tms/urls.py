@@ -7,6 +7,7 @@ from tms.views import EarningsView
 from tms.views import ReportsView
 from tms.views import SitesView
 from tms.views import UsersView
+from tms.views import FinancialAccountsView
 
 router = DefaultRouter()
 router.register(r'accounts', AccountsView, 'accounts')
@@ -15,6 +16,7 @@ router.register(r'earnings', EarningsView, 'earnings')
 router.register(r'reports', ReportsView, 'reports')
 router.register(r'sites', SitesView, 'sites')
 router.register(r'users', UsersView, 'users')
+router.register(r'financial_accounts', FinancialAccountsView, 'financial_accounts')
 
 urlpatterns = [
     path('login/', CustomAuthToken.as_view()),

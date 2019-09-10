@@ -7,7 +7,7 @@
 
       <div slot="body">
         <div class="row mb-5">
-          <div class="col-5"></div>
+          <div class="col-7"></div>
           <div class="col-2">
             <select
               class="form-control"

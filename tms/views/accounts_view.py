@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.core.exceptions import PermissionDenied
-from tms.models import Account
 from tms.serializers import AccountSerializer
 from tms.services.account_service import *
 
@@ -144,5 +143,55 @@ class AccountsView(viewsets.ViewSet):
             'success': True,
             'accounts': ret
         })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def payments(self, request):
+        try:
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.role_id != delegate_role_id:
+                raise PermissionDenied
+
+            ret = get_payment_accounts()
+            response = Response({
+                'success': True,
+                'accounts': ret
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permissions'
+            })
+        except Exception as e:
+            response = Response({
+                'success': False,
+                'message': str(e)
+            })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def freelancing_accounts(self, request):
+        try:
+            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+            if request.user.role_id != delegate_role_id:
+                raise PermissionDenied
+
+            ret = get_freelancing_accounts()
+            response = Response({
+                'success': True,
+                'accounts': ret
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permissions'
+            })
+        except Exception as e:
+            response = Response({
+                'success': False,
+                'message': str(e)
+            })
 
         return response

@@ -8,6 +8,8 @@ from django.core.exceptions import PermissionDenied
 from tms.serializers import EarningSerializer
 from tms.services.earning_service import *
 
+from tms.models import AccountFinance
+
 
 class EarningsView(viewsets.ViewSet):
     serializer_class = EarningSerializer
@@ -34,7 +36,7 @@ class EarningsView(viewsets.ViewSet):
         if month is None and year is None:
             response = Response({
                 'success': False,
-                'error_message': 'Month or Year should be provided'
+                'message': 'Month or Year should be provided'
             })
 
             return response
@@ -42,7 +44,7 @@ class EarningsView(viewsets.ViewSet):
         if year is None and month is not None:
             response = Response({
                 'success': False,
-                'error_message': 'Month is provided but Year is not provided'
+                'message': 'Month is provided but Year is not provided'
             })
 
             return response
@@ -60,7 +62,6 @@ class EarningsView(viewsets.ViewSet):
     def create(self, request):
         # TODO
         #   should validate permission
-        #   should validate whether week is in current month or not
         #
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid()
@@ -70,6 +71,12 @@ class EarningsView(viewsets.ViewSet):
                 'message': serializer.errors
             })
         else:
+            try:
+                mapped_finance_account = AccountFinance.objects.filter(email_account=serializer.validated_data['account']).first()
+                serializer.validated_data['finance_account'] = mapped_finance_account.financial_account
+            except AccountFinance.DoesNotExist:
+                pass
+
             serializer.save()
             response = Response({
                 'success': True,

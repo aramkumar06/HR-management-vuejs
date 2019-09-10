@@ -64,6 +64,17 @@
           </router-link>
           <router-link
             v-if="$store.state.auth.user.is_boss == true"
+            :to="{ name: 'financial_account.index' }"
+            active-class="active"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Payment-Email Register
+            </a>
+          </router-link>
+          <router-link
+            v-if="$store.state.auth.user.is_boss == true"
             :to="{ name: 'report.index' }"
             active-class="active"
             class="nav-item"

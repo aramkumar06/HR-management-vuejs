@@ -5,3 +5,4 @@ from .earnings_view import EarningsView
 from .reports_view import ReportsView
 from .sites_view import SitesView
 from .users_view import UsersView
+from .financial_accounts_view import FinancialAccountsView

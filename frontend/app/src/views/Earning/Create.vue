@@ -156,20 +156,6 @@
         accounts: [],
       };
     },
-//    beforeRouteEnter(to, from, next) {
-//      store.dispatch('account/index')
-//        .then((response) => {
-//          if (response.success === true) {
-//            store.commit('account/INDEX', response.accounts);
-//            next();
-//          } else {
-//            console.log('Request failed...');
-//          }
-//        })
-//        .catch(() => {
-//          console.log('Request failed...');
-//        });
-//    },
     mounted() {
       this.fetchCommonAccounts();
       this.fetchDelegationMembers();

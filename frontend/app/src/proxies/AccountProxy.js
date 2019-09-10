@@ -28,6 +28,24 @@ class AccountProxy extends BaseProxy {
   with_common() {
     return this.submit('post', `/${this.endpoint}/with_common/`);
   }
+
+  /**
+   * Method used to fetch all payment accounts from the API
+   *
+   * @returns {Promise} The result in a promise
+   */
+  payments() {
+    return this.submit('post', `/${this.endpoint}/payments/`);
+  }
+
+  /**
+   * Method used to fetch all payment accounts from the API
+   *
+   * @returns {Promise} The result in a promise
+   */
+  freelancing_accounts() {
+    return this.submit('post', `/${this.endpoint}/freelancing_accounts/`);
+  }
 }
 
 export default AccountProxy;

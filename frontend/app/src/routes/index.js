@@ -114,6 +114,30 @@ export default [
     },
   },
 
+  // Financial Account Index
+  {
+    path: '/financial_accounts',
+    name: 'financial_account.index',
+    component: () => import('@/views/FinancialAccount/Index.vue'),
+
+    // Only delegate owner can view this page
+    meta: {
+      delegate: true,
+    },
+  },
+
+  // Financial Account Create
+  {
+    path: '/financial_accounts/create',
+    name: 'financial_account.create',
+    component: () => import('@/views/FinancialAccount/Create.vue'),
+
+    // Only delegate owner can view this page
+    meta: {
+      delegate: true,
+    },
+  },
+
   // Report Index
   {
     path: '/report',

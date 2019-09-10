@@ -16,5 +16,6 @@ class EarningSerializer(serializers.ModelSerializer):
             'earned_by',
             'account',
             'approved_date',
-            'approved_by'
+            'approved_by',
+            'finance_account',
         )
