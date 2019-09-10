@@ -138,6 +138,18 @@ export default [
     },
   },
 
+  // Reward Index Create
+  {
+    path: '/rewards/create',
+    name: 'reward.index',
+    component: () => import('@/views/Reward/Index.vue'),
+
+    // Only delegate owner can view this page
+    meta: {
+      delegate: true,
+    },
+  },
+
   // Report Index
   {
     path: '/report',

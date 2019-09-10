@@ -12,4 +12,4 @@ class RewardLog(models.Model):
     reward_type = models.CharField(max_length=32, null=False, help_text='reward type')
     taken_id = models.IntegerField(null=False, help_text='id of taken. team_id when "team", user_id when "member"')
     rewarded_date = models.DateField(null=False, help_text='rewarded date')
-    remaining_
+    initial_amount = models.FloatField(null=False, help_text='the remaining amount after rewarding')

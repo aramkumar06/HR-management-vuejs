@@ -6,3 +6,4 @@ from .reports_view import ReportsView
 from .sites_view import SitesView
 from .users_view import UsersView
 from .financial_accounts_view import FinancialAccountsView
+from .rewards_view import RewardsView

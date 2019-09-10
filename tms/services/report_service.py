@@ -226,10 +226,10 @@ def report_monthly_summary_individual(year=None, user=None):
 
     user_query = "AND tu.id = %s" % (user, )
 
-    if year is None:
-        year_query = "AND te.year = %s" % (year, )
-    else:
+    if not year:
         year_query = ""
+    else:
+        year_query = "AND te.year = %s" % (year,)
 
     raw_query = """
         SELECT
@@ -293,10 +293,10 @@ def report_total_summary_by_member(year=None):
             }
         ]
     """
-    if year is None:
-        year_query = "AND te.year = %s" % (year, )
-    else:
+    if not year:
         year_query = ""
+    else:
+        year_query = "AND te.year = %s" % (year,)
 
     raw_query = """
         SELECT

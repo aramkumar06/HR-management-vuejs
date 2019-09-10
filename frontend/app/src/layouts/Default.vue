@@ -75,6 +75,17 @@
           </router-link>
           <router-link
             v-if="$store.state.auth.user.is_boss == true"
+            :to="{ name: 'reward.index' }"
+            active-class="active"
+            class="nav-item"
+            tag="li"
+          >
+            <a class="nav-link">
+              Reward
+            </a>
+          </router-link>
+          <router-link
+            v-if="$store.state.auth.user.is_boss == true"
             :to="{ name: 'report.index' }"
             active-class="active"
             class="nav-item"

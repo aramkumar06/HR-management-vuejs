@@ -104,7 +104,7 @@
     /**
      * The name of the page.
      */
-    name: 'FinancialAccount',
+    name: 'FinancialAccountIndex',
 
     /**
      * The components that the page can use.
