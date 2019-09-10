@@ -8,3 +8,4 @@ from .earning import Earning
 from .book import Book
 from .account_finance import AccountFinance
 from .reward_log import RewardLog
+from .current_reward import CurrentReward

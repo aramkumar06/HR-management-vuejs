@@ -30,6 +30,15 @@ class RewardProxy extends BaseProxy {
     return this.submit('post', `/${bonus_url}`, parameters)
   }
 
+  /**
+   * Method used to get last team reward from the API
+   *
+   * @returns {Promise} The result in a promise
+   */
+  getLastTeamReward(parameters={}) {
+    const team_reward_url = this.endpoint + '/team_last_reward/';
+    return this.submit('post', `/${team_reward_url}`, parameters)
+  }
 }
 
 export default RewardProxy;

@@ -107,7 +107,7 @@
         const params = { team_id: team_id };
         this.isLoading = true;
         new RewardProxy().awardBonus(params)
-        .then((response) => {
+          .then((response) => {
             if (response.success == true) {
               this.getTeamsRewards();
             } else {

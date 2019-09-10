@@ -7,7 +7,6 @@ from tms.serializers import UserSerializer
 
 from tms.models import Book
 
-
 class CustomAuthToken(ObtainAuthToken):
 
     serializer_class = UserSerializer

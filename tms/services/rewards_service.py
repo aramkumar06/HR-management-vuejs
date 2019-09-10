@@ -116,3 +116,38 @@ def award_bonus_team(team_id=None):
     reward.save()
 
     return True
+
+def get_current_team_reward(team_id=None):
+    if not team_id:
+        return None
+
+    raw_query = """
+      SELECT
+          view_current_reward.team_id
+        , view_current_reward.team_name
+        , view_current_reward.last_rewarded_date
+        , view_current_reward.initial_amount
+        , view_current_reward.current_earning
+      FROM
+        view_current_reward
+      WHERE view_current_reward.team_id = %s
+    """ % (team_id, )
+
+    cursor = connection.cursor()
+    cursor.execute(raw_query)
+    team_reward = cursor.fetchone()
+
+    last_reward_date = team_reward[2]
+    initial_amount = float(format(team_reward[3], '.2f'))
+    current_earning = float(format(team_reward[4], '.2f'))
+
+    threshold = int(os.getenv('REWARD_TEAM_THRESHOLD'))
+    mission = threshold - initial_amount - current_earning
+    ret = {
+        'last_reward_date': last_reward_date,
+        'initial_amount': initial_amount,
+        'current_earning': current_earning,
+        'mission': mission,
+    }
+
+    return ret

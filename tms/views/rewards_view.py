@@ -35,7 +35,15 @@ class RewardsView(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'])
     def team_last_reward(self, request):
-        pass
+        team_id = request.data.get('team_id', None)
+        ret = get_current_team_reward(team_id)
+
+        response = Response({
+            'success': True,
+            'data': ret
+        })
+
+        return response
 
     @action(detail=False, methods=['post'])
     def approve_team_reward(self, request):
@@ -62,10 +70,10 @@ class RewardsView(viewsets.GenericViewSet):
                 'success': False,
                 'message': 'no permission'
             })
-        # except Exception as e:
-        #     response = Response({
-        #         'success': False,
-        #         'message': str(e)
-        #     })
+        except Exception as e:
+            response = Response({
+                'success': False,
+                'message': str(e)
+            })
 
         return response
