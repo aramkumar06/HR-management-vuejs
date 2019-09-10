@@ -107,7 +107,7 @@
         </ul>
         <span class="navbar-text">
           <a
-            class="btn btn-secondary"
+            class="btn btn-outline-warning"
             href="#"
             @click.prevent="logout"
           >
