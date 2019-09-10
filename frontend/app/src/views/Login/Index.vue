@@ -52,56 +52,56 @@
 </template>
 
 <script>
-/* ============
- * Login Index Page
- * ============
- *
- * Page where the user can login.
- */
-
-import VLayout from '@/layouts/Minimal.vue';
-import VCard from '@/components/Card.vue';
-
-export default {
-  /**
-   * The name of the page.
-   */
-  name: 'LoginIndex',
-
-  /**
-   * The components the page can use.
-   */
-  components: {
-    VLayout,
-    VCard,
-  },
-
-  /**
-   * The data that can be used by the page.
+  /* ============
+   * Login Index Page
+   * ============
    *
-   * @returns {Object} The view-model data.
+   * Page where the user can login.
    */
-  data() {
-    return {
-      user: {
-        username: null,
-        password: null,
-      },
-    };
-  },
 
-  /**
-   * The methods the page can use.
-   */
-  methods: {
+  import VLayout from '@/layouts/Minimal.vue';
+  import VCard from '@/components/Card.vue';
+
+  export default {
     /**
-     * Will log the user in.
-     *
-     * @param {Object} user The user to be logged in.
+     * The name of the page.
      */
-    login(user) {
-      this.$store.dispatch('auth/login', user);
+    name: 'LoginIndex',
+
+    /**
+     * The components the page can use.
+     */
+    components: {
+      VLayout,
+      VCard,
     },
-  },
-};
+
+    /**
+     * The data that can be used by the page.
+     *
+     * @returns {Object} The view-model data.
+     */
+    data() {
+      return {
+        user: {
+          username: null,
+          password: null,
+        },
+      };
+    },
+
+    /**
+     * The methods the page can use.
+     */
+    methods: {
+      /**
+       * Will log the user in.
+       *
+       * @param {Object} user The user to be logged in.
+       */
+      login(user) {
+        this.$store.dispatch('auth/login', user);
+      },
+    },
+  };
 </script>

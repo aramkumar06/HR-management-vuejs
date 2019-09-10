@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
       </span>
 
@@ -105,23 +105,28 @@
           account: null,
         },
         earned_by_me: true,
-//        users: [],
         accounts: [],
       };
     },
     mounted() {
       this.fetchEarning();
       this.fetchCommonAccounts();
-//      this.fetchDelegationMembers();
     },
     computed: {
     },
     methods: {
       updateEarning() {
         if (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null) {
-          return;
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error occurred',
+            text: 'Withdraw date omitted',
+            duration: 3000,
+            speed: 1000,
+          });
 
-          console.log('Withdraw date omitted');
+          return;
         }
 
         this.earning.year = moment(this.earning.withdrawn_date).year();
@@ -135,7 +140,6 @@
           data: this.earning
         };
 
-//        this.$store.dispatch('earning/update', params);
         new EarningProxy()
           .update(params.id, params.data)
           .then((response) => {
@@ -144,42 +148,61 @@
                 name: 'approval.index',
               });
             } else {
-              console.log('Request failed...');
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
           .catch(() => {
-            console.log('Request failed...');
+	          this.$notify({
+	            group: 'notify',
+	            type: 'error',
+	            title: 'Error occurred',
+	            text: 'Something went wrong',
+	            duration: 3000,
+	            speed: 1000,
+	          });
           });
       },
-//      fetchDelegationMembers() {
-//        this.isLoading = true;
-//        new UserProxy().index()
-//          .then((response) => {
-//            if (response.success == true) {
-//              this.users = response.users;
-//            } else {
-//              console.log(response.message);
-//            }
-//          })
-//          .catch((error) => {
-//            console.log('Request failed...');
-//          })
-//          .finally(() => {
-//            this.isLoading = false;
-//          });
-//      },
       fetchCommonAccounts() {
         this.isLoading = true;
         new AccountProxy().with_common()
           .then((response) => {
             if (response.success == true) {
               this.accounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+	          this.$notify({
+	            group: 'notify',
+	            type: 'error',
+	            title: 'Error occurred',
+	            text: 'Something went wrong',
+	            duration: 3000,
+	            speed: 1000,
+	          });
           })
           .finally(() => {
             this.isLoading = false;
@@ -192,12 +215,34 @@
           .then((response) => {
             if (response.success == true) {
               this.earning = response.earning;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+	            group: 'notify',
+	            type: 'error',
+	            title: 'Error occurred',
+	            text: 'Something went wrong',
+	            duration: 3000,
+	            speed: 1000,
+	          });
           })
           .finally(() => {
             this.isLoading = false;

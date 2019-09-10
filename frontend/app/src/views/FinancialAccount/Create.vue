@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
       </span>
 
@@ -121,15 +121,37 @@
         new FinancialAccountProxy().create(this.financial_account)
           .then((response) => {
             if (response.success == true) {
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
               Vue.router.push({
                 name: 'financial_account.index',
               });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -141,12 +163,34 @@
           .then((response) => {
             if (response.success == true) {
               this.paymentAccounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -158,34 +202,39 @@
           .then((response) => {
             if (response.success == true) {
               this.freelancingAccounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
           });
       },
-      removeFinancialAccount: function(id, index) {
-        this.isLoading = true;
-        new FinancialAccountProxy().destroy(id)
-          .then((response) => {
-            if (response.success == true) {
-              this.financialAccounts.slice(index);
-            } else {
-              console.log(response.message);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      }
     },
   }
 </script>

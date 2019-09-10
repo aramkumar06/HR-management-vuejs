@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         Create New Account
       </span>
@@ -74,10 +74,6 @@
                 class="form-control"
                 required />
             </div>
-            <!--<div class="form-group">-->
-              <!--<label>Is Payment Account?</label>-->
-              <!--<input type="checkbox" v-model="account.is_payment_account" required />-->
-            <!--</div>-->
             <div class="form-group">
               <div class="row">
                 <div class="col-md-1 offset-md-9">
@@ -118,64 +114,64 @@
 </template>
 
 <script>
-/* ============
- * Account Create Page
- * ============
- *
- * Page where the user can create account.
- */
-
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
-import VLayout from '@/layouts/Default.vue';
-import VCard from '@/components/Card.vue';
-import Datepicker from 'vuejs-datepicker';
-import moment from 'moment';
-import store from '@/store';
-
-export default {
-  /**
-   * The name of the page.
+  /* ============
+   * Account Create Page
+   * ============
+   *
+   * Page where the user can create account.
    */
-  name: 'AccountCreate',
 
-  /**
-   * The components that the page can use.
-   */
-  components: {
-    Loading,
-    VLayout,
-    VCard,
-    Datepicker,
-  },
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.css';
+  import VLayout from '@/layouts/Default.vue';
+  import VCard from '@/components/Card.vue';
+  import Datepicker from 'vuejs-datepicker';
+  import moment from 'moment';
+  import store from '@/store';
 
-  data() {
-    return {
-      isLoading: false,
-      account: {},
-    };
-  },
+  export default {
+    /**
+     * The name of the page.
+     */
+    name: 'AccountCreate',
 
-  computed: {
-    countries() {
-      return this.$store.state.country.countries;
+    /**
+     * The components that the page can use.
+     */
+    components: {
+      Loading,
+      VLayout,
+      VCard,
+      Datepicker,
     },
-    sites() {
-      return this.$store.state.site.sites;
-    },
-  },
 
-  mounted() {
-    store.dispatch('country/index');
-    store.dispatch('site/index');
-  },
-
-  methods: {
-    createAccount() {
-      this.account.created_date = moment(this.account.created_date).format('YYYY-MM-DD');
-      this.account.user = this.$store.state.auth.user.id;
-      store.dispatch('account/create', this.account);
+    data() {
+      return {
+        isLoading: false,
+        account: {},
+      };
     },
-  },
-};
+
+    computed: {
+      countries() {
+        return this.$store.state.country.countries;
+      },
+      sites() {
+        return this.$store.state.site.sites;
+      },
+    },
+
+    mounted() {
+      store.dispatch('country/index');
+      store.dispatch('site/index');
+    },
+
+    methods: {
+      createAccount() {
+        this.account.created_date = moment(this.account.created_date).format('YYYY-MM-DD');
+        this.account.user = this.$store.state.auth.user.id;
+        store.dispatch('account/create', this.account);
+      },
+    },
+  };
 </script>

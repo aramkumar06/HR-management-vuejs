@@ -16,7 +16,6 @@ class AccountsView(viewsets.ViewSet):
 
     def list(self, request):
         # TODO
-        #   if user id is specified, return only user related accounts and share accounts like freelancer
         # v2
         #   role based query
         #
@@ -28,7 +27,8 @@ class AccountsView(viewsets.ViewSet):
 
         response = Response({
             'success': True,
-            'accounts': ret
+            'accounts': ret,
+            'message': 'successfully fetched!'
         })
 
         return response
@@ -56,7 +56,8 @@ class AccountsView(viewsets.ViewSet):
             serializer = self.serializer_class(account)
             response = Response({
                 'success': True,
-                'account': serializer.data
+                'account': serializer.data,
+                'message': 'successfully fetched!'
             })
         except Account.DoesNotExist:
             response = Response({
@@ -116,6 +117,7 @@ class AccountsView(viewsets.ViewSet):
             account.delete()
             response = Response({
                 'success': True,
+                'message': 'successfully removed',
                 'id': account.id
             })
         except Account.DoesNotExist:
@@ -133,15 +135,11 @@ class AccountsView(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def with_common(self, request):
-        # TODO
-        #   if user id is specified, return only user related accounts and share accounts like freelancer
-        # v2
-        #   role based query
-        #
         ret = get_self_and_common_accounts(request.user.id)
         response = Response({
             'success': True,
-            'accounts': ret
+            'accounts': ret,
+            'message': 'successfully fetched!'
         })
 
         return response
@@ -156,7 +154,8 @@ class AccountsView(viewsets.ViewSet):
             ret = get_payment_accounts()
             response = Response({
                 'success': True,
-                'accounts': ret
+                'accounts': ret,
+                'message': 'successfully fetched!'
             })
         except PermissionDenied:
             response = Response({
@@ -181,7 +180,8 @@ class AccountsView(viewsets.ViewSet):
             ret = get_freelancing_accounts()
             response = Response({
                 'success': True,
-                'accounts': ret
+                'accounts': ret,
+                'message': 'successfully fetched!'
             })
         except PermissionDenied:
             response = Response({

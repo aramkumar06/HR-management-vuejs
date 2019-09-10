@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         My Earnings
       </span>
@@ -246,12 +246,34 @@
             if (response.success === true) {
               this.earnings = response.earnings;
               this.summary = response.summary;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -262,13 +284,35 @@
         new EarningProxy().deletePendingEarning(earning_id)
           .then((response) => {
             if (response.success === true) {
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
               this.queryEarnings();
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;

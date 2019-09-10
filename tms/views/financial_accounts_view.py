@@ -22,7 +22,8 @@ class FinancialAccountsView(viewsets.ViewSet):
 
             response = Response({
                 'success': True,
-                'accounts': ret
+                'accounts': ret,
+                'message': 'successfully fetched!'
             })
         except PermissionDenied:
             response = Response({

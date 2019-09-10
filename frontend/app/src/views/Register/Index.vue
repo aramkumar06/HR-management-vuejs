@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         Register
       </span>

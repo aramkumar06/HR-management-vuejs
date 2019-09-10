@@ -3,7 +3,6 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from tms.models import User
 from tms.services.user_service import *
 
 
@@ -14,6 +13,7 @@ class UsersView(viewsets.ViewSet):
         response = Response({
             'success': True,
             'users': users,
+            'message': 'successfully fetched!',
         })
 
         return response

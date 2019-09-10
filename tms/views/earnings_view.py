@@ -27,14 +27,6 @@ class EarningsView(viewsets.ViewSet):
             raise PermissionDenied()
 
     def list(self, request):
-        # TODO
-        # should display only this month earning
-        # expected parameters
-        #   month
-        #   year
-        # if not specified use current week and current year
-        # all time is utc time
-        #
         account_id = request.GET.get('account_id', None)
         month = request.GET.get('month', None)
         year = request.GET.get('year', None)
@@ -60,6 +52,7 @@ class EarningsView(viewsets.ViewSet):
             'success': True,
             'earnings': ret,
             'summary': summary,
+            'message': 'successfully fetched!'
         })
 
         return response
@@ -96,7 +89,8 @@ class EarningsView(viewsets.ViewSet):
             serializer = self.serializer_class(earning)
             response = Response({
                 'success': True,
-                'earning': serializer.data
+                'earning': serializer.data,
+                'message': 'successfully fetched!'
             })
         except Earning.DoesNotExist:
             response = Response({
@@ -160,7 +154,8 @@ class EarningsView(viewsets.ViewSet):
             earning.delete()
             response = Response({
                 'success': True,
-                'id': earning.id
+                'id': earning.id,
+                'message': 'successfully removed!'
             })
         except Earning.DoesNotExist:
             response = Response({

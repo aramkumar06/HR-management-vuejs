@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         {{ $t('general.welcome') }}
       </span>
@@ -157,12 +157,34 @@
           .then((response) => {
             if (response.success == true) {
               this.teamReward = response.data;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -185,17 +207,38 @@
             if (response.success === true) {
               this.earnings_by_member = response.earnings_by_member;
               this.summary_member = response.summary;
-
               if (this.earnings_by_member.length > 0) {
                 this.memberEarningsLoaded = true;
                 this.fillMemberChartData();
               }
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log('Error occurred');
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -212,17 +255,38 @@
             if (response.success === true) {
               this.earnings_by_team = response.earnings_by_team;
               this.summary_team = response.summary;
-
               if (this.earnings_by_team.length > 0) {
                 this.teamEarningsLoaded = true;
                 this.fillTeamChartData();
               }
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log('Error occurred');
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -243,13 +307,35 @@
               if (this.earnings_by_year.length > 0) {
                 this.yearEarningsLoaded = true;
                 this.fillYearChartData();
-              } else {
-                console.log('Error occurred');
               }
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
+            } else {
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;

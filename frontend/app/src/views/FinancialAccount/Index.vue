@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         Financial Account and Emails Mapping
       </span>
@@ -136,12 +136,34 @@
           .then((response) => {
             if (response.success == true) {
               this.paymentAccounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -153,12 +175,34 @@
           .then((response) => {
             if (response.success == true) {
               this.financialAccounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;
@@ -169,12 +213,34 @@
           .then((response) => {
             if (response.success == true) {
               this.financialAccounts.splice(index, 1);
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;

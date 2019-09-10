@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
       </span>
 
@@ -109,7 +109,14 @@
             }
           })
           .catch((error) => {
-            console.log("Error occurs while updating");
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: 'Something went wrong',
+              duration: 3000,
+              speed: 1000,
+            });
           })
           .finally(() => {
             this.isLoading = false;

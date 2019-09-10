@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         Update Account
       </span>
@@ -111,14 +111,6 @@
               class="form-control"
               required />
           </div>
-          <!--<div class="form-group">-->
-            <!--<label>Is Payment Account?</label>-->
-            <!--<input-->
-              <!--type="checkbox"-->
-              <!--v-model="account.is_payment_account"-->
-              <!--required-->
-            <!--/>-->
-          <!--</div>-->
           <div class="form-group">
             <div class="row">
               <div class="col-md-1 offset-md-9">
@@ -152,70 +144,84 @@
 </template>
 
 <script>
-/* ============
- * Account Update Page
- * ============
- *
- * Page where the user can create account.
- */
-
-import VLayout from '@/layouts/Default.vue';
-import VCard from '@/components/Card.vue';
-import Datepicker from 'vuejs-datepicker';
-import moment from 'moment';
-import store from '@/store';
-
-export default {
-  /**
-   * The name of the page.
+  /* ============
+   * Account Update Page
+   * ============
+   *
+   * Page where the user can create account.
    */
-  name: 'AccountUpdate',
 
-  /**
-   * The components that the page can use.
-   */
-  components: {
-    VLayout,
-    VCard,
-    Datepicker,
-  },
+  import VLayout from '@/layouts/Default.vue';
+  import VCard from '@/components/Card.vue';
+  import Datepicker from 'vuejs-datepicker';
+  import moment from 'moment';
+  import store from '@/store';
 
-  data() {
-    return {
-      account: this.$store.state.account.account,
-    };
-  },
+  export default {
+    /**
+     * The name of the page.
+     */
+    name: 'AccountUpdate',
 
-  beforeRouteEnter(to, from, next) {
-    store.dispatch('country/index');
-    store.dispatch('site/index');
-    store.dispatch('account/find', to.params.account_id)
-      .then((response) => {
-        if (response.success === true) {
-          store.commit('account/FIND', response.account);
-          next();
-        } else {
-          console.log('Request failed...');
-        }
-      })
-      .catch(() => {
-        console.log('Request failed...');
-      });
-  },
-
-  mounted() {
-  },
-
-  methods: {
-    updateAccount() {
-      this.account.created_date = moment(this.account.created_date).format('YYYY-MM-DD');
-      this.account.user = this.$store.state.auth.user.id;
-      const payload = {
-        id: this.$route.params.account_id,
-        data: this.account,
-      };
-      this.$store.dispatch('account/update', payload);
+    /**
+     * The components that the page can use.
+     */
+    components: {
+      VLayout,
+      VCard,
+      Datepicker,
     },
-  },
-};
+
+    data() {
+      return {
+        account: this.$store.state.account.account,
+      };
+    },
+
+    beforeRouteEnter(to, from, next) {
+      store.dispatch('country/index');
+      store.dispatch('site/index');
+      store.dispatch('account/find', to.params.account_id)
+        .then((response) => {
+          if (response.success === true) {
+            store.commit('account/FIND', response.account);
+            next();
+          } else {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: response.message,
+              duration: 3000,
+              speed: 1000,
+            });
+          }
+        })
+        .catch(() => {
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error occurred',
+            text: 'Something went wrong',
+            duration: 3000,
+            speed: 1000,
+          });
+        });
+    },
+
+    mounted() {
+    },
+
+    methods: {
+      updateAccount() {
+        this.account.created_date = moment(this.account.created_date).format('YYYY-MM-DD');
+        this.account.user = this.$store.state.auth.user.id;
+        const payload = {
+          id: this.$route.params.account_id,
+          data: this.account,
+        };
+        this.$store.dispatch('account/update', payload);
+      },
+    },
+  };
 </script>

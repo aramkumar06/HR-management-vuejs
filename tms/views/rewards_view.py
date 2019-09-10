@@ -23,12 +23,13 @@ class RewardsView(viewsets.GenericViewSet):
             ret = get_teams_rewards()
             response = Response({
                 'success': True,
-                'data': ret
+                'data': ret,
+                'message': 'successfully fetched!',
             })
         except PermissionDenied:
             response = Response({
                 'success': False,
-                'message': 'no permission'
+                'message': 'no permission',
             })
 
         return response
@@ -40,7 +41,8 @@ class RewardsView(viewsets.GenericViewSet):
 
         response = Response({
             'success': True,
-            'data': ret
+            'data': ret,
+            'message': 'successfully fetched!',
         })
 
         return response

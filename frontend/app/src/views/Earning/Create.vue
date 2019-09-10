@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
       </span>
 
@@ -165,13 +165,27 @@
     methods: {
       createEarning() {
         if (this.earning.status == 'Withdraw' && (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null)) {
-          return;
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error occurred',
+            text: 'Withdraw date omitted',
+            duration: 3000,
+            speed: 1000,
+          });
 
-          console.log('Withdraw date omitted');
+          return;
         }
 
         if (this.earned_by_me == false && (this.earning.earned_by === "undefined" || this.earning.earned_by === null)) {
-          console.log('Please select earned by');
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error occurred',
+            text: 'Please select earned by',
+            duration: 3000,
+            speed: 1000,
+          });
         }
 
         if (this.earned_by_me == true) {
@@ -189,12 +203,34 @@
           .then((response) => {
             if (response.success == true) {
               this.users = response.users;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+	          this.$notify({
+	            group: 'notify',
+	            type: 'error',
+	            title: 'Error occurred',
+	            text: 'Something went wrong',
+	            duration: 3000,
+	            speed: 1000,
+	          });
           })
           .finally(() => {
             this.isLoading = false;
@@ -206,12 +242,34 @@
           .then((response) => {
             if (response.success == true) {
               this.accounts = response.accounts;
+              this.$notify({
+                group: 'notify',
+                type: 'success',
+                title: 'Success',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             } else {
-              console.log(response.message);
+              this.$notify({
+                group: 'notify',
+                type: 'error',
+                title: 'Error occurred',
+                text: response.message,
+                duration: 3000,
+                speed: 1000,
+              });
             }
           })
-          .catch((error) => {
-            console.log('Request failed...');
+          .catch(() => {
+            this.$notify({
+		          group: 'notify',
+		          type: 'error',
+		          title: 'Error occurred',
+		          text: 'Something went wrong',
+		          duration: 3000,
+		          speed: 1000,
+		        });
           })
           .finally(() => {
             this.isLoading = false;

@@ -4,7 +4,6 @@ from rest_framework.decorators import action
 from django.core.exceptions import PermissionDenied
 from tms.services.report_service import *
 
-
 class ReportsView(viewsets.GenericViewSet):
     def check_object_permissions(self, request, obj):
         pass
@@ -22,6 +21,7 @@ class ReportsView(viewsets.GenericViewSet):
             'success': True,
             'earnings_by_member': earnings_by_member,
             'summary': summary,
+            'message': 'successfully fetched!',
         })
 
         return response
@@ -38,6 +38,7 @@ class ReportsView(viewsets.GenericViewSet):
             'success': True,
             'earnings_by_team': earnings_by_team,
             'summary': summary,
+            'message': 'successfully fetched!',
         })
 
         return response
@@ -59,11 +60,12 @@ class ReportsView(viewsets.GenericViewSet):
                 'success': True,
                 'earnings_by_delegate': earnings_by_delegate,
                 'summary': summary,
+                'message': 'successfully fetched!'
             })
         except PermissionDenied:
             response = Response({
                 'success': False,
-                'message': 'no permission'
+                'message': 'no permission',
             })
 
         return response
@@ -80,11 +82,12 @@ class ReportsView(viewsets.GenericViewSet):
                 'success': True,
                 'earnings': earnings_total,
                 'summary': summary_year,
+                'message': 'successfully fetched!',
             })
         except PermissionDenied:
             response = Response({
                 'success': False,
-                'message': 'no permission'
+                'message': 'no permission',
             })
 
         return response
@@ -105,11 +108,12 @@ class ReportsView(viewsets.GenericViewSet):
                 'success': True,
                 'earnings': earnings,
                 'summary': summary,
+                'message': 'successfully fetched!',
             })
         except PermissionDenied:
             response = Response({
                 'success': False,
-                'message': 'no permission'
+                'message': 'no permission',
             })
 
         return response

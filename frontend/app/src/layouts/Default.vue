@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bd-navbar">
       <router-link
         :to="{ name: 'home.index' }"
         class="navbar-brand"
@@ -179,3 +179,10 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="css">
+  .bd-navbar {
+    background-color: #563d7c;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.05), inset 0 -1px 0 rgba(0,0,0,.1)
+  }
+</style>

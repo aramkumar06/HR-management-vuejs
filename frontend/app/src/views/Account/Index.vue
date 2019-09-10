@@ -13,7 +13,7 @@
 
     <br />
 
-    <v-card contextual-style="dark">
+    <v-card contextual-style="info">
       <span slot="header">
         My Accounts
       </span>
@@ -72,7 +72,7 @@
                 <th>
                   <router-link
                     :to="{name: 'account.update', params: {account_id: account.id}}"
-                    class="btn btn-xs btn-info"
+                    class="btn btn-xs btn-warning"
                   >
                     Edit
                   </router-link>
@@ -104,49 +104,63 @@
  * Page where the user can view the accounts information.
  */
 
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
-import VLayout from '@/layouts/Default.vue';
-import VCard from '@/components/Card.vue';
-import store from '@/store';
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.css';
+  import VLayout from '@/layouts/Default.vue';
+  import VCard from '@/components/Card.vue';
+  import store from '@/store';
 
-export default {
-  /**
-   * The name of the page.
-   */
-  name: 'AccountIndex',
+  export default {
+    /**
+     * The name of the page.
+     */
+    name: 'AccountIndex',
 
-  /**
-   * The components that the page can use.
-   */
-  components: {
-    Loading,
-    VLayout,
-    VCard,
-  },
+    /**
+     * The components that the page can use.
+     */
+    components: {
+      Loading,
+      VLayout,
+      VCard,
+    },
 
-  beforeRouteEnter(to, from, next) {
-    store.dispatch('account/index')
-      .then((response) => {
-        if (response.success === true) {
-          store.commit('account/INDEX', response.accounts);
-          next();
-        } else {
-          console.log('Request failed...');
-        }
-      })
-      .catch(() => {
-        console.log('Request failed...');
-      });
-  },
+    beforeRouteEnter(to, from, next) {
+      store.dispatch('account/index')
+        .then((response) => {
+          if (response.success === true) {
+            store.commit('account/INDEX', response.accounts);
+            next();
+          } else {
+            this.$notify({
+              group: 'notify',
+              type: 'error',
+              title: 'Error occurred',
+              text: response.message,
+              duration: 3000,
+              speed: 1000,
+            });
+          }
+        })
+        .catch(() => {
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error occurred',
+            text: 'Something went wrong',
+            duration: 3000,
+            speed: 1000,
+          });
+        });
+    },
 
-  data() {
-    return {
-      isLoading: false,
-    };
-  },
+    data() {
+      return {
+        isLoading: false,
+      };
+    },
 
-  mounted() {
-  },
-};
+    mounted() {
+    },
+  };
 </script>
