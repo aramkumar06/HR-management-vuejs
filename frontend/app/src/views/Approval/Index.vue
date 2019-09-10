@@ -7,7 +7,30 @@
 
       <div slot="body">
         <div class="row mb-5">
-          <div class="col-7"></div>
+          <div class="col-4">
+            <select
+              class="form-control"
+              v-model="filterObject.account_id"
+              >
+              <option label=""></option>
+              <option
+                v-for="paymentAccount in paymentAccounts"
+                :value="paymentAccount.id">
+                {{ paymentAccount.site_name + ' <' + paymentAccount.account_first_name + ' ' + paymentAccount.account_last_name + '>' }}
+              </option>
+            </select>
+          </div><!-- end of payment-->
+          <div class="col-3">
+            <select
+              class="form-control"
+              v-model="filterObject.user_id"
+              >
+              <option label=""></option>
+              <option v-for="user in users" :value="user.id">
+                {{ user.name }}
+              </option>
+            </select>
+          </div><!-- end of member-->
           <div class="col-2">
             <select
               class="form-control"
@@ -136,12 +159,12 @@
 </template>
 
 <script>
-/* ============
- * Approval Index Page
- * ============
- *
- * The approval index page.
- */
+  /* ============
+   * Approval Index Page
+   * ============
+   *
+   * The approval index page.
+   */
 
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/vue-loading.css';
@@ -149,6 +172,8 @@
   import VCard from '@/components/Card.vue';
   import store from '@/store';
   import EarningProxy from '@/proxies/EarningProxy.js';
+  import AccountProxy from '@/proxies/AccountProxy.js';
+  import UserProxy from '@/proxies/UserProxy.js';
   import NumberUtil from '@/utils/NumberUtil.js';
 
   export default {
@@ -174,7 +199,11 @@
         filterObject: {
           year: null,
           month: null,
+          account_id: null,
+          user_id: null,
         },
+        paymentAccounts: [],
+        users: [],
       };
     },
     computed: {
@@ -196,6 +225,9 @@
       this.populateMonths();
 
       this.getDelegationMonthEarnings();
+
+      this.getPaymentAccounts();
+      this.getDelegationMembers();
     },
     methods: {
       dollarFormat(value) {
@@ -255,6 +287,40 @@
           });
 
         return false;
+      },
+      getPaymentAccounts: function() {
+        this.isLoading = true;
+        new AccountProxy().payments()
+          .then((response) => {
+            if (response.success == true) {
+              this.paymentAccounts = response.accounts;
+            } else {
+              console.log(response.message);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
+      },
+      getDelegationMembers() {
+        this.isLoading = true;
+        new UserProxy().index()
+          .then((response) => {
+            if (response.success == true) {
+              this.users = response.users;
+            } else {
+              console.log(response.message);
+            }
+          })
+          .catch((error) => {
+            console.log('Request failed...');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
       },
     },
   };

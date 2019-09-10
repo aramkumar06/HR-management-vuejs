@@ -20,10 +20,10 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
     else:
         month_query = ""
 
-    if user_id is not None:
-        user_query = " AND tu.id = " + str(user_id)
-    else:
+    if not user_id:
         user_query = ""
+    else:
+        user_query = " AND tu.id = " + str(user_id)
 
     raw_query = """
       SELECT
@@ -121,13 +121,13 @@ def get_pending_earnings(team_id=None):
     return ret
 
 
-def get_delegation_month_earnings(year=None, month=None):
+def get_delegation_month_earnings(year=None, month=None, user_id=None, account_id=None):
     if year is not None and month is not None:
         try:
             querying_book = Book.objects.filter(year=year, month=month).first()
             year_month_query = """
-                                AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND'
-                            """ % (querying_book.start_date, querying_book.end_date,)
+                AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND'
+            """ % (querying_book.start_date, querying_book.end_date, )
         except Exception as e:
             return []
 
@@ -137,32 +137,48 @@ def get_delegation_month_earnings(year=None, month=None):
             AND te.withdrawn_date BETWEEN DATE('%s') AND DATE('%s') + INTERVAL '23 HOUR' + INTERVAL '59 MINUTE' + INTERVAL '59 SECOND'
         """ % (querying_book.start_date, querying_book.end_date, )
 
+    if not account_id:
+        account_query = ""
+    else:
+        account_query = """
+            AND (te.finance_account_id = %s OR te.account_id = %s)
+        """ % (account_id, account_id, )
+
+    if not user_id:
+        user_query = ""
+    else:
+        user_query = """
+            AND te.earned_by_id = %s
+        """ % (user_id, )
+
     raw_query = """
-          SELECT
-              te.id                        AS id
-            , tu.first_name                AS member_first_name
-            , tu.last_name                 AS member_last_name
-            , COALESCE(ts.name, ta.title)  AS site_name
-            , ta.first_name                AS account_first_name
-            , ta.last_name                 AS account_last_name
-            , tu.id                        AS user_id
-            , te.cost                      AS cost
-            , te.withdrawn_date            AS withdrawn_date
-            , CASE WHEN te.approved_date IS NULL AND te.approved_by_id IS NULL THEN
-                FALSE
-              ELSE
-                TRUE
-              END                          AS approved
-            , te.comments                  AS comments              
-          FROM tms_earning AS te
-            INNER JOIN tms_account AS ta ON te.account_id = ta.id
-            LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
-            INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
-          WHERE te.deleted_at IS NULL
-            %s
-          ORDER BY ta.id ASC, te.withdrawn_date ASC
-        ; 
-        """ % (year_month_query, )
+      SELECT
+          te.id                        AS id
+        , tu.first_name                AS member_first_name
+        , tu.last_name                 AS member_last_name
+        , COALESCE(ts.name, ta.title)  AS site_name
+        , ta.first_name                AS account_first_name
+        , ta.last_name                 AS account_last_name
+        , tu.id                        AS user_id
+        , te.cost                      AS cost
+        , te.withdrawn_date            AS withdrawn_date
+        , CASE WHEN te.approved_date IS NULL AND te.approved_by_id IS NULL THEN
+            FALSE
+          ELSE
+            TRUE
+          END                          AS approved
+        , te.comments                  AS comments              
+      FROM tms_earning AS te
+        INNER JOIN tms_account AS ta ON te.account_id = ta.id
+        LEFT JOIN tms_site AS ts ON ta.site_id = ts.id
+        INNER JOIN tms_user AS tu ON te.earned_by_id = tu.id
+      WHERE te.deleted_at IS NULL
+        %s
+        %s
+        %s
+      ORDER BY ta.id ASC, te.withdrawn_date ASC
+    ; 
+    """ % (year_month_query, account_query, user_query, )
 
     pending_earnings = Earning.objects.raw(raw_query)
     ret = []

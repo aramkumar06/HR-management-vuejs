@@ -21,6 +21,11 @@ class EarningsView(viewsets.ViewSet):
             if obj.user_id != request.user.id:
                 raise PermissionDenied()
 
+    def check_admin(self, request):
+        delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+        if request.user.role_id != delegate_role_id:
+            raise PermissionDenied()
+
     def list(self, request):
         # TODO
         # should display only this month earning
@@ -170,59 +175,6 @@ class EarningsView(viewsets.ViewSet):
 
         return response
 
-    @action(detail=False, methods=['post'])
-    def get_pending_earnings(self, request):
-        # TODO
-        # permission check
-        #
-        team_id = request.data.get('team_id', None)
-        try:
-            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
-            if request.user.role_id != delegate_role_id:
-                raise PermissionDenied()
-
-            ret = get_pending_earnings(team_id)
-
-            response = Response({
-                'success': True,
-                'pending_earnings': ret,
-            })
-        except PermissionDenied:
-            response = Response({
-                'success': False,
-                'message': 'no permission'
-            })
-
-        return response
-
-    @action(detail=False, methods=['post'])
-    def get_delegation_month_earnings(self, request):
-        # TODO
-        # permission check
-        # need to filter with user_id and account_id
-        try:
-            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
-            year = request.data.get('year', None)
-            month = request.data.get('month', None)
-            user_id = request.data.get('user_id', None)
-            account_id = request.data.get('account_id', None)
-            if request.user.role_id != delegate_role_id:
-                raise PermissionDenied()
-
-            ret = get_delegation_month_earnings(year, month)
-
-            response = Response({
-                'success': True,
-                'earnings': ret,
-            })
-        except PermissionDenied:
-            response = Response({
-                'success': False,
-                'message': 'no permission'
-            })
-
-        return response
-
     @action(detail=True, methods=['post'])
     def approve(self, request, pk=None):
         # TODO
@@ -285,3 +237,44 @@ class EarningsView(viewsets.ViewSet):
 
         return response
 
+    @action(detail=False, methods=['post'])
+    def get_pending_earnings(self, request):
+        team_id = request.data.get('team_id', None)
+        try:
+            self.check_admin(request)
+
+            ret = get_pending_earnings(team_id)
+            response = Response({
+                'success': True,
+                'pending_earnings': ret,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response
+
+    @action(detail=False, methods=['post'])
+    def get_delegation_month_earnings(self, request):
+        try:
+            self.check_admin(request)
+
+            year = request.data.get('year', None)
+            month = request.data.get('month', None)
+            user_id = request.data.get('user_id', None)
+            account_id = request.data.get('account_id', None)
+
+            ret = get_delegation_month_earnings(year, month, user_id, account_id)
+            response = Response({
+                'success': True,
+                'earnings': ret,
+            })
+        except PermissionDenied:
+            response = Response({
+                'success': False,
+                'message': 'no permission'
+            })
+
+        return response

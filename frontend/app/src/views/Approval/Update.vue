@@ -105,14 +105,14 @@
           account: null,
         },
         earned_by_me: true,
-        users: [],
+//        users: [],
         accounts: [],
       };
     },
     mounted() {
       this.fetchEarning();
       this.fetchCommonAccounts();
-      this.fetchDelegationMembers();
+//      this.fetchDelegationMembers();
     },
     computed: {
     },
@@ -151,23 +151,23 @@
             console.log('Request failed...');
           });
       },
-      fetchDelegationMembers() {
-        this.isLoading = true;
-        new UserProxy().index()
-          .then((response) => {
-            if (response.success == true) {
-              this.users = response.users;
-            } else {
-              console.log(response.message);
-            }
-          })
-          .catch((error) => {
-            console.log('Request failed...');
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      },
+//      fetchDelegationMembers() {
+//        this.isLoading = true;
+//        new UserProxy().index()
+//          .then((response) => {
+//            if (response.success == true) {
+//              this.users = response.users;
+//            } else {
+//              console.log(response.message);
+//            }
+//          })
+//          .catch((error) => {
+//            console.log('Request failed...');
+//          })
+//          .finally(() => {
+//            this.isLoading = false;
+//          });
+//      },
       fetchCommonAccounts() {
         this.isLoading = true;
         new AccountProxy().with_common()

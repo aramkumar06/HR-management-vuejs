@@ -2,10 +2,10 @@ from tms.models import AccountFinance
 
 
 def get_financial_accounts(financial_account_id=None):
-    if financial_account_id is not None:
-        financial_query = "AND tms_accountfinance.financial_account_id = %s" % (financial_account_id, )
-    else:
+    if not financial_account_id:
         financial_query = ""
+    else:
+        financial_query = "AND tms_accountfinance.financial_account_id = %s" % (financial_account_id,)
 
     raw_query = """
         SELECT

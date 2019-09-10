@@ -21,7 +21,7 @@
                 class="form-control"
                 v-model="filterObject.financial_account_id"
                 >
-                <option value=''></option>
+                <option label=""></option>
                 <option
                   v-for="paymentAccount in paymentAccounts"
                   :value="paymentAccount.id">
