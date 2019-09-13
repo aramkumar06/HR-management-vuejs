@@ -114,7 +114,7 @@
                 <td>
                   <router-link
                     :to="{name: 'earning.update', params: {earning_id: earning.id}}"
-                    class="btn btn-sm btn-warning"
+                    class="btn btn-sm btn-warning text-white"
                     v-if="earning.approved != true"
                   >
                     Edit

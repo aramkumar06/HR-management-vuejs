@@ -71,6 +71,9 @@ class EarningsView(viewsets.ViewSet):
         else:
             try:
                 mapped_finance_account = AccountFinance.objects.filter(email_account=serializer.validated_data['account']).first()
+                if mapped_finance_account is None:
+                    raise AccountFinance.DoesNotExist
+                
                 serializer.validated_data['finance_account'] = mapped_finance_account.financial_account
             except AccountFinance.DoesNotExist:
                 pass
@@ -261,10 +264,11 @@ class EarningsView(viewsets.ViewSet):
             user_id = request.data.get('user_id', None)
             account_id = request.data.get('account_id', None)
 
-            ret = get_delegation_month_earnings(year, month, user_id, account_id)
+            ret, summary = get_delegation_month_earnings(year, month, user_id, account_id)
             response = Response({
                 'success': True,
                 'earnings': ret,
+                'summary': summary,
             })
         except PermissionDenied:
             response = Response({

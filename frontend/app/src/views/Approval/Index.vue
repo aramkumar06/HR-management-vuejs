@@ -6,7 +6,7 @@
       </span>
 
       <div slot="body">
-        <div class="row mb-5">
+        <div class="row mb-4">
           <div class="col-5">
             <select
               class="form-control"
@@ -72,6 +72,28 @@
 
         <div
           class="row"
+          v-if="summary != null"
+          >
+          <table class="table table-borderless text-right">
+            <thead>
+              <th class="text-success">
+                APPROVED
+              </th>
+              <th class="text-danger">
+                NOT APPROVED
+              </th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ dollarFormat(summary.approved) }}</td>
+                <td>{{ dollarFormat(summary.unapproved) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- end of statistics -->
+
+        <div
+          class="row"
           v-if="!isLoading"
           >
           <table class="table">
@@ -121,7 +143,7 @@
                 </td>
                 <td>
                   <a
-                    class="btn btn-sm btn-success"
+                    class="btn btn-sm btn-success text-white"
                     v-if="earning.approved == false"
                     @click="approvePendingEarning(earning)"
                   >
@@ -137,7 +159,7 @@
                 <td>
                   <router-link
                     :to="{name: 'approval.update', params: {earning_id: earning.id}}"
-                    class="btn btn-sm btn-warning"
+                    class="btn btn-sm btn-warning text-white"
                     v-if="earning.approved == false"
                   >
                     Edit
@@ -205,6 +227,7 @@
         },
         paymentAccounts: [],
         users: [],
+        summary: null,
       };
     },
     computed: {
@@ -254,6 +277,7 @@
           .then((response) => {
             if (response.success == true) {
               this.earnings = response.earnings;
+              this.summary = response.summary;
               this.$notify({
                 group: 'notify',
                 type: 'success',

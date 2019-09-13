@@ -182,6 +182,7 @@ def get_delegation_month_earnings(year=None, month=None, user_id=None, account_i
 
     pending_earnings = Earning.objects.raw(raw_query)
     ret = []
+    summary = { "approved": 0.0, "unapproved": 0.0 }
     for earning in pending_earnings:
         ret.append({
             "id": earning.id,
@@ -195,5 +196,12 @@ def get_delegation_month_earnings(year=None, month=None, user_id=None, account_i
             "approved": earning.approved,
             "comments": earning.comments,
         })
+        if earning.approved:
+            summary["approved"] = summary["approved"] + earning.cost
+        else:
+            summary["unapproved"] = summary["unapproved"] + earning.cost
 
-    return ret
+    summary["approved"] = float(format(summary["approved"], ".2f"))
+    summary["unapproved"] = float(format(summary["unapproved"], ".2f"))
+
+    return ret, summary

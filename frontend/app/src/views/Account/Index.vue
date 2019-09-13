@@ -72,7 +72,7 @@
                 <th>
                   <router-link
                     :to="{name: 'account.update', params: {account_id: account.id}}"
-                    class="btn btn-xs btn-warning"
+                    class="btn btn-sm btn-warning text-white"
                   >
                     Edit
                   </router-link>
