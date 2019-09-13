@@ -25,7 +25,7 @@ def get_teams_rewards():
             WHERE tms_rewardlog.reward_type = 'team'
               AND tms_rewardlog.taken_id = tms_team.id
             ORDER BY tms_rewardlog.rewarded_date DESC, tms_rewardlog.id DESC 
-            limit 1
+            LIMIT 1
           ) last_reward ON TRUE
           INNER JOIN lateral (
             SELECT 
@@ -54,7 +54,7 @@ def get_teams_rewards():
             'rewarded_date': reward[2],
             'initial_amount': float(format(reward[3], '.2f')),
             'cost': float(format(reward[4], '.2f')),
-            'can_reward': int(reward[3] + reward[4]) > reward_team_threshold
+            'can_reward': int(reward[3] + reward[4]) >= reward_team_threshold
         })
 
     return ret
@@ -82,7 +82,7 @@ def award_bonus_team(team_id=None):
             WHERE tms_rewardlog.reward_type = 'team'
               AND tms_rewardlog.taken_id = tms_team.id
             ORDER BY rewarded_date DESC, tms_rewardlog.id DESC
-            limit 1
+            LIMIT 1
           ) last_reward ON TRUE
           INNER JOIN lateral (
             SELECT 

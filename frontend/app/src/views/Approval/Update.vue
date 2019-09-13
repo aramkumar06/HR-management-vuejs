@@ -105,12 +105,10 @@
           account: null,
         },
         earned_by_me: true,
-        accounts: [],
       };
     },
     mounted() {
       this.fetchEarning();
-      this.fetchCommonAccounts();
     },
     computed: {
     },
@@ -167,45 +165,6 @@
 	            duration: 3000,
 	            speed: 1000,
 	          });
-          });
-      },
-      fetchCommonAccounts() {
-        this.isLoading = true;
-        new AccountProxy().with_common()
-          .then((response) => {
-            if (response.success == true) {
-              this.accounts = response.accounts;
-              this.$notify({
-                group: 'notify',
-                type: 'success',
-                title: 'Success',
-                text: response.message,
-                duration: 3000,
-                speed: 1000,
-              });
-            } else {
-              this.$notify({
-                group: 'notify',
-                type: 'error',
-                title: 'Error occurred',
-                text: response.message,
-                duration: 3000,
-                speed: 1000,
-              });
-            }
-          })
-          .catch(() => {
-	          this.$notify({
-	            group: 'notify',
-	            type: 'error',
-	            title: 'Error occurred',
-	            text: 'Something went wrong',
-	            duration: 3000,
-	            speed: 1000,
-	          });
-          })
-          .finally(() => {
-            this.isLoading = false;
           });
       },
       fetchEarning() {

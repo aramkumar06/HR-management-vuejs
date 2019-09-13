@@ -117,7 +117,7 @@
       </div>
     </nav>
 
-    <div class="container pt-4">
+    <div class="container pt-4 mb-5">
       <div class="row">
         <div class="col col-12">
           <!-- Content will be placed here -->

@@ -7,20 +7,20 @@
 
       <div slot="body">
         <div class="row mb-5">
-          <div class="col-4">
+          <div class="col-5">
             <select
               class="form-control"
               v-model="filterObject.account_id"
               >
               <option label=""></option>
-              <option
-                v-for="paymentAccount in paymentAccounts"
-                :value="paymentAccount.id">
-                {{ paymentAccount.site_name + ' <' + paymentAccount.account_first_name + ' ' + paymentAccount.account_last_name + '>' }}
-              </option>
+              <optgroup v-for="(optGroup, key) in paymentAccounts" :label="key">
+                <option v-for="account in optGroup" :value="account.id">
+                  {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.account_email +'>' }}
+                </option>
+              </optgroup>
             </select>
           </div><!-- end of payment-->
-          <div class="col-3">
+          <div class="col-2">
             <select
               class="form-control"
               v-model="filterObject.user_id"
@@ -175,6 +175,7 @@
   import AccountProxy from '@/proxies/AccountProxy.js';
   import UserProxy from '@/proxies/UserProxy.js';
   import NumberUtil from '@/utils/NumberUtil.js';
+  import BasicUtil from '@/utils/BasicUtil.js';
 
   export default {
     /**
@@ -337,7 +338,7 @@
         new AccountProxy().payments()
           .then((response) => {
             if (response.success == true) {
-              this.paymentAccounts = response.accounts;
+              this.paymentAccounts = BasicUtil.buildOptGroup(response.accounts, 'site_name');
               this.$notify({
                 group: 'notify',
                 type: 'success',

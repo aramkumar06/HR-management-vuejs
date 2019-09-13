@@ -45,9 +45,11 @@
                 class="form-control"
                 v-model="earning.account"
               >
-                <option v-for="account in accounts" :value="account.id">
-                  {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.site_name +'>' }}
-                </option>
+                <optgroup v-for="(optGroup, key) in accounts" :label="key">
+                  <option v-for="account in optGroup" :value="account.id">
+                    {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.account_email +'>' }}
+                  </option>
+                </optgroup>
               </select>
             </div>
             <div class="form-group">
@@ -127,6 +129,7 @@
   import store from '@/store';
   import UserProxy from '@/proxies/UserProxy.js';
   import AccountProxy from '@/proxies/AccountProxy.js';
+  import BasicUtil from '@/utils/BasicUtil.js';
 
   export default {
     /**
@@ -236,12 +239,14 @@
             this.isLoading = false;
           });
       },
+
       fetchCommonAccounts() {
         this.isLoading = true;
         new AccountProxy().with_common()
           .then((response) => {
             if (response.success == true) {
-              this.accounts = response.accounts;
+              this.accounts = BasicUtil.buildOptGroup(response.accounts, 'site_name');
+              console.log(this.accounts);
               this.$notify({
                 group: 'notify',
                 type: 'success',

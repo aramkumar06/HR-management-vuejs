@@ -18,9 +18,11 @@
                 class="form-control"
                 v-model="financial_account.account_finance_id"
                 >
-                <option v-for="paymentAccount in paymentAccounts" :value="paymentAccount.id">
-                  {{ paymentAccount.site_name + ' <' + paymentAccount.account_email + ', ' + paymentAccount.account_first_name + ' ' + paymentAccount.account_last_name + '>' }}
-                </option>
+                <optgroup v-for="(optGroup, key) in paymentAccounts" :label="key">
+                  <option v-for="account in optGroup" :value="account.id">
+                    {{ account.account_first_name + ' ' + account.account_last_name + '<' + account.account_email +'>' }}
+                  </option>
+                </optgroup>
               </select>
             </div><!-- end of payment account -->
             <div class="form-group">
@@ -84,6 +86,7 @@
   import VCard from '@/components/Card.vue';
   import AccountProxy from '@/proxies/AccountProxy.js';
   import FinancialAccountProxy from '@/proxies/FinancialAccountProxy.js';
+  import BasicUtil from '@/utils/BasicUtil.js';
 
   export default {
     /**
@@ -162,7 +165,7 @@
         new AccountProxy().payments()
           .then((response) => {
             if (response.success == true) {
-              this.paymentAccounts = response.accounts;
+              this.paymentAccounts = BasicUtil.buildOptGroup(response.accounts, 'site_name');
               this.$notify({
                 group: 'notify',
                 type: 'success',
