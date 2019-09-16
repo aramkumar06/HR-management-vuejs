@@ -8,6 +8,11 @@ class ReportsView(viewsets.GenericViewSet):
     def check_object_permissions(self, request, obj):
         pass
 
+    def check_admin(self, request):
+        delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
+        if request.user.role_id != delegate_role_id:
+            raise PermissionDenied()
+
     @action(detail=False, methods=['post'])
     def member(self, request):
         # TODO
@@ -45,13 +50,8 @@ class ReportsView(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'])
     def delegate(self, request):
-        # TODO
-        #  check permissions
-        #
         try:
-            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
-            if request.user.role_id != delegate_role_id:
-                raise PermissionDenied
+            self.check_admin(request)
 
             year = request.data.get('year', None)
             month = request.data.get('month', None)
@@ -98,9 +98,7 @@ class ReportsView(viewsets.GenericViewSet):
         #  check permissions
         #
         try:
-            delegate_role_id = int(os.getenv('ROLE_DELEGATE_ID'))
-            if request.user.role_id != delegate_role_id:
-                raise PermissionDenied
+            self.check_admin(request)
 
             year = request.data.get('year', None)
             earnings, summary = report_total_summary_by_member(year)

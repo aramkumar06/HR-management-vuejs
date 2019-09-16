@@ -73,7 +73,7 @@ class EarningsView(viewsets.ViewSet):
                 mapped_finance_account = AccountFinance.objects.filter(email_account=serializer.validated_data['account']).first()
                 if mapped_finance_account is None:
                     raise AccountFinance.DoesNotExist
-                
+
                 serializer.validated_data['finance_account'] = mapped_finance_account.financial_account
             except AccountFinance.DoesNotExist:
                 pass
@@ -205,9 +205,6 @@ class EarningsView(viewsets.ViewSet):
 
     @action(detail=True, methods=['post'])
     def delete(self, request, pk=None):
-        # TODO
-        # permission check
-        #
         try:
             earning = Earning.objects.get(pk=pk)
             if earning.earned_by.id != request.user.id:
