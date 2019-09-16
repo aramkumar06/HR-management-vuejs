@@ -80,7 +80,7 @@ def report_team(year=None, month=None):
           tt.name                                                                      AS name
         , COALESCE(summaries.earning_sum, 0)                                           AS earning_sum
         , ROUND(CAST(FLOAT8 (earning_sum / members.team_members_count) AS NUMERIC), 2) AS earning_avg
-        , DENSE_RANK() OVER (ORDER BY earning_sum DESC)                                AS ranking
+        , DENSE_RANK() OVER (ORDER BY earning_sum DESC NULLS LAST)                     AS ranking
       FROM
         tms_team AS tt
       LEFT JOIN (
@@ -144,9 +144,9 @@ def report_delegation(year=None, month=None):
     role_delegate_id = int(os.getenv('ROLE_DELEGATE_ID'))
     raw_query = """
       SELECT
-          tu.name                                       AS    name  
-        , COALESCE(summaries.earning_sum, 0)            AS    earning_sum
-        , DENSE_RANK() OVER (ORDER BY earning_sum DESC) AS    ranking
+          tu.name                                                  AS    name  
+        , COALESCE(summaries.earning_sum, 0)                       AS    earning_sum
+        , DENSE_RANK() OVER (ORDER BY earning_sum DESC NULLS LAST) AS    ranking
       FROM tms_user AS tu
       LEFT JOIN (
         SELECT
@@ -300,9 +300,9 @@ def report_total_summary_by_member(year=None):
 
     raw_query = """
         SELECT
-            tu.name                                        AS name
-          , SUM(te.cost)                                   AS cost
-          , DENSE_RANK() OVER (ORDER BY SUM(te.cost) DESC) AS ranking
+            tu.name                                                   AS name
+          , SUM(te.cost)                                              AS cost
+          , DENSE_RANK() OVER (ORDER BY SUM(te.cost) DESC NULLS LAST) AS ranking
         FROM tms_earning AS te
           INNER JOIN tms_user AS tu ON tu.id = te.earned_by_id
           INNER JOIN tms_book AS tb ON tb.year = te.year AND te.withdrawn_date BETWEEN tb.start_date AND tb.end_date
