@@ -6,7 +6,8 @@
  */
 
 import Vue from 'vue';
-
+import Notifications from 'vue-notification';
+import IdleVue from 'idle-vue';
 /* ============
  * Plugins
  * ============
@@ -50,8 +51,12 @@ import './assets/stylus/app.styl';
 
 import App from './App.vue';
 import store from './store';
-import Notifications from 'vue-notification';
 
+Vue.use(IdleVue, {
+  eventEmitter: new Vue(),
+  idleTime: 30 * 1000,
+  store,
+});
 Vue.use(Notifications);
 Vue.config.productionTip = false;
 
@@ -85,4 +90,7 @@ new Vue({
    * @param {Function} h Will create an element.
    */
   render: h => h(App),
+  onIdle() {
+    store.dispatch('auth/logout');
+  },
 });
