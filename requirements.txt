@@ -1,6 +1,6 @@
-Django==2.1.2
+Django==2.1.11
 psycopg2==2.7.5
-djangorestframework==3.8.2
+djangorestframework==3.9.1
 markdown
 django-filter
 django-cors-headers==2.4.0
