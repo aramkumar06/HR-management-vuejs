@@ -37,7 +37,7 @@ export const login = ({ commit }, payload) => {
   new AuthProxy()
     .login(payload)
     .then((response) => {
-      if (response.success == true) {
+      if (response.success === true) {
         commit(types.LOGIN, response);
         Vue.router.push({
           name: 'home.index',

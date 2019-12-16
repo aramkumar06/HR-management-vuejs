@@ -91,6 +91,11 @@ new Vue({
    */
   render: h => h(App),
   onIdle() {
-    store.dispatch('auth/logout');
+    debugger;
+    if (store.state.auth.user.role_name === 'Delegate') {
+
+    } else {
+      store.dispatch('auth/logout');
+    }
   },
 });
