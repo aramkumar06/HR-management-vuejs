@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
     /*
      * If the user is team owner then allows, if a user without permission is trying, rejects it
      */
-    if (store.state.auth.user.role_name == 'Officer') {
+    if (store.state.auth.user.role_name === 'Officer') {
       next();
     } else {
       next({
@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
     /*
      * If the user is delegate owner then allows, if a user without permission is trying, rejects it
      */
-    if (store.state.auth.user.role_name == 'Delegate') {
+    if (store.state.auth.user.role_name === 'Delegate') {
       next();
     } else {
       next({

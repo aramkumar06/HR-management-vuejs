@@ -260,10 +260,10 @@ def report_monthly_summary_individual(year=None, user=None):
             "last_name": earning[1],
             "year": earning[2],
             "month": earning[3],
-            "cost": earning[4],
+            "cost": earning[4] / int(os.getenv('DIVIDE_VALUE')),
         })
 
-        summary = summary + earning[4]
+        summary = summary + earning[4] / int(os.getenv('DIVIDE_VALUE'))
 
     return ret, summary
 
