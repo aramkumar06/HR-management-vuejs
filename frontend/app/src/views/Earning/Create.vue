@@ -167,7 +167,7 @@
     },
     methods: {
       createEarning() {
-        if (this.earning.status == 'Withdraw' && (this.earning.withdrawn_date == undefined || this.earning.withdrawn_date == null)) {
+        if (this.earning.status === 'Withdraw' && (this.earning.withdrawn_date === undefined || this.earning.withdrawn_date === null)) {
           this.$notify({
             group: 'notify',
             type: 'error',
@@ -180,7 +180,7 @@
           return;
         }
 
-        if (this.earned_by_me == false && (this.earning.earned_by === "undefined" || this.earning.earned_by === null)) {
+        if (this.earned_by_me === false && (this.earning.earned_by === "undefined" || this.earning.earned_by === null)) {
           this.$notify({
             group: 'notify',
             type: 'error',
@@ -191,11 +191,11 @@
           });
         }
 
-        if (this.earned_by_me == true) {
+        if (this.earned_by_me === true) {
           this.earning.earned_by = this.$store.state.auth.user.id;
         }
 
-        this.earning.year = moment(this.earning.withdrawn_date).year();
+        this.earning.year = store.state.auth.app.active_year;
         this.earning.withdrawn_date = moment(this.earning.withdrawn_date).format('YYYY-MM-DD');
 
         this.$store.dispatch('earning/create', this.earning);
@@ -204,7 +204,7 @@
         this.isLoading = true;
         new UserProxy().index()
           .then((response) => {
-            if (response.success == true) {
+            if (response.success === true) {
               this.users = response.users;
               this.$notify({
                 group: 'notify',
@@ -244,7 +244,7 @@
         this.isLoading = true;
         new AccountProxy().with_common()
           .then((response) => {
-            if (response.success == true) {
+            if (response.success === true) {
               this.accounts = BasicUtil.buildOptGroup(response.accounts, 'site_name');
               console.log(this.accounts);
               this.$notify({

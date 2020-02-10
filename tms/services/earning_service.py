@@ -52,6 +52,7 @@ def get_earnings(account_id=None, year=None, month=None, user_id=None):
       ORDER BY te.withdrawn_date ASC
     ;
     """ % (month_query, account_query, year_query, user_query)
+
     earnings = Earning.objects.raw(raw_query)
     ret = []
     summary = 0.0

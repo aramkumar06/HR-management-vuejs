@@ -54,7 +54,7 @@ import store from './store';
 
 Vue.use(IdleVue, {
   eventEmitter: new Vue(),
-  idleTime: 30 * 1000,
+  idleTime: 100 * 1000,
   store,
 });
 Vue.use(Notifications);
@@ -91,7 +91,6 @@ new Vue({
    */
   render: h => h(App),
   onIdle() {
-    debugger;
     if (store.state.auth.user.role_name === 'Delegate') {
 
     } else {

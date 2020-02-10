@@ -17,7 +17,7 @@ import {
 /* eslint-disable no-param-reassign */
 export default {
   [CHECK](state) {
-    state.authenticated = !!localStorage.getItem('token');
+    state.authenticated = !!localStorage.getItem('token') && !!localStorage.getItem('user');
     if (state.authenticated) {
       state.user = JSON.parse(localStorage.getItem('user'));
       Vue.$http.defaults.headers.common.Authorization = `Token ${localStorage.getItem('token')}`;
